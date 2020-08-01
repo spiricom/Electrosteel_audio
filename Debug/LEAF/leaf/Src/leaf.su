@@ -1,0 +1,6 @@
+leaf.c:23:6:LEAF_init	40	static
+leaf.c:49:6:LEAF_setSampleRate	16	static
+leaf.c:55:7:LEAF_getSampleRate	4	static
+leaf.c:60:6:LEAF_defaultErrorCallback	16	static
+leaf.c:66:6:LEAF_internalErrorCallback	16	static
+leaf.c:72:6:LEAF_setErrorCallback	16	static

@@ -59,7 +59,8 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void MPU_Conf(void);
+void SDRAM_Initialization_sequence(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -74,7 +75,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	  MPU_Conf();
   /* USER CODE END 1 */
 
   /* Enable I-Cache---------------------------------------------------------*/
@@ -112,6 +113,19 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+
+  //pull reset pin on audio codec low to make sure it's stable
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+
+  uint32_t tempFPURegisterVal = __get_FPSCR();
+  tempFPURegisterVal |= (1<<24); // set the FTZ (flush-to-zero) bit in the FPU control register  // this makes checking for denormals not necessary as they are automatically set to zero by the hardware
+  __set_FPSCR(tempFPURegisterVal);
+
+
+  SDRAM_Initialization_sequence();
+
+  audioInit(&hi2c2, &hsai_BlockA1, &hsai_BlockB1);
+
 
   /* USER CODE END 2 */
 
@@ -214,7 +228,210 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+#define SDRAM_TIMEOUT ((uint32_t)0xFFFF)
 
+#define SDRAM_MODEREG_BURST_LENGTH_1             ((uint16_t)0x0000)
+#define SDRAM_MODEREG_BURST_LENGTH_2             ((uint16_t)0x0001)
+#define SDRAM_MODEREG_BURST_LENGTH_4             ((uint16_t)0x0002)
+#define SDRAM_MODEREG_BURST_LENGTH_8             ((uint16_t)0x0003)
+#define SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL      ((uint16_t)0x0000)
+#define SDRAM_MODEREG_BURST_TYPE_INTERLEAVED     ((uint16_t)0x0008)
+#define SDRAM_MODEREG_CAS_LATENCY_2              ((uint16_t)0x0020)
+#define SDRAM_MODEREG_CAS_LATENCY_3              ((uint16_t)0x0030)
+#define SDRAM_MODEREG_OPERATING_MODE_STANDARD    ((uint16_t)0x0000)
+#define SDRAM_MODEREG_WRITEBURST_MODE_PROGRAMMED ((uint16_t)0x0000)
+#define SDRAM_MODEREG_WRITEBURST_MODE_SINGLE     ((uint16_t)0x0200)
+
+//#define SDRAM_REFRESH_COUNT                   	 ((uint32_t)956)// 7.9us in cycles of 8.333333ns + 20 cycles as recommended by datasheet page 866/3289 for STM32H743
+#define SDRAM_REFRESH_COUNT                   	 ((uint32_t)0x0569)// 7.9us in cycles of 8.333333ns + 20 cycles as recommended by datasheet page 866/3289 for STM32H743
+void SDRAM_Initialization_sequence(void)
+{
+    __IO uint32_t tmpmrd = 0;
+    FMC_SDRAM_CommandTypeDef Command;
+    /* Step 1: Configure a clock configuration enable command */
+    Command.CommandMode = FMC_SDRAM_CMD_CLK_ENABLE;
+    Command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
+    Command.AutoRefreshNumber = 1;
+    Command.ModeRegisterDefinition = 0;
+
+    /* Send the command */
+    HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
+
+    /* Step 2: Insert 100 us minimum delay */
+    /* Inserted delay is equal to 1 ms due to systick time base unit (ms) */
+    HAL_Delay(1);
+
+    /* Step 3: Configure a PALL (precharge all) command */
+    Command.CommandMode = FMC_SDRAM_CMD_PALL;
+    Command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
+    Command.AutoRefreshNumber = 1;
+    Command.ModeRegisterDefinition = 0;
+
+    /* Send the command */
+    HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
+
+    /* Step 5: Program the external memory mode register */
+    tmpmrd = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_4 | SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL
+        | SDRAM_MODEREG_CAS_LATENCY_2 | SDRAM_MODEREG_OPERATING_MODE_STANDARD
+        | SDRAM_MODEREG_WRITEBURST_MODE_SINGLE;
+
+    Command.CommandMode = FMC_SDRAM_CMD_LOAD_MODE;
+    Command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
+    Command.AutoRefreshNumber = 1;
+    Command.ModeRegisterDefinition = tmpmrd;
+
+    /* Send the command */
+    HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
+
+    /* Step 4: Configure the 1st Auto Refresh command */
+    Command.CommandMode = FMC_SDRAM_CMD_AUTOREFRESH_MODE;
+    Command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
+    Command.AutoRefreshNumber = 8;
+    Command.ModeRegisterDefinition = 0;
+
+    /* Send the command */
+    HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
+
+    /* Step 2: Insert 100 us minimum delay */
+    /* Inserted delay is equal to 1 ms due to systick time base unit (ms) */
+    HAL_Delay(1);
+
+    /* Step 5: Configure the 2nd Auto Refresh command */
+    Command.CommandMode = FMC_SDRAM_CMD_AUTOREFRESH_MODE;
+    Command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
+    Command.AutoRefreshNumber = 8;
+    Command.ModeRegisterDefinition = 0;
+
+    /* Send the command */
+    HAL_SDRAM_SendCommand(&hsdram1, &Command, SDRAM_TIMEOUT);
+
+    /* Step 6: Set the refresh rate counter */
+    /* Set the device refresh rate */
+    HAL_SDRAM_ProgramRefreshRate(&hsdram1, SDRAM_REFRESH_COUNT);
+}
+
+float randomNumber(void) {
+
+	uint32_t rand;
+	HAL_RNG_GenerateRandomNumber(&hrng, &rand);
+	float num = (float)rand * INV_TWO_TO_32;
+	return num;
+}
+
+
+void MPU_Conf(void)
+{
+	//code from Keshikan https://github.com/keshikan/STM32H7_DMA_sample
+  //Thanks, Keshikan! This solves the issues with accessing the SRAM in the D2 area properly. -JS
+	//should test the different possible settings to see what works best while avoiding needing to manually clear the cache -JS
+
+	MPU_Region_InitTypeDef MPU_InitStruct;
+
+	HAL_MPU_Disable();
+
+  //currently leaving D1 SRAM not configured by the MPU - just set as normal default memory.
+
+	//the following code configures D2 and D3 SRAM
+
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+
+  //D2 Domain�SRAM1
+  MPU_InitStruct.BaseAddress = 0x30000000;
+  // Increased region size to 256k. In Keshikan's code, this was 512 bytes (that's all that application needed).
+  // Each audio buffer takes up the frame size * 8 (16 bits makes it *2 and stereo makes it *2 and double buffering makes it *2)
+  // So a buffer size for read/write of 4096 would take up 64k = 4096*8 * 2 (read and write).
+  // I increased that to 256k so that there would be room for the ADC knob inputs and other peripherals that might require DMA access.
+  // we have a total of 256k in SRAM1 (128k, 0x30000000-0x30020000) and SRAM2 (128k, 0x30020000-0x3004000) of D2 domain.
+  // There is an SRAM3 in D2 domain as well (32k, 0x30040000-0x3004800) that is currently not mapped by the MPU (memory protection unit) controller.
+
+  MPU_InitStruct.Size = MPU_REGION_SIZE_256KB;
+
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+
+  //AN4838
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+
+  //Shared Device
+	  //MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+	  //MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+	  //MPU_InitStruct.IsBufferable = MPU_ACCESS_BUFFERABLE;
+	  //MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
+
+
+  MPU_InitStruct.Number = MPU_REGION_NUMBER1;
+
+  MPU_InitStruct.SubRegionDisable = 0x00;
+
+
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+  //now set up D3 domain RAM
+
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+
+  //D3 Domain�SRAM1
+  MPU_InitStruct.BaseAddress = 0x38000000;
+
+
+  MPU_InitStruct.Size = MPU_REGION_SIZE_64KB;
+
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+
+  //AN4838
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+
+  //Shared Device
+//	  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+//	  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+//	  MPU_InitStruct.IsBufferable = MPU_ACCESS_BUFFERABLE;
+//	  MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
+
+
+  MPU_InitStruct.Number = MPU_REGION_NUMBER2;
+
+  MPU_InitStruct.SubRegionDisable = 0x00;
+
+
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+
+
+
+  /*
+   // Maybe configure the MPU attributes as WT for SDRAM? (from H7 hid example...)
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress = 0xD0000000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_32MB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+  */
+
+
+
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+}
 /* USER CODE END 4 */
 
 /**

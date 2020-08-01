@@ -12,6 +12,8 @@ RM := rm -rf
 -include Src/subdir.mk
 -include Middlewares/Third_Party/FatFs/src/option/subdir.mk
 -include Middlewares/Third_Party/FatFs/src/subdir.mk
+-include LEAF/leaf/Src/subdir.mk
+-include LEAF/leaf/Externals/subdir.mk
 -include Drivers/STM32H7xx_HAL_Driver/Src/subdir.mk
 -include subdir.mk
 -include objects.mk
@@ -42,8 +44,8 @@ cube_for_new_genera_brain4.bin \
 all: cube_for_new_genera_brain4.elf secondary-outputs
 
 # Tool invocations
-cube_for_new_genera_brain4.elf: $(OBJS) $(USER_OBJS) /Users/josnyder/dev/Electrosteel/audio_board/STM32H743ZITX_FLASH.ld
-	arm-none-eabi-gcc -o "cube_for_new_genera_brain4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/josnyder/dev/Electrosteel/audio_board/STM32H743ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="cube_for_new_genera_brain4.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+cube_for_new_genera_brain4.elf: $(OBJS) $(USER_OBJS) /Users/josnyder/dev/Electrosteel_audio/STM32H743ZITX_FLASH.ld
+	arm-none-eabi-gcc -o "cube_for_new_genera_brain4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/josnyder/dev/Electrosteel_audio/STM32H743ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="cube_for_new_genera_brain4.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

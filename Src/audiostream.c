@@ -11,15 +11,9 @@
 #include "main.h"
 #include "leaf.h"
 #include "codec.h"
-#include "ui.h"
-#include "oled.h"
-#include "tunings.h"
 #include "i2c.h"
 #include "gpio.h"
-#include "sfx.h"
-#include "tim.h"
-#include "usbh_MIDI.h"
-#include "MIDI_application.h"
+
 
 //the audio buffers are put in the D2 RAM area because that is a memory location that the DMA has access to.
 int32_t audioOutBuffer[AUDIO_BUFFER_SIZE] __ATTR_RAM_D2;
@@ -30,6 +24,11 @@ int32_t audioInBuffer[AUDIO_BUFFER_SIZE] __ATTR_RAM_D2;
 //uint8_t displayBufferIndex = 0;
 //float displayBlockVal = 0.0f;
 //uint32_t displayBlockCount = 0;
+char small_memory[SMALL_MEM_SIZE];
+char medium_memory[MED_MEM_SIZE] __ATTR_RAM_D1;
+char large_memory[LARGE_MEM_SIZE] __ATTR_SDRAM;
+tMempool mediumPool;
+tMempool largePool;
 
 void audioFrame(uint16_t buffer_offset);
 uint32_t audioTick(float* samples);
@@ -74,9 +73,10 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 	tMempool_init (&mediumPool, medium_memory, MED_MEM_SIZE);
 	tMempool_init (&largePool, large_memory, LARGE_MEM_SIZE);
 
-
-	loadingPreset = 1;
-	previousPreset = PresetNil;
+	tCycle_init(&mySine[0]);
+	tCycle_setFreq(&mySine[0], 220.0f);
+	//loadingPreset = 1;
+	//previousPreset = PresetNil;
 
 	HAL_Delay(10);
 
@@ -109,10 +109,10 @@ void audioFrame(uint16_t buffer_offset)
 
 	uint32_t clipCatcher = 0;
 
-	if (!loadingPreset)
-	{
+	//if (!loadingPreset)
+	//{
 		//frameFunctions[currentPreset]();
-	}
+	//}
 
 	//if the codec isn't ready, keep the buffer as all zeros
 	//otherwise, start computing audio!
@@ -132,10 +132,10 @@ void audioFrame(uint16_t buffer_offset)
 			audioOutBuffer[buffer_offset + i] = (int32_t)(theSamples[1] * TWO_TO_23);
 			audioOutBuffer[buffer_offset + i + 1] = (int32_t)(theSamples[0] * TWO_TO_23);
 		}
-		if (!loadingPreset)
-		{
-			bufferCleared = 0;
-		}
+		//if (!loadingPreset)
+		//{
+			//bufferCleared = 0;
+		//}
 	}
 }
 
@@ -146,8 +146,9 @@ uint32_t audioTick(float* samples)
 {
 	uint32_t clips = 0;
 
-	tickFunctions[currentPreset](samples);
-
+	//tickFunctions[currentPreset](samples);
+	samples[0] = tCycle_tick(&mySine[0]);
+	samples[1] = samples[0];
 	return clips;
 }
 
@@ -156,7 +157,7 @@ uint32_t audioTick(float* samples)
 
 void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)
 {
-	setLED_Edit(1);
+	//setLED_Edit(1);
 }
 
 void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)

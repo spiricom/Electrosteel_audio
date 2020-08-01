@@ -36,7 +36,9 @@
 #define AUDIO_FRAME_SIZE      128
 #define HALF_BUFFER_SIZE      AUDIO_FRAME_SIZE * 2 //number of samples per half of the "double-buffer" (twice the audio frame size because there are interleaved samples for both left and right channels)
 #define AUDIO_BUFFER_SIZE     AUDIO_FRAME_SIZE * 4 //number of samples in the whole data structure (four times the audio frame size because of stereo and also double-buffering/ping-ponging)
-
+#define SMALL_MEM_SIZE 80328
+#define MED_MEM_SIZE 519000
+#define LARGE_MEM_SIZE 33554432 //32 MBytes - size of SDRAM IC
 
 extern int32_t audioOutBuffer[AUDIO_BUFFER_SIZE];
 extern int32_t audioInBuffer[AUDIO_BUFFER_SIZE];
