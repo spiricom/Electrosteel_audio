@@ -61,10 +61,14 @@ int numBuffersCleared = 0;
 #define ATODB_TABLE_SIZE_MINUS_ONE 511
 float atodbTable[ATODB_TABLE_SIZE];
 
+#define NUM_STRINGS 10
 
 tADSR envelopes[10];
 tSaw saws[10];
+tSimpleLivingString strings[10];
 float theAmps[10];
+tNoise myNoise;
+tExpSmooth smoother[10];
 /**********************************************/
 
 
@@ -87,9 +91,12 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 		tADSR_init(&envelopes[i], 5.0f, 4090.0f, 0.0f, 100.0f);
 		tSaw_initToPool(&saws[i], &mediumPool);
 		tSaw_setFreq(&saws[i], 110.0f * ((float)i+1.0f));
+		tSimpleLivingString_initToPool(&strings[i], 100.0f, 19000.0f, 0.99999f, 1.0f, 0.01f, 0.01f, 0, &mediumPool);
+		tExpSmooth_init(&smoother[i],0.0f, 0.001f);
 	}
 	//loadingPreset = 1;
 	//previousPreset = PresetNil;
+	tNoise_init(&myNoise, WhiteNoise);
 
 	HAL_Delay(10);
 
@@ -145,6 +152,28 @@ void audioFrame(uint16_t buffer_offset)
 
 uint maxVolumes[10];
 uint stringInputs[10];
+float openStringFrequencies[NUM_STRINGS] = {123.470825f, 146.832384f, 164.813779f, 184.997211f, 207.652349f, 246.941651f, 329.627557f, 415.304698f, 311.126984f, 369.994423f};
+float octave = 1.0f;
+
+float stringMappedPositions[NUM_STRINGS];
+float stringFrequencies[NUM_STRINGS];
+
+
+// frets are measured at 3 7 12 and 19   need to redo these measurements with an accurately set capo
+float fretMeasurements[4][2] ={
+		{52628.0f, 53920.0f},
+		{40008.0f, 41254.0f},
+		{27462.0f, 28328.0f},
+		{10040.0f, 10052.0f}
+	};
+
+
+float fretScaling[4] = {0.9f, 0.66666666666f, 0.5f, 0.25f};
+
+float map(float value, float istart, float istop, float ostart, float ostop)
+{
+    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
 
 uint32_t audioTick(float* samples)
 {
@@ -152,10 +181,28 @@ uint32_t audioTick(float* samples)
 	for (int j = 0; j < 2; j++)
 	{
 		stringPositions[j] =  ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
-	}
-	//tCycle_setFreq(&mySine[0], mtof(((stringPositions[0] * INV_TWO_TO_16) * 24.0f) + 48.0f));
 
-	//tCycle_setFreq(&mySine[1], mtof(((stringPositions[1] * INV_TWO_TO_16) * 24.0f) + 48.0f));
+		if (stringPositions[j] == 65535)
+		{
+			stringMappedPositions[j] = 1.0f;
+		}
+		else
+		{
+			stringMappedPositions[j] = map((float)stringPositions[j], fretMeasurements[1][j], fretMeasurements[2][j], fretScaling[1], fretScaling[2]);
+		}
+	}
+
+	for (int i = 0; i < NUM_STRINGS; i++)
+	{
+		//interpolate ratios for each of the 10 strings
+		float myMappedPos = LEAF_interpolation_linear(stringMappedPositions[1], stringMappedPositions[0], ((float)i) * 0.111111111111111f);
+
+		//then apply those ratios to the fundamental frequencies
+		stringFrequencies[i] = ((1.0 / myMappedPos) * openStringFrequencies[i]);
+		//tSaw_setFreq(&saws[i], stringFrequencies[i]);
+		tSimpleLivingString_setFreq(&strings[i], stringFrequencies[i]);
+
+	}
 
 	samples[0] = 0.0f;
 
@@ -174,7 +221,9 @@ uint32_t audioTick(float* samples)
 	}
 	for (int i = 0; i < 10; i++)
 	{
-		samples[0] += tSaw_tick(&saws[i]) * theAmps[i];//tADSR_tick(&envelopes[i]);
+		//samples[0] += tSaw_tick(&saws[i]) * theAmps[i];//tADSR_tick(&envelopes[i]);
+
+		samples[0] += tSimpleLivingString_tick(&strings[i], tExpSmooth_tick(&smoother[i]) * tNoise_tick(&myNoise)) * theAmps[i];//tADSR_tick(&envelopes[i]);
 	}
 	samples[0] *= .10f;
 	samples[1] = samples[0];
@@ -210,6 +259,8 @@ void midiIn (uint string, uint amplitude)
 
 volatile int testInt = 0;
 
+int previousStringInputs[10];
+
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
 	if (hspi == &hspi1)
@@ -222,7 +273,24 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 			//	maxVolumes[i] = stringInputs[i];
 			//}
 
-			theAmps[i] = (float)(stringInputs[i] > 0); //(float)stringInputs[i] / (float)maxVolumes[i];
+			if ((previousStringInputs[i] == 0) && (stringInputs[i] > 0))
+			{
+				//attack
+				tExpSmooth_setVal(&smoother[i], 1.0f);
+				tExpSmooth_setDest(&smoother[i], 0.0f);
+				theAmps[i] = 1.0f;
+			}
+			else if ((previousStringInputs[i] > 0) && (stringInputs[i] == 0))
+			{
+				//attack
+				tExpSmooth_setVal(&smoother[i], 1.0f);
+				tExpSmooth_setDest(&smoother[i], 0.0f);
+				theAmps[i] = 0.0f;
+				//theAmps[i] = (float)(stringInputs[i] > 0);
+			}
+
+			previousStringInputs[i] = stringInputs[i];
+			//theAmps[i] = (float)(stringInputs[i] > 0); //(float)stringInputs[i] / (float)maxVolumes[i];
 		}
 
 

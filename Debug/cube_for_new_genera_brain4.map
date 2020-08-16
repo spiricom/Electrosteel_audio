@@ -153,12 +153,18 @@ uwTick              0x4               Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx
 pFlash              0x1c              Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.o
 theAmps             0x28              Src/audiostream.o
 saws                0x28              Src/audiostream.o
+smoother            0x28              Src/audiostream.o
 transmit_status     0x1               Src/audiostream.o
 hsai_BlockB1        0x98              Src/sai.o
 testVal             0x1               Src/codec.o
 hdma_sai1_a         0x78              Src/sai.o
 myNoise             0x4               Src/audiostream.o
+previousStringInputs
+                    0x28              Src/audiostream.o
 largePool           0x4               Src/audiostream.o
+strings             0x28              Src/audiostream.o
+stringMappedPositions
+                    0x28              Src/audiostream.o
 SDPath              0x4               Src/fatfs.o
 receive_status      0x1               Src/audiostream.o
 mediumPool          0x4               Src/audiostream.o
@@ -175,6 +181,7 @@ maxVolumes          0x28              Src/audiostream.o
 hdma_spi1_rx        0x78              Src/spi.o
 hsdram1             0x34              Src/fmc.o
 SDFatFS             0x234             Src/fatfs.o
+stringFrequencies   0x28              Src/audiostream.o
 
 Discarded input sections
 
@@ -5315,14 +5322,10 @@ Discarded input sections
                 0x0000000000000000       0x34 LEAF/leaf/Src/leaf-analysis.o
  .text.tPowerFollower_init
                 0x0000000000000000       0x3c LEAF/leaf/Src/leaf-analysis.o
- .text.tPowerFollower_initToPool
-                0x0000000000000000       0x34 LEAF/leaf/Src/leaf-analysis.o
  .text.tPowerFollower_free
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-analysis.o
  .text.tPowerFollower_setFactor
                 0x0000000000000000       0x28 LEAF/leaf/Src/leaf-analysis.o
- .text.tPowerFollower_tick
-                0x0000000000000000       0x20 LEAF/leaf/Src/leaf-analysis.o
  .text.tPowerFollower_sample
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-analysis.o
  .text.tEnvPD_initToPool
@@ -5495,65 +5498,20 @@ Discarded input sections
                 0x0000000000000000      0x1fc LEAF/leaf/Src/leaf-analysis.o
  .text.tPitchDetector_reset
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-analysis.o
- .debug_info    0x0000000000000000     0x7253 LEAF/leaf/Src/leaf-analysis.o
- .debug_abbrev  0x0000000000000000      0x596 LEAF/leaf/Src/leaf-analysis.o
- .debug_loc     0x0000000000000000     0x618b LEAF/leaf/Src/leaf-analysis.o
- .debug_aranges
-                0x0000000000000000      0x348 LEAF/leaf/Src/leaf-analysis.o
- .debug_ranges  0x0000000000000000     0x1508 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000      0x2ef LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000      0xa72 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x22 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x40 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x17 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x94 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x3c LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x34 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x16 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x57 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x97 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000      0x330 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0xfd LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x10 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x52 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x1f LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x43 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x20 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000      0x1a3 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x10 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0x6a LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x1c LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x52 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x40 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x10 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x40 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0xd7 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x1c LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x3d LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x16 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000      0x145 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x16 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x35 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x16 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x29 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x16 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x20 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x22 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000      0x1e1 LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000       0xef LEAF/leaf/Src/leaf-analysis.o
  .debug_macro   0x0000000000000000      0x1df LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x2b LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000      0x118 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000      0x136 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x94 LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0xba LEAF/leaf/Src/leaf-analysis.o
- .debug_macro   0x0000000000000000       0x10 LEAF/leaf/Src/leaf-analysis.o
- .debug_line    0x0000000000000000     0x1dc7 LEAF/leaf/Src/leaf-analysis.o
- .debug_str     0x0000000000000000     0xb08b LEAF/leaf/Src/leaf-analysis.o
- .comment       0x0000000000000000       0x7c LEAF/leaf/Src/leaf-analysis.o
- .debug_frame   0x0000000000000000      0xc4c LEAF/leaf/Src/leaf-analysis.o
- .ARM.attributes
-                0x0000000000000000       0x33 LEAF/leaf/Src/leaf-analysis.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-delay.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-delay.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-delay.o
@@ -5636,20 +5594,10 @@ Discarded input sections
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-delay.o
  .text.tLinearDelay_init
                 0x0000000000000000       0xf4 LEAF/leaf/Src/leaf-delay.o
- .text.tLinearDelay_initToPool
-                0x0000000000000000       0xec LEAF/leaf/Src/leaf-delay.o
  .text.tLinearDelay_free
                 0x0000000000000000       0x18 LEAF/leaf/Src/leaf-delay.o
- .text.tLinearDelay_clear
-                0x0000000000000000       0x1c LEAF/leaf/Src/leaf-delay.o
  .text.tLinearDelay_tick
                 0x0000000000000000       0x74 LEAF/leaf/Src/leaf-delay.o
- .text.tLinearDelay_tickIn
-                0x0000000000000000       0x28 LEAF/leaf/Src/leaf-delay.o
- .text.tLinearDelay_tickOut
-                0x0000000000000000       0x54 LEAF/leaf/Src/leaf-delay.o
- .text.tLinearDelay_setDelay
-                0x0000000000000000       0x80 LEAF/leaf/Src/leaf-delay.o
  .text.tLinearDelay_tapOut
                 0x0000000000000000       0x1c LEAF/leaf/Src/leaf-delay.o
  .text.tLinearDelay_tapIn
@@ -5774,13 +5722,6 @@ Discarded input sections
                 0x0000000000000000       0x18 LEAF/leaf/Src/leaf-delay.o
  .text.tRingBuffer_getSize
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-delay.o
- .debug_info    0x0000000000000000     0x33d4 LEAF/leaf/Src/leaf-delay.o
- .debug_abbrev  0x0000000000000000      0x468 LEAF/leaf/Src/leaf-delay.o
- .debug_loc     0x0000000000000000     0x2061 LEAF/leaf/Src/leaf-delay.o
- .debug_aranges
-                0x0000000000000000      0x2b8 LEAF/leaf/Src/leaf-delay.o
- .debug_ranges  0x0000000000000000      0x4f8 LEAF/leaf/Src/leaf-delay.o
- .debug_macro   0x0000000000000000      0x386 LEAF/leaf/Src/leaf-delay.o
  .debug_macro   0x0000000000000000      0xa72 LEAF/leaf/Src/leaf-delay.o
  .debug_macro   0x0000000000000000       0x22 LEAF/leaf/Src/leaf-delay.o
  .debug_macro   0x0000000000000000       0x40 LEAF/leaf/Src/leaf-delay.o
@@ -5824,18 +5765,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x2b LEAF/leaf/Src/leaf-delay.o
  .debug_macro   0x0000000000000000      0x118 LEAF/leaf/Src/leaf-delay.o
  .debug_macro   0x0000000000000000      0x136 LEAF/leaf/Src/leaf-delay.o
- .debug_macro   0x0000000000000000       0x10 LEAF/leaf/Src/leaf-delay.o
- .debug_macro   0x0000000000000000       0x8e LEAF/leaf/Src/leaf-delay.o
  .debug_macro   0x0000000000000000       0xba LEAF/leaf/Src/leaf-delay.o
- .debug_macro   0x0000000000000000       0x11 LEAF/leaf/Src/leaf-delay.o
- .debug_macro   0x0000000000000000       0x42 LEAF/leaf/Src/leaf-delay.o
- .debug_macro   0x0000000000000000       0x10 LEAF/leaf/Src/leaf-delay.o
- .debug_line    0x0000000000000000     0x140e LEAF/leaf/Src/leaf-delay.o
- .debug_str     0x0000000000000000     0xa5ae LEAF/leaf/Src/leaf-delay.o
- .comment       0x0000000000000000       0x7c LEAF/leaf/Src/leaf-delay.o
- .debug_frame   0x0000000000000000      0x7a4 LEAF/leaf/Src/leaf-delay.o
- .ARM.attributes
-                0x0000000000000000       0x33 LEAF/leaf/Src/leaf-delay.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-distortion.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-distortion.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-distortion.o
@@ -6048,8 +5978,6 @@ Discarded input sections
                 0x0000000000000000      0x120 LEAF/leaf/Src/leaf-dynamics.o
  .text.tFeedbackLeveler_init
                 0x0000000000000000       0x54 LEAF/leaf/Src/leaf-dynamics.o
- .text.tFeedbackLeveler_initToPool
-                0x0000000000000000       0x50 LEAF/leaf/Src/leaf-dynamics.o
  .text.tFeedbackLeveler_free
                 0x0000000000000000       0x18 LEAF/leaf/Src/leaf-dynamics.o
  .text.tFeedbackLeveler_setStrength
@@ -6058,8 +5986,6 @@ Discarded input sections
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-dynamics.o
  .text.tFeedbackLeveler_setMode
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-dynamics.o
- .text.tFeedbackLeveler_tick
-                0x0000000000000000       0x50 LEAF/leaf/Src/leaf-dynamics.o
  .text.tFeedbackLeveler_sample
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-dynamics.o
  .text.tFeedbackLeveler_setTargetLevel
@@ -6076,13 +6002,6 @@ Discarded input sections
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-dynamics.o
  .text.tThreshold_setHigh
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-dynamics.o
- .debug_info    0x0000000000000000     0x17a6 LEAF/leaf/Src/leaf-dynamics.o
- .debug_abbrev  0x0000000000000000      0x34a LEAF/leaf/Src/leaf-dynamics.o
- .debug_loc     0x0000000000000000      0x8c2 LEAF/leaf/Src/leaf-dynamics.o
- .debug_aranges
-                0x0000000000000000       0xb0 LEAF/leaf/Src/leaf-dynamics.o
- .debug_ranges  0x0000000000000000      0x110 LEAF/leaf/Src/leaf-dynamics.o
- .debug_macro   0x0000000000000000      0x2e2 LEAF/leaf/Src/leaf-dynamics.o
  .debug_macro   0x0000000000000000      0xa72 LEAF/leaf/Src/leaf-dynamics.o
  .debug_macro   0x0000000000000000       0x22 LEAF/leaf/Src/leaf-dynamics.o
  .debug_macro   0x0000000000000000       0x40 LEAF/leaf/Src/leaf-dynamics.o
@@ -6128,12 +6047,6 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x136 LEAF/leaf/Src/leaf-dynamics.o
  .debug_macro   0x0000000000000000       0x94 LEAF/leaf/Src/leaf-dynamics.o
  .debug_macro   0x0000000000000000       0xba LEAF/leaf/Src/leaf-dynamics.o
- .debug_line    0x0000000000000000      0xa05 LEAF/leaf/Src/leaf-dynamics.o
- .debug_str     0x0000000000000000     0x9f0f LEAF/leaf/Src/leaf-dynamics.o
- .comment       0x0000000000000000       0x7c LEAF/leaf/Src/leaf-dynamics.o
- .debug_frame   0x0000000000000000      0x23c LEAF/leaf/Src/leaf-dynamics.o
- .ARM.attributes
-                0x0000000000000000       0x33 LEAF/leaf/Src/leaf-dynamics.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-effects.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-effects.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-effects.o
@@ -6807,22 +6720,12 @@ Discarded input sections
                 0x0000000000000000       0x5c LEAF/leaf/Src/leaf-envelopes.o
  .text.tRampUpDown_sample
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-envelopes.o
- .text.tExpSmooth_init
-                0x0000000000000000       0x54 LEAF/leaf/Src/leaf-envelopes.o
- .text.tExpSmooth_initToPool
-                0x0000000000000000       0x4c LEAF/leaf/Src/leaf-envelopes.o
  .text.tExpSmooth_free
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-envelopes.o
  .text.tExpSmooth_setFactor
                 0x0000000000000000       0x24 LEAF/leaf/Src/leaf-envelopes.o
- .text.tExpSmooth_setDest
-                0x0000000000000000        0x8 LEAF/leaf/Src/leaf-envelopes.o
- .text.tExpSmooth_setVal
-                0x0000000000000000        0x8 LEAF/leaf/Src/leaf-envelopes.o
  .text.tExpSmooth_setValAndDest
                 0x0000000000000000        0xc LEAF/leaf/Src/leaf-envelopes.o
- .text.tExpSmooth_tick
-                0x0000000000000000       0x20 LEAF/leaf/Src/leaf-envelopes.o
  .text.tExpSmooth_sample
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-envelopes.o
  .text.tSlide_init
@@ -6962,8 +6865,6 @@ Discarded input sections
                 0x0000000000000000       0x34 LEAF/leaf/Src/leaf-filters.o
  .text.tOnePole_init
                 0x0000000000000000       0x6c LEAF/leaf/Src/leaf-filters.o
- .text.tOnePole_initToPool
-                0x0000000000000000       0x6c LEAF/leaf/Src/leaf-filters.o
  .text.tOnePole_free
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-filters.o
  .text.tOnePole_setB0
@@ -6978,8 +6879,6 @@ Discarded input sections
                 0x0000000000000000       0x24 LEAF/leaf/Src/leaf-filters.o
  .text.tOnePole_setGain
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-filters.o
- .text.tOnePole_tick
-                0x0000000000000000       0x28 LEAF/leaf/Src/leaf-filters.o
  .text.tTwoPole_init
                 0x0000000000000000       0x2c LEAF/leaf/Src/leaf-filters.o
  .text.tTwoPole_initToPool
@@ -7122,16 +7021,12 @@ Discarded input sections
                 0x0000000000000000       0x38 LEAF/leaf/Src/leaf-filters.o
  .text.tHighpass_init
                 0x0000000000000000       0x40 LEAF/leaf/Src/leaf-filters.o
- .text.tHighpass_initToPool
-                0x0000000000000000       0x40 LEAF/leaf/Src/leaf-filters.o
  .text.tHighpass_free
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-filters.o
  .text.tHighpass_setFreq
                 0x0000000000000000       0x20 LEAF/leaf/Src/leaf-filters.o
  .text.tHighpass_getFreq
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-filters.o
- .text.tHighpass_tick
-                0x0000000000000000       0x20 LEAF/leaf/Src/leaf-filters.o
  .text.tHighpassSampleRateChanged
                 0x0000000000000000       0x2c LEAF/leaf/Src/leaf-filters.o
  .text.tButterworth_initToPool
@@ -7207,13 +7102,6 @@ Discarded input sections
                 0x0000000000000000       0x3c LEAF/leaf/Src/leaf-filters.o
  .text.tDiodeFilter_setQ
                 0x0000000000000000       0x28 LEAF/leaf/Src/leaf-filters.o
- .debug_info    0x0000000000000000     0x6a4e LEAF/leaf/Src/leaf-filters.o
- .debug_abbrev  0x0000000000000000      0x4de LEAF/leaf/Src/leaf-filters.o
- .debug_loc     0x0000000000000000     0x52c1 LEAF/leaf/Src/leaf-filters.o
- .debug_aranges
-                0x0000000000000000      0x420 LEAF/leaf/Src/leaf-filters.o
- .debug_ranges  0x0000000000000000      0xf18 LEAF/leaf/Src/leaf-filters.o
- .debug_macro   0x0000000000000000      0x394 LEAF/leaf/Src/leaf-filters.o
  .debug_macro   0x0000000000000000      0xa72 LEAF/leaf/Src/leaf-filters.o
  .debug_macro   0x0000000000000000       0x22 LEAF/leaf/Src/leaf-filters.o
  .debug_macro   0x0000000000000000       0x40 LEAF/leaf/Src/leaf-filters.o
@@ -7262,12 +7150,6 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0xba LEAF/leaf/Src/leaf-filters.o
  .debug_macro   0x0000000000000000       0x42 LEAF/leaf/Src/leaf-filters.o
  .debug_macro   0x0000000000000000       0x10 LEAF/leaf/Src/leaf-filters.o
- .debug_line    0x0000000000000000     0x257f LEAF/leaf/Src/leaf-filters.o
- .debug_str     0x0000000000000000     0xab04 LEAF/leaf/Src/leaf-filters.o
- .comment       0x0000000000000000       0x7c LEAF/leaf/Src/leaf-filters.o
- .debug_frame   0x0000000000000000      0xf24 LEAF/leaf/Src/leaf-filters.o
- .ARM.attributes
-                0x0000000000000000       0x33 LEAF/leaf/Src/leaf-filters.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-instruments.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-instruments.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-instruments.o
@@ -7560,8 +7442,6 @@ Discarded input sections
                 0x0000000000000000       0x18 LEAF/leaf/Src/leaf-math.o
  .text.LEAF_softClip
                 0x0000000000000000       0x4c LEAF/leaf/Src/leaf-math.o
- .text.LEAF_clip
-                0x0000000000000000       0x28 LEAF/leaf/Src/leaf-math.o
  .text.LEAF_clipInt
                 0x0000000000000000       0x18 LEAF/leaf/Src/leaf-math.o
  .text.LEAF_isPrime
@@ -7592,14 +7472,14 @@ Discarded input sections
                 0x0000000000000000       0x4c LEAF/leaf/Src/leaf-math.o
  .text.LEAF_generate_atodbPositiveClipped
                 0x0000000000000000       0x9c LEAF/leaf/Src/leaf-math.o
+ .text.LEAF_poly_blep
+                0x0000000000000000       0x58 LEAF/leaf/Src/leaf-math.o
  .text.LEAF_midiToFrequency
                 0x0000000000000000       0x5c LEAF/leaf/Src/leaf-math.o
  .text.LEAF_interpolate_hermite
                 0x0000000000000000       0x68 LEAF/leaf/Src/leaf-math.o
  .text.LEAF_interpolate_hermite_x
                 0x0000000000000000       0x3c LEAF/leaf/Src/leaf-math.o
- .text.LEAF_interpolation_linear
-                0x0000000000000000       0x28 LEAF/leaf/Src/leaf-math.o
  .text.mtof     0x0000000000000000       0x48 LEAF/leaf/Src/leaf-math.o
  .text.fast_mtof
                 0x0000000000000000       0x48 LEAF/leaf/Src/leaf-math.o
@@ -7720,8 +7600,6 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 LEAF/leaf/Src/leaf-mempool.o
  .text.mpool_create
                 0x0000000000000000       0x28 LEAF/leaf/Src/leaf-mempool.o
- .text.mpool_calloc
-                0x0000000000000000       0xb0 LEAF/leaf/Src/leaf-mempool.o
  .text.leaf_alloc
                 0x0000000000000000       0xb0 LEAF/leaf/Src/leaf-mempool.o
  .text.leaf_calloc
@@ -8136,6 +8014,8 @@ Discarded input sections
                 0x0000000000000000       0x20 LEAF/leaf/Src/leaf-oscillators.o
  .text.tSaw_free
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-oscillators.o
+ .text.tSaw_tick
+                0x0000000000000000       0x4c LEAF/leaf/Src/leaf-oscillators.o
  .text.tPhasorSampleRateChanged
                 0x0000000000000000       0x1c LEAF/leaf/Src/leaf-oscillators.o
  .text.tPhasor_init
@@ -8148,14 +8028,10 @@ Discarded input sections
                 0x0000000000000000       0x1c LEAF/leaf/Src/leaf-oscillators.o
  .text.tPhasor_tick
                 0x0000000000000000       0x34 LEAF/leaf/Src/leaf-oscillators.o
- .text.tNoise_init
-                0x0000000000000000       0x24 LEAF/leaf/Src/leaf-oscillators.o
  .text.tNoise_initToPool
                 0x0000000000000000       0x24 LEAF/leaf/Src/leaf-oscillators.o
  .text.tNoise_free
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-oscillators.o
- .text.tNoise_tick
-                0x0000000000000000       0xa4 LEAF/leaf/Src/leaf-oscillators.o
  .text.tNeuronSampleRateChanged
                 0x0000000000000000        0x4 LEAF/leaf/Src/leaf-oscillators.o
  .text.tNeuron_init
@@ -8383,12 +8259,8 @@ Discarded input sections
                 0x0000000000000000      0x1fc LEAF/leaf/Src/leaf-physical.o
  .text.tSimpleLivingString_init
                 0x0000000000000000       0xe8 LEAF/leaf/Src/leaf-physical.o
- .text.tSimpleLivingString_initToPool
-                0x0000000000000000       0xe4 LEAF/leaf/Src/leaf-physical.o
  .text.tSimpleLivingString_free
                 0x0000000000000000       0x38 LEAF/leaf/Src/leaf-physical.o
- .text.tSimpleLivingString_setFreq
-                0x0000000000000000       0x30 LEAF/leaf/Src/leaf-physical.o
  .text.tSimpleLivingString_setWaveLength
                 0x0000000000000000       0x48 LEAF/leaf/Src/leaf-physical.o
  .text.tSimpleLivingString_setDampFreq
@@ -8403,8 +8275,6 @@ Discarded input sections
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-physical.o
  .text.tSimpleLivingString_setLevMode
                 0x0000000000000000       0x14 LEAF/leaf/Src/leaf-physical.o
- .text.tSimpleLivingString_tick
-                0x0000000000000000       0x68 LEAF/leaf/Src/leaf-physical.o
  .text.tSimpleLivingString_sample
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-physical.o
  .text.tLivingString_initToPool
@@ -8483,13 +8353,6 @@ Discarded input sections
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-physical.o
  .text.tReedTable_setSlope
                 0x0000000000000000        0x8 LEAF/leaf/Src/leaf-physical.o
- .debug_info    0x0000000000000000     0x62d3 LEAF/leaf/Src/leaf-physical.o
- .debug_abbrev  0x0000000000000000      0x4fc LEAF/leaf/Src/leaf-physical.o
- .debug_loc     0x0000000000000000     0x3a72 LEAF/leaf/Src/leaf-physical.o
- .debug_aranges
-                0x0000000000000000      0x278 LEAF/leaf/Src/leaf-physical.o
- .debug_ranges  0x0000000000000000      0x728 LEAF/leaf/Src/leaf-physical.o
- .debug_macro   0x0000000000000000      0x2f1 LEAF/leaf/Src/leaf-physical.o
  .debug_macro   0x0000000000000000      0xa72 LEAF/leaf/Src/leaf-physical.o
  .debug_macro   0x0000000000000000       0x22 LEAF/leaf/Src/leaf-physical.o
  .debug_macro   0x0000000000000000       0x40 LEAF/leaf/Src/leaf-physical.o
@@ -8536,12 +8399,6 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x94 LEAF/leaf/Src/leaf-physical.o
  .debug_macro   0x0000000000000000       0x11 LEAF/leaf/Src/leaf-physical.o
  .debug_macro   0x0000000000000000       0xba LEAF/leaf/Src/leaf-physical.o
- .debug_line    0x0000000000000000     0x14d7 LEAF/leaf/Src/leaf-physical.o
- .debug_str     0x0000000000000000     0xad45 LEAF/leaf/Src/leaf-physical.o
- .comment       0x0000000000000000       0x7c LEAF/leaf/Src/leaf-physical.o
- .debug_frame   0x0000000000000000      0xb38 LEAF/leaf/Src/leaf-physical.o
- .ARM.attributes
-                0x0000000000000000       0x33 LEAF/leaf/Src/leaf-physical.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-reverb.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-reverb.o
  .group         0x0000000000000000        0xc LEAF/leaf/Src/leaf-reverb.o
@@ -10185,10 +10042,9 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Src/audiostream.o
  .data          0x0000000000000000        0x0 Src/audiostream.o
  .bss           0x0000000000000000        0x0 Src/audiostream.o
+ .text.map      0x0000000000000000       0x1c Src/audiostream.o
  .text.audioFrame
-                0x0000000000000000       0x10 Src/audiostream.o
- .text.audioTick
-                0x0000000000000000       0x8c Src/audiostream.o
+                0x0000000000000000       0x9c Src/audiostream.o
  .text.midiIn   0x0000000000000000       0x5c Src/audiostream.o
  .bss.clipCounter
                 0x0000000000000000       0x10 Src/audiostream.o
@@ -10204,6 +10060,7 @@ Discarded input sections
                 0x0000000000000000        0x1 Src/audiostream.o
  .data.numBuffersToClearOnLoad
                 0x0000000000000000        0x4 Src/audiostream.o
+ .data.octave   0x0000000000000000        0x4 Src/audiostream.o
  .debug_macro   0x0000000000000000      0xa72 Src/audiostream.o
  .debug_macro   0x0000000000000000      0x22d Src/audiostream.o
  .debug_macro   0x0000000000000000       0x2e Src/audiostream.o
@@ -13847,7 +13704,7 @@ LOAD /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.id
                 0x0000000008000000                g_pfnVectors
                 0x0000000008000298                . = ALIGN (0x4)
 
-.text           0x0000000008000298     0x8620
+.text           0x0000000008000298     0x8fa4
                 0x0000000008000298                . = ALIGN (0x4)
  *(.text)
  .text          0x0000000008000298       0x40 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
@@ -14166,462 +14023,535 @@ LOAD /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.id
  .text.SDMMC_CmdVoltageSwitch
                 0x0000000008006da4       0x8c Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
                 0x0000000008006da4                SDMMC_CmdVoltageSwitch
+ .text.tPowerFollower_initToPool
+                0x0000000008006e30       0x34 LEAF/leaf/Src/leaf-analysis.o
+                0x0000000008006e30                tPowerFollower_initToPool
+ .text.tPowerFollower_tick
+                0x0000000008006e64       0x20 LEAF/leaf/Src/leaf-analysis.o
+                0x0000000008006e64                tPowerFollower_tick
+ .text.tLinearDelay_initToPool
+                0x0000000008006e84       0xec LEAF/leaf/Src/leaf-delay.o
+                0x0000000008006e84                tLinearDelay_initToPool
+ .text.tLinearDelay_clear
+                0x0000000008006f70       0x1c LEAF/leaf/Src/leaf-delay.o
+                0x0000000008006f70                tLinearDelay_clear
+ .text.tLinearDelay_tickIn
+                0x0000000008006f8c       0x28 LEAF/leaf/Src/leaf-delay.o
+                0x0000000008006f8c                tLinearDelay_tickIn
+ .text.tLinearDelay_tickOut
+                0x0000000008006fb4       0x54 LEAF/leaf/Src/leaf-delay.o
+                0x0000000008006fb4                tLinearDelay_tickOut
+ .text.tLinearDelay_setDelay
+                0x0000000008007008       0x80 LEAF/leaf/Src/leaf-delay.o
+                0x0000000008007008                tLinearDelay_setDelay
+ .text.tFeedbackLeveler_initToPool
+                0x0000000008007088       0x50 LEAF/leaf/Src/leaf-dynamics.o
+                0x0000000008007088                tFeedbackLeveler_initToPool
+ .text.tFeedbackLeveler_tick
+                0x00000000080070d8       0x50 LEAF/leaf/Src/leaf-dynamics.o
+                0x00000000080070d8                tFeedbackLeveler_tick
  .text.tADSR_init
-                0x0000000008006e30       0xe0 LEAF/leaf/Src/leaf-envelopes.o
-                0x0000000008006e30                tADSR_init
- .text.LEAF_poly_blep
-                0x0000000008006f10       0x58 LEAF/leaf/Src/leaf-math.o
-                0x0000000008006f10                LEAF_poly_blep
+                0x0000000008007128       0xe0 LEAF/leaf/Src/leaf-envelopes.o
+                0x0000000008007128                tADSR_init
+ .text.tExpSmooth_init
+                0x0000000008007208       0x54 LEAF/leaf/Src/leaf-envelopes.o
+                0x0000000008007208                tExpSmooth_init
+ .text.tExpSmooth_initToPool
+                0x000000000800725c       0x4c LEAF/leaf/Src/leaf-envelopes.o
+                0x000000000800725c                tExpSmooth_initToPool
+ .text.tExpSmooth_setDest
+                0x00000000080072a8        0x8 LEAF/leaf/Src/leaf-envelopes.o
+                0x00000000080072a8                tExpSmooth_setDest
+ .text.tExpSmooth_setVal
+                0x00000000080072b0        0x8 LEAF/leaf/Src/leaf-envelopes.o
+                0x00000000080072b0                tExpSmooth_setVal
+ .text.tExpSmooth_tick
+                0x00000000080072b8       0x20 LEAF/leaf/Src/leaf-envelopes.o
+                0x00000000080072b8                tExpSmooth_tick
+ .text.tOnePole_initToPool
+                0x00000000080072d8       0x6c LEAF/leaf/Src/leaf-filters.o
+                0x00000000080072d8                tOnePole_initToPool
+ .text.tOnePole_tick
+                0x0000000008007344       0x28 LEAF/leaf/Src/leaf-filters.o
+                0x0000000008007344                tOnePole_tick
+ .text.tHighpass_initToPool
+                0x000000000800736c       0x40 LEAF/leaf/Src/leaf-filters.o
+                0x000000000800736c                tHighpass_initToPool
+ .text.tHighpass_tick
+                0x00000000080073ac       0x20 LEAF/leaf/Src/leaf-filters.o
+                0x00000000080073ac                tHighpass_tick
+ .text.LEAF_clip
+                0x00000000080073cc       0x28 LEAF/leaf/Src/leaf-math.o
+                0x00000000080073cc                LEAF_clip
+ .text.LEAF_interpolation_linear
+                0x00000000080073f4       0x28 LEAF/leaf/Src/leaf-math.o
+                0x00000000080073f4                LEAF_interpolation_linear
  .text.leaf_pool_init
-                0x0000000008006f68       0x30 LEAF/leaf/Src/leaf-mempool.o
-                0x0000000008006f68                leaf_pool_init
+                0x000000000800741c       0x30 LEAF/leaf/Src/leaf-mempool.o
+                0x000000000800741c                leaf_pool_init
  .text.mpool_alloc
-                0x0000000008006f98       0xb8 LEAF/leaf/Src/leaf-mempool.o
-                0x0000000008006f98                mpool_alloc
+                0x000000000800744c       0xb8 LEAF/leaf/Src/leaf-mempool.o
+                0x000000000800744c                mpool_alloc
+ .text.mpool_calloc
+                0x0000000008007504       0xb0 LEAF/leaf/Src/leaf-mempool.o
+                0x0000000008007504                mpool_calloc
  .text.tMempool_init
-                0x0000000008007050      0x100 LEAF/leaf/Src/leaf-mempool.o
-                0x0000000008007050                tMempool_init
+                0x00000000080075b4      0x100 LEAF/leaf/Src/leaf-mempool.o
+                0x00000000080075b4                tMempool_init
  .text.tCycle_init
-                0x0000000008007150       0x20 LEAF/leaf/Src/leaf-oscillators.o
-                0x0000000008007150                tCycle_init
+                0x00000000080076b4       0x20 LEAF/leaf/Src/leaf-oscillators.o
+                0x00000000080076b4                tCycle_init
  .text.tCycle_setFreq
-                0x0000000008007170       0x1c LEAF/leaf/Src/leaf-oscillators.o
-                0x0000000008007170                tCycle_setFreq
+                0x00000000080076d4       0x1c LEAF/leaf/Src/leaf-oscillators.o
+                0x00000000080076d4                tCycle_setFreq
  .text.tSaw_initToPool
-                0x000000000800718c       0x1c LEAF/leaf/Src/leaf-oscillators.o
-                0x000000000800718c                tSaw_initToPool
- .text.tSaw_tick
-                0x00000000080071a8       0x4c LEAF/leaf/Src/leaf-oscillators.o
-                0x00000000080071a8                tSaw_tick
+                0x00000000080076f0       0x1c LEAF/leaf/Src/leaf-oscillators.o
+                0x00000000080076f0                tSaw_initToPool
  .text.tSaw_setFreq
-                0x00000000080071f4       0x1c LEAF/leaf/Src/leaf-oscillators.o
-                0x00000000080071f4                tSaw_setFreq
+                0x000000000800770c       0x1c LEAF/leaf/Src/leaf-oscillators.o
+                0x000000000800770c                tSaw_setFreq
+ .text.tNoise_init
+                0x0000000008007728       0x24 LEAF/leaf/Src/leaf-oscillators.o
+                0x0000000008007728                tNoise_init
+ .text.tNoise_tick
+                0x000000000800774c       0xa4 LEAF/leaf/Src/leaf-oscillators.o
+                0x000000000800774c                tNoise_tick
+ .text.tSimpleLivingString_initToPool
+                0x00000000080077f0       0xe4 LEAF/leaf/Src/leaf-physical.o
+                0x00000000080077f0                tSimpleLivingString_initToPool
+ .text.tSimpleLivingString_setFreq
+                0x00000000080078d4       0x30 LEAF/leaf/Src/leaf-physical.o
+                0x00000000080078d4                tSimpleLivingString_setFreq
+ .text.tSimpleLivingString_tick
+                0x0000000008007904       0x68 LEAF/leaf/Src/leaf-physical.o
+                0x0000000008007904                tSimpleLivingString_tick
  .text.LEAF_defaultErrorCallback
-                0x0000000008007210        0x4 LEAF/leaf/Src/leaf.o
-                0x0000000008007210                LEAF_defaultErrorCallback
+                0x000000000800796c        0x4 LEAF/leaf/Src/leaf.o
+                0x000000000800796c                LEAF_defaultErrorCallback
  .text.LEAF_init
-                0x0000000008007214       0x5c LEAF/leaf/Src/leaf.o
-                0x0000000008007214                LEAF_init
+                0x0000000008007970       0x5c LEAF/leaf/Src/leaf.o
+                0x0000000008007970                LEAF_init
  .text.LEAF_internalErrorCallback
-                0x0000000008007270       0x14 LEAF/leaf/Src/leaf.o
-                0x0000000008007270                LEAF_internalErrorCallback
+                0x00000000080079cc       0x14 LEAF/leaf/Src/leaf.o
+                0x00000000080079cc                LEAF_internalErrorCallback
  .text.FATFS_LinkDriver
-                0x0000000008007284       0x4c Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
-                0x0000000008007284                FATFS_LinkDriver
- .text.audioFrame.part.0
-                0x00000000080072d0       0xb8 Src/audiostream.o
+                0x00000000080079e0       0x4c Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+                0x00000000080079e0                FATFS_LinkDriver
  .text.audioInit
-                0x0000000008007388      0x150 Src/audiostream.o
-                0x0000000008007388                audioInit
+                0x0000000008007a2c      0x1c4 Src/audiostream.o
+                0x0000000008007a2c                audioInit
+ .text.audioTick
+                0x0000000008007bf0      0x1a4 Src/audiostream.o
+                0x0000000008007bf0                audioTick
  .text.HAL_SPI_RxCpltCallback
-                0x00000000080074d8      0x110 Src/audiostream.o
-                0x00000000080074d8                HAL_SPI_RxCpltCallback
+                0x0000000008007d94       0xf8 Src/audiostream.o
+                0x0000000008007d94                HAL_SPI_RxCpltCallback
  .text.HAL_SPI_RxHalfCpltCallback
-                0x00000000080075e8        0x4 Src/audiostream.o
-                0x00000000080075e8                HAL_SPI_RxHalfCpltCallback
+                0x0000000008007e8c        0x4 Src/audiostream.o
+                0x0000000008007e8c                HAL_SPI_RxHalfCpltCallback
  .text.HAL_SAI_ErrorCallback
-                0x00000000080075ec        0x4 Src/audiostream.o
-                0x00000000080075ec                HAL_SAI_ErrorCallback
+                0x0000000008007e90        0x4 Src/audiostream.o
+                0x0000000008007e90                HAL_SAI_ErrorCallback
  .text.HAL_SAI_TxCpltCallback
-                0x00000000080075f0        0x4 Src/audiostream.o
-                0x00000000080075f0                HAL_SAI_TxCpltCallback
+                0x0000000008007e94        0x4 Src/audiostream.o
+                0x0000000008007e94                HAL_SAI_TxCpltCallback
  .text.HAL_SAI_TxHalfCpltCallback
-                0x00000000080075f4        0x4 Src/audiostream.o
-                0x00000000080075f4                HAL_SAI_TxHalfCpltCallback
+                0x0000000008007e98        0x4 Src/audiostream.o
+                0x0000000008007e98                HAL_SAI_TxHalfCpltCallback
  .text.HAL_SAI_RxCpltCallback
-                0x00000000080075f8       0x14 Src/audiostream.o
-                0x00000000080075f8                HAL_SAI_RxCpltCallback
+                0x0000000008007e9c       0x84 Src/audiostream.o
+                0x0000000008007e9c                HAL_SAI_RxCpltCallback
  .text.HAL_SAI_RxHalfCpltCallback
-                0x000000000800760c       0x14 Src/audiostream.o
-                0x000000000800760c                HAL_SAI_RxHalfCpltCallback
+                0x0000000008007f20       0x84 Src/audiostream.o
+                0x0000000008007f20                HAL_SAI_RxHalfCpltCallback
  .text.BSP_SD_ReadBlocks
-                0x0000000008007620       0x24 Src/bsp_driver_sd.o
-                0x0000000008007620                BSP_SD_ReadBlocks
+                0x0000000008007fa4       0x24 Src/bsp_driver_sd.o
+                0x0000000008007fa4                BSP_SD_ReadBlocks
  .text.BSP_SD_WriteBlocks
-                0x0000000008007644       0x24 Src/bsp_driver_sd.o
-                0x0000000008007644                BSP_SD_WriteBlocks
+                0x0000000008007fc8       0x24 Src/bsp_driver_sd.o
+                0x0000000008007fc8                BSP_SD_WriteBlocks
  .text.BSP_SD_GetCardState
-                0x0000000008007668       0x14 Src/bsp_driver_sd.o
-                0x0000000008007668                BSP_SD_GetCardState
+                0x0000000008007fec       0x14 Src/bsp_driver_sd.o
+                0x0000000008007fec                BSP_SD_GetCardState
  .text.BSP_SD_GetCardInfo
-                0x000000000800767c        0xc Src/bsp_driver_sd.o
-                0x000000000800767c                BSP_SD_GetCardInfo
+                0x0000000008008000        0xc Src/bsp_driver_sd.o
+                0x0000000008008000                BSP_SD_GetCardInfo
  .text.BSP_SD_IsDetected
-                0x0000000008007688       0x20 Src/bsp_driver_sd.o
-                0x0000000008007688                BSP_SD_IsDetected
+                0x000000000800800c       0x20 Src/bsp_driver_sd.o
+                0x000000000800800c                BSP_SD_IsDetected
  .text.BSP_SD_Init
-                0x00000000080076a8       0x30 Src/bsp_driver_sd.o
-                0x00000000080076a8                BSP_SD_Init
+                0x000000000800802c       0x30 Src/bsp_driver_sd.o
+                0x000000000800802c                BSP_SD_Init
  .text.AudioCodec_init
-                0x00000000080076d8      0x124 Src/codec.o
-                0x00000000080076d8                AudioCodec_init
+                0x000000000800805c      0x124 Src/codec.o
+                0x000000000800805c                AudioCodec_init
  .text.MX_DMA_Init
-                0x00000000080077fc       0x80 Src/dma.o
-                0x00000000080077fc                MX_DMA_Init
+                0x0000000008008180       0x80 Src/dma.o
+                0x0000000008008180                MX_DMA_Init
  .text.MX_FATFS_Init
-                0x000000000800787c       0x1c Src/fatfs.o
-                0x000000000800787c                MX_FATFS_Init
+                0x0000000008008200       0x1c Src/fatfs.o
+                0x0000000008008200                MX_FATFS_Init
  .text.BSP_PlatformIsDetected
-                0x0000000008007898       0x18 Src/fatfs_platform.o
-                0x0000000008007898                BSP_PlatformIsDetected
+                0x000000000800821c       0x18 Src/fatfs_platform.o
+                0x000000000800821c                BSP_PlatformIsDetected
  .text.MX_FMC_Init
-                0x00000000080078b0       0x6c Src/fmc.o
-                0x00000000080078b0                MX_FMC_Init
+                0x0000000008008234       0x6c Src/fmc.o
+                0x0000000008008234                MX_FMC_Init
  .text.HAL_SDRAM_MspInit
-                0x000000000800791c       0xc8 Src/fmc.o
-                0x000000000800791c                HAL_SDRAM_MspInit
+                0x00000000080082a0       0xc8 Src/fmc.o
+                0x00000000080082a0                HAL_SDRAM_MspInit
  .text.MX_GPIO_Init
-                0x00000000080079e4      0x21c Src/gpio.o
-                0x00000000080079e4                MX_GPIO_Init
+                0x0000000008008368      0x21c Src/gpio.o
+                0x0000000008008368                MX_GPIO_Init
  .text.MX_I2C2_Init
-                0x0000000008007c00       0x5c Src/i2c.o
-                0x0000000008007c00                MX_I2C2_Init
+                0x0000000008008584       0x5c Src/i2c.o
+                0x0000000008008584                MX_I2C2_Init
  .text.HAL_I2C_MspInit
-                0x0000000008007c5c       0x78 Src/i2c.o
-                0x0000000008007c5c                HAL_I2C_MspInit
+                0x00000000080085e0       0x78 Src/i2c.o
+                0x00000000080085e0                HAL_I2C_MspInit
  .text.SystemClock_Config
-                0x0000000008007cd4      0x108 Src/main.o
-                0x0000000008007cd4                SystemClock_Config
+                0x0000000008008658      0x108 Src/main.o
+                0x0000000008008658                SystemClock_Config
  .text.SDRAM_Initialization_sequence
-                0x0000000008007ddc       0xb8 Src/main.o
-                0x0000000008007ddc                SDRAM_Initialization_sequence
+                0x0000000008008760       0xb8 Src/main.o
+                0x0000000008008760                SDRAM_Initialization_sequence
  .text.randomNumber
-                0x0000000008007e94       0x2c Src/main.o
-                0x0000000008007e94                randomNumber
+                0x0000000008008818       0x2c Src/main.o
+                0x0000000008008818                randomNumber
  .text.MPU_Conf
-                0x0000000008007ec0       0x50 Src/main.o
-                0x0000000008007ec0                MPU_Conf
+                0x0000000008008844       0x50 Src/main.o
+                0x0000000008008844                MPU_Conf
  .text.startup.main
-                0x0000000008007f10      0x110 Src/main.o
-                0x0000000008007f10                main
+                0x0000000008008894      0x110 Src/main.o
+                0x0000000008008894                main
  .text.Error_Handler
-                0x0000000008008020        0x4 Src/main.o
-                0x0000000008008020                Error_Handler
+                0x00000000080089a4        0x4 Src/main.o
+                0x00000000080089a4                Error_Handler
  .text.MX_RNG_Init
-                0x0000000008008024       0x28 Src/rng.o
-                0x0000000008008024                MX_RNG_Init
+                0x00000000080089a8       0x28 Src/rng.o
+                0x00000000080089a8                MX_RNG_Init
  .text.HAL_RNG_MspInit
-                0x000000000800804c       0x34 Src/rng.o
-                0x000000000800804c                HAL_RNG_MspInit
+                0x00000000080089d0       0x34 Src/rng.o
+                0x00000000080089d0                HAL_RNG_MspInit
  .text.MX_SAI1_Init
-                0x0000000008008080       0x7c Src/sai.o
-                0x0000000008008080                MX_SAI1_Init
+                0x0000000008008a04       0x7c Src/sai.o
+                0x0000000008008a04                MX_SAI1_Init
  .text.HAL_SAI_MspInit
-                0x00000000080080fc      0x168 Src/sai.o
-                0x00000000080080fc                HAL_SAI_MspInit
+                0x0000000008008a80      0x168 Src/sai.o
+                0x0000000008008a80                HAL_SAI_MspInit
  .text.SD_initialize
-                0x0000000008008264       0x30 Src/sd_diskio.o
-                0x0000000008008264                SD_initialize
+                0x0000000008008be8       0x30 Src/sd_diskio.o
+                0x0000000008008be8                SD_initialize
  .text.SD_status
-                0x0000000008008294       0x20 Src/sd_diskio.o
-                0x0000000008008294                SD_status
- .text.SD_read  0x00000000080082b4       0x20 Src/sd_diskio.o
-                0x00000000080082b4                SD_read
+                0x0000000008008c18       0x20 Src/sd_diskio.o
+                0x0000000008008c18                SD_status
+ .text.SD_read  0x0000000008008c38       0x20 Src/sd_diskio.o
+                0x0000000008008c38                SD_read
  .text.SD_ioctl
-                0x00000000080082d4       0x60 Src/sd_diskio.o
-                0x00000000080082d4                SD_ioctl
+                0x0000000008008c58       0x60 Src/sd_diskio.o
+                0x0000000008008c58                SD_ioctl
  .text.SD_write
-                0x0000000008008334       0x20 Src/sd_diskio.o
-                0x0000000008008334                SD_write
+                0x0000000008008cb8       0x20 Src/sd_diskio.o
+                0x0000000008008cb8                SD_write
  .text.MX_SDMMC1_SD_Init
-                0x0000000008008354       0x2c Src/sdmmc.o
-                0x0000000008008354                MX_SDMMC1_SD_Init
+                0x0000000008008cd8       0x2c Src/sdmmc.o
+                0x0000000008008cd8                MX_SDMMC1_SD_Init
  .text.HAL_SD_MspInit
-                0x0000000008008380       0xb0 Src/sdmmc.o
-                0x0000000008008380                HAL_SD_MspInit
+                0x0000000008008d04       0xb0 Src/sdmmc.o
+                0x0000000008008d04                HAL_SD_MspInit
  .text.MX_SPI1_Init
-                0x0000000008008430       0x54 Src/spi.o
-                0x0000000008008430                MX_SPI1_Init
+                0x0000000008008db4       0x54 Src/spi.o
+                0x0000000008008db4                MX_SPI1_Init
  .text.MX_SPI2_Init
-                0x0000000008008484       0x54 Src/spi.o
-                0x0000000008008484                MX_SPI2_Init
+                0x0000000008008e08       0x54 Src/spi.o
+                0x0000000008008e08                MX_SPI2_Init
  .text.HAL_SPI_MspInit
-                0x00000000080084d8      0x20c Src/spi.o
-                0x00000000080084d8                HAL_SPI_MspInit
+                0x0000000008008e5c      0x20c Src/spi.o
+                0x0000000008008e5c                HAL_SPI_MspInit
  .text.HAL_MspInit
-                0x00000000080086e4       0x24 Src/stm32h7xx_hal_msp.o
-                0x00000000080086e4                HAL_MspInit
+                0x0000000008009068       0x24 Src/stm32h7xx_hal_msp.o
+                0x0000000008009068                HAL_MspInit
  .text.NMI_Handler
-                0x0000000008008708        0x4 Src/stm32h7xx_it.o
-                0x0000000008008708                NMI_Handler
+                0x000000000800908c        0x4 Src/stm32h7xx_it.o
+                0x000000000800908c                NMI_Handler
  .text.HardFault_Handler
-                0x000000000800870c        0x4 Src/stm32h7xx_it.o
-                0x000000000800870c                HardFault_Handler
+                0x0000000008009090        0x4 Src/stm32h7xx_it.o
+                0x0000000008009090                HardFault_Handler
  .text.MemManage_Handler
-                0x0000000008008710        0x4 Src/stm32h7xx_it.o
-                0x0000000008008710                MemManage_Handler
+                0x0000000008009094        0x4 Src/stm32h7xx_it.o
+                0x0000000008009094                MemManage_Handler
  .text.BusFault_Handler
-                0x0000000008008714        0x4 Src/stm32h7xx_it.o
-                0x0000000008008714                BusFault_Handler
+                0x0000000008009098        0x4 Src/stm32h7xx_it.o
+                0x0000000008009098                BusFault_Handler
  .text.UsageFault_Handler
-                0x0000000008008718        0x4 Src/stm32h7xx_it.o
-                0x0000000008008718                UsageFault_Handler
+                0x000000000800909c        0x4 Src/stm32h7xx_it.o
+                0x000000000800909c                UsageFault_Handler
  .text.SVC_Handler
-                0x000000000800871c        0x4 Src/stm32h7xx_it.o
-                0x000000000800871c                SVC_Handler
+                0x00000000080090a0        0x4 Src/stm32h7xx_it.o
+                0x00000000080090a0                SVC_Handler
  .text.DebugMon_Handler
-                0x0000000008008720        0x4 Src/stm32h7xx_it.o
-                0x0000000008008720                DebugMon_Handler
+                0x00000000080090a4        0x4 Src/stm32h7xx_it.o
+                0x00000000080090a4                DebugMon_Handler
  .text.PendSV_Handler
-                0x0000000008008724        0x4 Src/stm32h7xx_it.o
-                0x0000000008008724                PendSV_Handler
+                0x00000000080090a8        0x4 Src/stm32h7xx_it.o
+                0x00000000080090a8                PendSV_Handler
  .text.SysTick_Handler
-                0x0000000008008728        0x4 Src/stm32h7xx_it.o
-                0x0000000008008728                SysTick_Handler
+                0x00000000080090ac        0x4 Src/stm32h7xx_it.o
+                0x00000000080090ac                SysTick_Handler
  .text.DMA1_Stream1_IRQHandler
-                0x000000000800872c        0xc Src/stm32h7xx_it.o
-                0x000000000800872c                DMA1_Stream1_IRQHandler
+                0x00000000080090b0        0xc Src/stm32h7xx_it.o
+                0x00000000080090b0                DMA1_Stream1_IRQHandler
  .text.DMA1_Stream2_IRQHandler
-                0x0000000008008738        0xc Src/stm32h7xx_it.o
-                0x0000000008008738                DMA1_Stream2_IRQHandler
+                0x00000000080090bc        0xc Src/stm32h7xx_it.o
+                0x00000000080090bc                DMA1_Stream2_IRQHandler
  .text.DMA1_Stream3_IRQHandler
-                0x0000000008008744        0xc Src/stm32h7xx_it.o
-                0x0000000008008744                DMA1_Stream3_IRQHandler
+                0x00000000080090c8        0xc Src/stm32h7xx_it.o
+                0x00000000080090c8                DMA1_Stream3_IRQHandler
  .text.SPI1_IRQHandler
-                0x0000000008008750        0xc Src/stm32h7xx_it.o
-                0x0000000008008750                SPI1_IRQHandler
+                0x00000000080090d4        0xc Src/stm32h7xx_it.o
+                0x00000000080090d4                SPI1_IRQHandler
  .text.SPI2_IRQHandler
-                0x000000000800875c        0xc Src/stm32h7xx_it.o
-                0x000000000800875c                SPI2_IRQHandler
+                0x00000000080090e0        0xc Src/stm32h7xx_it.o
+                0x00000000080090e0                SPI2_IRQHandler
  .text.DMA2_Stream0_IRQHandler
-                0x0000000008008768        0xc Src/stm32h7xx_it.o
-                0x0000000008008768                DMA2_Stream0_IRQHandler
+                0x00000000080090ec        0xc Src/stm32h7xx_it.o
+                0x00000000080090ec                DMA2_Stream0_IRQHandler
  .text.SystemInit
-                0x0000000008008774       0x80 Src/system_stm32h7xx.o
-                0x0000000008008774                SystemInit
+                0x00000000080090f8       0x80 Src/system_stm32h7xx.o
+                0x00000000080090f8                SystemInit
  .text.Reset_Handler
-                0x00000000080087f4       0x50 Startup/startup_stm32h743zitx.o
-                0x00000000080087f4                Reset_Handler
+                0x0000000008009178       0x50 Startup/startup_stm32h743zitx.o
+                0x0000000008009178                Reset_Handler
  .text.Default_Handler
-                0x0000000008008844        0x2 Startup/startup_stm32h743zitx.o
-                0x0000000008008844                SAI1_IRQHandler
-                0x0000000008008844                EXTI2_IRQHandler
-                0x0000000008008844                TIM8_CC_IRQHandler
-                0x0000000008008844                HRTIM1_Master_IRQHandler
-                0x0000000008008844                UART8_IRQHandler
-                0x0000000008008844                SPI4_IRQHandler
-                0x0000000008008844                TIM1_CC_IRQHandler
-                0x0000000008008844                BDMA_Channel6_IRQHandler
-                0x0000000008008844                DMA2_Stream5_IRQHandler
-                0x0000000008008844                HRTIM1_FLT_IRQHandler
-                0x0000000008008844                JPEG_IRQHandler
-                0x0000000008008844                DMA1_Stream5_IRQHandler
-                0x0000000008008844                BDMA_Channel1_IRQHandler
-                0x0000000008008844                HRTIM1_TIMD_IRQHandler
-                0x0000000008008844                TAMP_STAMP_IRQHandler
-                0x0000000008008844                EXTI3_IRQHandler
-                0x0000000008008844                LPTIM4_IRQHandler
-                0x0000000008008844                TIM8_TRG_COM_TIM14_IRQHandler
-                0x0000000008008844                LPTIM2_IRQHandler
-                0x0000000008008844                DFSDM1_FLT1_IRQHandler
-                0x0000000008008844                DMAMUX2_OVR_IRQHandler
-                0x0000000008008844                TIM8_UP_TIM13_IRQHandler
-                0x0000000008008844                I2C3_ER_IRQHandler
-                0x0000000008008844                DFSDM1_FLT2_IRQHandler
-                0x0000000008008844                MDMA_IRQHandler
-                0x0000000008008844                LPTIM3_IRQHandler
-                0x0000000008008844                HSEM1_IRQHandler
-                0x0000000008008844                EXTI0_IRQHandler
-                0x0000000008008844                I2C2_EV_IRQHandler
-                0x0000000008008844                FPU_IRQHandler
-                0x0000000008008844                OTG_HS_WKUP_IRQHandler
-                0x0000000008008844                FDCAN1_IT1_IRQHandler
-                0x0000000008008844                LTDC_ER_IRQHandler
-                0x0000000008008844                DMA2_Stream2_IRQHandler
-                0x0000000008008844                HRTIM1_TIME_IRQHandler
-                0x0000000008008844                TIM6_DAC_IRQHandler
-                0x0000000008008844                DCMI_IRQHandler
-                0x0000000008008844                HRTIM1_TIMC_IRQHandler
-                0x0000000008008844                DMA2_Stream3_IRQHandler
-                0x0000000008008844                SAI2_IRQHandler
-                0x0000000008008844                DFSDM1_FLT3_IRQHandler
-                0x0000000008008844                USART6_IRQHandler
-                0x0000000008008844                TIM17_IRQHandler
-                0x0000000008008844                USART3_IRQHandler
-                0x0000000008008844                BDMA_Channel7_IRQHandler
-                0x0000000008008844                LPTIM5_IRQHandler
-                0x0000000008008844                UART5_IRQHandler
-                0x0000000008008844                ADC3_IRQHandler
-                0x0000000008008844                TIM4_IRQHandler
-                0x0000000008008844                BDMA_Channel2_IRQHandler
-                0x0000000008008844                QUADSPI_IRQHandler
-                0x0000000008008844                I2C1_EV_IRQHandler
-                0x0000000008008844                DMA1_Stream6_IRQHandler
-                0x0000000008008844                DMAMUX1_OVR_IRQHandler
-                0x0000000008008844                TIM16_IRQHandler
-                0x0000000008008844                UART4_IRQHandler
-                0x0000000008008844                BDMA_Channel5_IRQHandler
-                0x0000000008008844                TIM3_IRQHandler
-                0x0000000008008844                RCC_IRQHandler
-                0x0000000008008844                TIM8_BRK_TIM12_IRQHandler
-                0x0000000008008844                TIM1_TRG_COM_IRQHandler
-                0x0000000008008844                Default_Handler
-                0x0000000008008844                ECC_IRQHandler
-                0x0000000008008844                CEC_IRQHandler
-                0x0000000008008844                EXTI15_10_IRQHandler
-                0x0000000008008844                BDMA_Channel0_IRQHandler
-                0x0000000008008844                ADC_IRQHandler
-                0x0000000008008844                DMA1_Stream7_IRQHandler
-                0x0000000008008844                HRTIM1_TIMA_IRQHandler
-                0x0000000008008844                SPI5_IRQHandler
-                0x0000000008008844                TIM7_IRQHandler
-                0x0000000008008844                SDMMC1_IRQHandler
-                0x0000000008008844                TIM5_IRQHandler
-                0x0000000008008844                DMA2_Stream7_IRQHandler
-                0x0000000008008844                TIM15_IRQHandler
-                0x0000000008008844                PVD_AVD_IRQHandler
-                0x0000000008008844                I2C3_EV_IRQHandler
-                0x0000000008008844                EXTI9_5_IRQHandler
-                0x0000000008008844                RTC_WKUP_IRQHandler
-                0x0000000008008844                LTDC_IRQHandler
-                0x0000000008008844                SAI3_IRQHandler
-                0x0000000008008844                ETH_WKUP_IRQHandler
-                0x0000000008008844                SPDIF_RX_IRQHandler
-                0x0000000008008844                OTG_HS_EP1_IN_IRQHandler
-                0x0000000008008844                DMA1_Stream0_IRQHandler
-                0x0000000008008844                CRS_IRQHandler
-                0x0000000008008844                EXTI4_IRQHandler
-                0x0000000008008844                RNG_IRQHandler
-                0x0000000008008844                HRTIM1_TIMB_IRQHandler
-                0x0000000008008844                FDCAN2_IT1_IRQHandler
-                0x0000000008008844                ETH_IRQHandler
-                0x0000000008008844                TIM1_UP_IRQHandler
-                0x0000000008008844                BDMA_Channel4_IRQHandler
-                0x0000000008008844                OTG_HS_EP1_OUT_IRQHandler
-                0x0000000008008844                WWDG_IRQHandler
-                0x0000000008008844                SPI6_IRQHandler
-                0x0000000008008844                MDIOS_IRQHandler
-                0x0000000008008844                I2C4_EV_IRQHandler
-                0x0000000008008844                FDCAN2_IT0_IRQHandler
-                0x0000000008008844                LPUART1_IRQHandler
-                0x0000000008008844                FDCAN1_IT0_IRQHandler
-                0x0000000008008844                TIM2_IRQHandler
-                0x0000000008008844                OTG_FS_WKUP_IRQHandler
-                0x0000000008008844                OTG_HS_IRQHandler
-                0x0000000008008844                DMA2D_IRQHandler
-                0x0000000008008844                TIM1_BRK_IRQHandler
-                0x0000000008008844                EXTI1_IRQHandler
-                0x0000000008008844                SDMMC2_IRQHandler
-                0x0000000008008844                OTG_FS_EP1_OUT_IRQHandler
-                0x0000000008008844                BDMA_Channel3_IRQHandler
-                0x0000000008008844                UART7_IRQHandler
-                0x0000000008008844                MDIOS_WKUP_IRQHandler
-                0x0000000008008844                USART2_IRQHandler
-                0x0000000008008844                DFSDM1_FLT0_IRQHandler
-                0x0000000008008844                SAI4_IRQHandler
-                0x0000000008008844                I2C2_ER_IRQHandler
-                0x0000000008008844                DMA2_Stream1_IRQHandler
-                0x0000000008008844                FLASH_IRQHandler
-                0x0000000008008844                DMA2_Stream4_IRQHandler
-                0x0000000008008844                USART1_IRQHandler
-                0x0000000008008844                OTG_FS_IRQHandler
-                0x0000000008008844                SPI3_IRQHandler
-                0x0000000008008844                WAKEUP_PIN_IRQHandler
-                0x0000000008008844                DMA1_Stream4_IRQHandler
-                0x0000000008008844                OTG_FS_EP1_IN_IRQHandler
-                0x0000000008008844                I2C1_ER_IRQHandler
-                0x0000000008008844                FMC_IRQHandler
-                0x0000000008008844                FDCAN_CAL_IRQHandler
-                0x0000000008008844                SWPMI1_IRQHandler
-                0x0000000008008844                COMP1_IRQHandler
-                0x0000000008008844                LPTIM1_IRQHandler
-                0x0000000008008844                I2C4_ER_IRQHandler
-                0x0000000008008844                DMA2_Stream6_IRQHandler
-                0x0000000008008844                RTC_Alarm_IRQHandler
- *fill*         0x0000000008008846        0x2 
+                0x00000000080091c8        0x2 Startup/startup_stm32h743zitx.o
+                0x00000000080091c8                SAI1_IRQHandler
+                0x00000000080091c8                EXTI2_IRQHandler
+                0x00000000080091c8                TIM8_CC_IRQHandler
+                0x00000000080091c8                HRTIM1_Master_IRQHandler
+                0x00000000080091c8                UART8_IRQHandler
+                0x00000000080091c8                SPI4_IRQHandler
+                0x00000000080091c8                TIM1_CC_IRQHandler
+                0x00000000080091c8                BDMA_Channel6_IRQHandler
+                0x00000000080091c8                DMA2_Stream5_IRQHandler
+                0x00000000080091c8                HRTIM1_FLT_IRQHandler
+                0x00000000080091c8                JPEG_IRQHandler
+                0x00000000080091c8                DMA1_Stream5_IRQHandler
+                0x00000000080091c8                BDMA_Channel1_IRQHandler
+                0x00000000080091c8                HRTIM1_TIMD_IRQHandler
+                0x00000000080091c8                TAMP_STAMP_IRQHandler
+                0x00000000080091c8                EXTI3_IRQHandler
+                0x00000000080091c8                LPTIM4_IRQHandler
+                0x00000000080091c8                TIM8_TRG_COM_TIM14_IRQHandler
+                0x00000000080091c8                LPTIM2_IRQHandler
+                0x00000000080091c8                DFSDM1_FLT1_IRQHandler
+                0x00000000080091c8                DMAMUX2_OVR_IRQHandler
+                0x00000000080091c8                TIM8_UP_TIM13_IRQHandler
+                0x00000000080091c8                I2C3_ER_IRQHandler
+                0x00000000080091c8                DFSDM1_FLT2_IRQHandler
+                0x00000000080091c8                MDMA_IRQHandler
+                0x00000000080091c8                LPTIM3_IRQHandler
+                0x00000000080091c8                HSEM1_IRQHandler
+                0x00000000080091c8                EXTI0_IRQHandler
+                0x00000000080091c8                I2C2_EV_IRQHandler
+                0x00000000080091c8                FPU_IRQHandler
+                0x00000000080091c8                OTG_HS_WKUP_IRQHandler
+                0x00000000080091c8                FDCAN1_IT1_IRQHandler
+                0x00000000080091c8                LTDC_ER_IRQHandler
+                0x00000000080091c8                DMA2_Stream2_IRQHandler
+                0x00000000080091c8                HRTIM1_TIME_IRQHandler
+                0x00000000080091c8                TIM6_DAC_IRQHandler
+                0x00000000080091c8                DCMI_IRQHandler
+                0x00000000080091c8                HRTIM1_TIMC_IRQHandler
+                0x00000000080091c8                DMA2_Stream3_IRQHandler
+                0x00000000080091c8                SAI2_IRQHandler
+                0x00000000080091c8                DFSDM1_FLT3_IRQHandler
+                0x00000000080091c8                USART6_IRQHandler
+                0x00000000080091c8                TIM17_IRQHandler
+                0x00000000080091c8                USART3_IRQHandler
+                0x00000000080091c8                BDMA_Channel7_IRQHandler
+                0x00000000080091c8                LPTIM5_IRQHandler
+                0x00000000080091c8                UART5_IRQHandler
+                0x00000000080091c8                ADC3_IRQHandler
+                0x00000000080091c8                TIM4_IRQHandler
+                0x00000000080091c8                BDMA_Channel2_IRQHandler
+                0x00000000080091c8                QUADSPI_IRQHandler
+                0x00000000080091c8                I2C1_EV_IRQHandler
+                0x00000000080091c8                DMA1_Stream6_IRQHandler
+                0x00000000080091c8                DMAMUX1_OVR_IRQHandler
+                0x00000000080091c8                TIM16_IRQHandler
+                0x00000000080091c8                UART4_IRQHandler
+                0x00000000080091c8                BDMA_Channel5_IRQHandler
+                0x00000000080091c8                TIM3_IRQHandler
+                0x00000000080091c8                RCC_IRQHandler
+                0x00000000080091c8                TIM8_BRK_TIM12_IRQHandler
+                0x00000000080091c8                TIM1_TRG_COM_IRQHandler
+                0x00000000080091c8                Default_Handler
+                0x00000000080091c8                ECC_IRQHandler
+                0x00000000080091c8                CEC_IRQHandler
+                0x00000000080091c8                EXTI15_10_IRQHandler
+                0x00000000080091c8                BDMA_Channel0_IRQHandler
+                0x00000000080091c8                ADC_IRQHandler
+                0x00000000080091c8                DMA1_Stream7_IRQHandler
+                0x00000000080091c8                HRTIM1_TIMA_IRQHandler
+                0x00000000080091c8                SPI5_IRQHandler
+                0x00000000080091c8                TIM7_IRQHandler
+                0x00000000080091c8                SDMMC1_IRQHandler
+                0x00000000080091c8                TIM5_IRQHandler
+                0x00000000080091c8                DMA2_Stream7_IRQHandler
+                0x00000000080091c8                TIM15_IRQHandler
+                0x00000000080091c8                PVD_AVD_IRQHandler
+                0x00000000080091c8                I2C3_EV_IRQHandler
+                0x00000000080091c8                EXTI9_5_IRQHandler
+                0x00000000080091c8                RTC_WKUP_IRQHandler
+                0x00000000080091c8                LTDC_IRQHandler
+                0x00000000080091c8                SAI3_IRQHandler
+                0x00000000080091c8                ETH_WKUP_IRQHandler
+                0x00000000080091c8                SPDIF_RX_IRQHandler
+                0x00000000080091c8                OTG_HS_EP1_IN_IRQHandler
+                0x00000000080091c8                DMA1_Stream0_IRQHandler
+                0x00000000080091c8                CRS_IRQHandler
+                0x00000000080091c8                EXTI4_IRQHandler
+                0x00000000080091c8                RNG_IRQHandler
+                0x00000000080091c8                HRTIM1_TIMB_IRQHandler
+                0x00000000080091c8                FDCAN2_IT1_IRQHandler
+                0x00000000080091c8                ETH_IRQHandler
+                0x00000000080091c8                TIM1_UP_IRQHandler
+                0x00000000080091c8                BDMA_Channel4_IRQHandler
+                0x00000000080091c8                OTG_HS_EP1_OUT_IRQHandler
+                0x00000000080091c8                WWDG_IRQHandler
+                0x00000000080091c8                SPI6_IRQHandler
+                0x00000000080091c8                MDIOS_IRQHandler
+                0x00000000080091c8                I2C4_EV_IRQHandler
+                0x00000000080091c8                FDCAN2_IT0_IRQHandler
+                0x00000000080091c8                LPUART1_IRQHandler
+                0x00000000080091c8                FDCAN1_IT0_IRQHandler
+                0x00000000080091c8                TIM2_IRQHandler
+                0x00000000080091c8                OTG_FS_WKUP_IRQHandler
+                0x00000000080091c8                OTG_HS_IRQHandler
+                0x00000000080091c8                DMA2D_IRQHandler
+                0x00000000080091c8                TIM1_BRK_IRQHandler
+                0x00000000080091c8                EXTI1_IRQHandler
+                0x00000000080091c8                SDMMC2_IRQHandler
+                0x00000000080091c8                OTG_FS_EP1_OUT_IRQHandler
+                0x00000000080091c8                BDMA_Channel3_IRQHandler
+                0x00000000080091c8                UART7_IRQHandler
+                0x00000000080091c8                MDIOS_WKUP_IRQHandler
+                0x00000000080091c8                USART2_IRQHandler
+                0x00000000080091c8                DFSDM1_FLT0_IRQHandler
+                0x00000000080091c8                SAI4_IRQHandler
+                0x00000000080091c8                I2C2_ER_IRQHandler
+                0x00000000080091c8                DMA2_Stream1_IRQHandler
+                0x00000000080091c8                FLASH_IRQHandler
+                0x00000000080091c8                DMA2_Stream4_IRQHandler
+                0x00000000080091c8                USART1_IRQHandler
+                0x00000000080091c8                OTG_FS_IRQHandler
+                0x00000000080091c8                SPI3_IRQHandler
+                0x00000000080091c8                WAKEUP_PIN_IRQHandler
+                0x00000000080091c8                DMA1_Stream4_IRQHandler
+                0x00000000080091c8                OTG_FS_EP1_IN_IRQHandler
+                0x00000000080091c8                I2C1_ER_IRQHandler
+                0x00000000080091c8                FMC_IRQHandler
+                0x00000000080091c8                FDCAN_CAL_IRQHandler
+                0x00000000080091c8                SWPMI1_IRQHandler
+                0x00000000080091c8                COMP1_IRQHandler
+                0x00000000080091c8                LPTIM1_IRQHandler
+                0x00000000080091c8                I2C4_ER_IRQHandler
+                0x00000000080091c8                DMA2_Stream6_IRQHandler
+                0x00000000080091c8                RTC_Alarm_IRQHandler
+ *fill*         0x00000000080091ca        0x2 
  .text.__libc_init_array
-                0x0000000008008848       0x48 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-init.o)
-                0x0000000008008848                __libc_init_array
- .text.memset   0x0000000008008890       0x10 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-memset.o)
-                0x0000000008008890                memset
+                0x00000000080091cc       0x48 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-init.o)
+                0x00000000080091cc                __libc_init_array
+ .text.memset   0x0000000008009214       0x10 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-memset.o)
+                0x0000000008009214                memset
  *(.glue_7)
- .glue_7        0x00000000080088a0        0x0 linker stubs
+ .glue_7        0x0000000008009224        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x00000000080088a0        0x0 linker stubs
+ .glue_7t       0x0000000008009224        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x00000000080088a0        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
+ .eh_frame      0x0000000008009224        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
  *(.init)
- .init          0x00000000080088a0        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crti.o
-                0x00000000080088a0                _init
- .init          0x00000000080088a4        0x8 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtn.o
+ .init          0x0000000008009224        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crti.o
+                0x0000000008009224                _init
+ .init          0x0000000008009228        0x8 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtn.o
  *(.fini)
- .fini          0x00000000080088ac        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crti.o
-                0x00000000080088ac                _fini
- .fini          0x00000000080088b0        0x8 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtn.o
-                0x00000000080088b8                . = ALIGN (0x4)
-                0x00000000080088b8                _etext = .
+ .fini          0x0000000008009230        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crti.o
+                0x0000000008009230                _fini
+ .fini          0x0000000008009234        0x8 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtn.o
+                0x000000000800923c                . = ALIGN (0x4)
+                0x000000000800923c                _etext = .
 
-.vfp11_veneer   0x00000000080088b8        0x0
- .vfp11_veneer  0x00000000080088b8        0x0 linker stubs
+.vfp11_veneer   0x000000000800923c        0x0
+ .vfp11_veneer  0x000000000800923c        0x0 linker stubs
 
-.v4_bx          0x00000000080088b8        0x0
- .v4_bx         0x00000000080088b8        0x0 linker stubs
+.v4_bx          0x000000000800923c        0x0
+ .v4_bx         0x000000000800923c        0x0 linker stubs
 
-.iplt           0x00000000080088b8        0x0
- .iplt          0x00000000080088b8        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
+.iplt           0x000000000800923c        0x0
+ .iplt          0x000000000800923c        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
 
-.rodata         0x00000000080088b8    0x8002c
-                0x00000000080088b8                . = ALIGN (0x4)
+.rodata         0x000000000800923c    0x8002c
+                0x000000000800923c                . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
  .rodata.flagBitshiftOffset.10891
-                0x00000000080088b8        0x8 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
+                0x000000000800923c        0x8 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
  .rodata.__leaf_table_attack_decay_inc
-                0x00000000080088c0    0x40000 LEAF/leaf/Src/leaf-tables.o
-                0x00000000080088c0                __leaf_table_attack_decay_inc
+                0x0000000008009244    0x40000 LEAF/leaf/Src/leaf-tables.o
+                0x0000000008009244                __leaf_table_attack_decay_inc
  .rodata.__leaf_table_exp_decay
-                0x00000000080488c0    0x40000 LEAF/leaf/Src/leaf-tables.o
-                0x00000000080488c0                __leaf_table_exp_decay
+                0x0000000008049244    0x40000 LEAF/leaf/Src/leaf-tables.o
+                0x0000000008049244                __leaf_table_exp_decay
  .rodata.SD_Driver
-                0x00000000080888c0       0x14 Src/sd_diskio.o
-                0x00000000080888c0                SD_Driver
+                0x0000000008089244       0x14 Src/sd_diskio.o
+                0x0000000008089244                SD_Driver
  .rodata.D1CorePrescTable
-                0x00000000080888d4       0x10 Src/system_stm32h7xx.o
-                0x00000000080888d4                D1CorePrescTable
-                0x00000000080888e4                . = ALIGN (0x4)
+                0x0000000008089258       0x10 Src/system_stm32h7xx.o
+                0x0000000008089258                D1CorePrescTable
+                0x0000000008089268                . = ALIGN (0x4)
 
-.rel.dyn        0x00000000080888e4        0x0
- .rel.iplt      0x00000000080888e4        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
+.rel.dyn        0x0000000008089268        0x0
+ .rel.iplt      0x0000000008089268        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
 
-.ARM.extab      0x00000000080888e4        0x0
-                0x00000000080888e4                . = ALIGN (0x4)
+.ARM.extab      0x0000000008089268        0x0
+                0x0000000008089268                . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x00000000080888e4                . = ALIGN (0x4)
+                0x0000000008089268                . = ALIGN (0x4)
 
-.ARM            0x00000000080888e4        0x0
-                0x00000000080888e4                . = ALIGN (0x4)
-                0x00000000080888e4                __exidx_start = .
+.ARM            0x0000000008089268        0x0
+                0x0000000008089268                . = ALIGN (0x4)
+                0x0000000008089268                __exidx_start = .
  *(.ARM.exidx*)
-                0x00000000080888e4                __exidx_end = .
-                0x00000000080888e4                . = ALIGN (0x4)
+                0x0000000008089268                __exidx_end = .
+                0x0000000008089268                . = ALIGN (0x4)
 
-.preinit_array  0x00000000080888e4        0x0
-                0x00000000080888e4                . = ALIGN (0x4)
-                0x00000000080888e4                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x0000000008089268        0x0
+                0x0000000008089268                . = ALIGN (0x4)
+                0x0000000008089268                PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x00000000080888e4                PROVIDE (__preinit_array_end = .)
-                0x00000000080888e4                . = ALIGN (0x4)
+                0x0000000008089268                PROVIDE (__preinit_array_end = .)
+                0x0000000008089268                . = ALIGN (0x4)
 
-.init_array     0x00000000080888e4        0x4
-                0x00000000080888e4                . = ALIGN (0x4)
-                0x00000000080888e4                PROVIDE (__init_array_start = .)
+.init_array     0x0000000008089268        0x4
+                0x0000000008089268                . = ALIGN (0x4)
+                0x0000000008089268                PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x00000000080888e4        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
-                0x00000000080888e8                PROVIDE (__init_array_end = .)
-                0x00000000080888e8                . = ALIGN (0x4)
+ .init_array    0x0000000008089268        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
+                0x000000000808926c                PROVIDE (__init_array_end = .)
+                0x000000000808926c                . = ALIGN (0x4)
 
-.fini_array     0x00000000080888e8        0x4
-                0x00000000080888e8                . = ALIGN (0x4)
+.fini_array     0x000000000808926c        0x4
+                0x000000000808926c                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x00000000080888e8        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
+ .fini_array    0x000000000808926c        0x4 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x00000000080888ec                . = ALIGN (0x4)
-                0x00000000080888ec                _sidata = LOADADDR (.data)
+                0x0000000008089270                . = ALIGN (0x4)
+                0x0000000008089270                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000       0x18 load address 0x00000000080888ec
+.data           0x0000000020000000       0x70 load address 0x0000000008089270
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                _sdata = .
  *(.data)
@@ -14633,108 +14563,122 @@ LOAD /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.id
  .data.uwTickPrio
                 0x0000000020000004        0x4 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
                 0x0000000020000004                uwTickPrio
+ .data.fretMeasurements
+                0x0000000020000008       0x20 Src/audiostream.o
+                0x0000000020000008                fretMeasurements
+ .data.fretScaling
+                0x0000000020000028       0x10 Src/audiostream.o
+                0x0000000020000028                fretScaling
+ .data.openStringFrequencies
+                0x0000000020000038       0x28 Src/audiostream.o
+                0x0000000020000038                openStringFrequencies
  .data.I2Ctimeout
-                0x0000000020000008        0x4 Src/codec.o
-                0x0000000020000008                I2Ctimeout
+                0x0000000020000060        0x4 Src/codec.o
+                0x0000000020000060                I2Ctimeout
  .data.i2cDataSize
-                0x000000002000000c        0x2 Src/codec.o
-                0x000000002000000c                i2cDataSize
- .data.Stat     0x000000002000000e        0x1 Src/sd_diskio.o
- *fill*         0x000000002000000f        0x1 
+                0x0000000020000064        0x2 Src/codec.o
+                0x0000000020000064                i2cDataSize
+ .data.Stat     0x0000000020000066        0x1 Src/sd_diskio.o
+ *fill*         0x0000000020000067        0x1 
  .data.SystemCoreClock
-                0x0000000020000010        0x4 Src/system_stm32h7xx.o
-                0x0000000020000010                SystemCoreClock
+                0x0000000020000068        0x4 Src/system_stm32h7xx.o
+                0x0000000020000068                SystemCoreClock
  .data.SystemD2Clock
-                0x0000000020000014        0x4 Src/system_stm32h7xx.o
-                0x0000000020000014                SystemD2Clock
-                0x0000000020000018                . = ALIGN (0x4)
-                0x0000000020000018                _edata = .
+                0x000000002000006c        0x4 Src/system_stm32h7xx.o
+                0x000000002000006c                SystemD2Clock
+                0x0000000020000070                . = ALIGN (0x4)
+                0x0000000020000070                _edata = .
 
-.igot.plt       0x0000000020000018        0x0 load address 0x0000000008088904
- .igot.plt      0x0000000020000018        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
-                0x0000000020000018                . = ALIGN (0x4)
+.igot.plt       0x0000000020000070        0x0 load address 0x00000000080892e0
+ .igot.plt      0x0000000020000070        0x0 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
+                0x0000000020000070                . = ALIGN (0x4)
 
-.bss            0x0000000020000018    0x14ce4 load address 0x0000000008088904
-                0x0000000020000018                _sbss = .
-                0x0000000020000018                __bss_start__ = _sbss
+.bss            0x0000000020000070    0x14dac load address 0x00000000080892e0
+                0x0000000020000070                _sbss = .
+                0x0000000020000070                __bss_start__ = _sbss
  *(.bss)
- .bss           0x0000000020000018       0x1c /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
+ .bss           0x0000000020000070       0x1c /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtbegin.o
  *(.bss*)
- .bss.disk      0x0000000020000034        0xc Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
-                0x0000000020000034                disk
+ .bss.disk      0x000000002000008c        0xc Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+                0x000000002000008c                disk
  .bss.codecReady
-                0x0000000020000040        0x4 Src/audiostream.o
-                0x0000000020000040                codecReady
+                0x0000000020000098        0x4 Src/audiostream.o
+                0x0000000020000098                codecReady
  .bss.myI2cData
-                0x0000000020000044        0x2 Src/codec.o
-                0x0000000020000044                myI2cData
- *fill*         0x0000000020000046        0x2 
+                0x000000002000009c        0x2 Src/codec.o
+                0x000000002000009c                myI2cData
+ *fill*         0x000000002000009e        0x2 
  .bss.FMC_Initialized
-                0x0000000020000048        0x4 Src/fmc.o
+                0x00000000200000a0        0x4 Src/fmc.o
  .bss.SAI1_client
-                0x000000002000004c        0x4 Src/sai.o
+                0x00000000200000a4        0x4 Src/sai.o
  *(COMMON)
- COMMON         0x0000000020000050        0x4 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
-                0x0000000020000050                uwTick
- COMMON         0x0000000020000054       0x40 LEAF/leaf/Src/leaf.o
-                0x0000000020000054                leaf
- COMMON         0x0000000020000094    0x142c4 Src/audiostream.o
-                0x0000000020000094                stringPositions
-                0x000000002000009c                mySine
-                0x00000000200000a4                small_memory
-                0x0000000020013a6c                theAmps
-                0x0000000020013a94                saws
-                0x0000000020013abc                transmit_status
-                0x0000000020013ac0                myNoise
-                0x0000000020013ac4                largePool
-                0x0000000020013ac8                receive_status
-                0x0000000020013acc                mediumPool
-                0x0000000020013ad0                stringInputs
-                0x0000000020013af8                LED_envelope
-                0x0000000020013b08                atodbTable
-                0x0000000020014308                envelopes
-                0x0000000020014330                maxVolumes
- COMMON         0x0000000020014358        0x1 Src/codec.o
-                0x0000000020014358                testVal
- *fill*         0x0000000020014359        0x3 
- COMMON         0x000000002001435c      0x46c Src/fatfs.o
-                0x000000002001435c                retSD
-                0x0000000020014360                SDPath
-                0x0000000020014364                SDFile
-                0x0000000020014594                SDFatFS
- COMMON         0x00000000200147c8       0x34 Src/fmc.o
-                0x00000000200147c8                hsdram1
- COMMON         0x00000000200147fc       0x4c Src/i2c.o
-                0x00000000200147fc                hi2c2
- COMMON         0x0000000020014848       0x14 Src/rng.o
-                0x0000000020014848                hrng
- COMMON         0x000000002001485c      0x220 Src/sai.o
-                0x000000002001485c                hsai_BlockB1
-                0x00000000200148f4                hdma_sai1_a
-                0x000000002001496c                hdma_sai1_b
-                0x00000000200149e4                hsai_BlockA1
- COMMON         0x0000000020014a7c       0x80 Src/sdmmc.o
-                0x0000000020014a7c                hsd1
- COMMON         0x0000000020014afc      0x200 Src/spi.o
-                0x0000000020014afc                hspi2
-                0x0000000020014b84                hdma_spi2_rx
-                0x0000000020014bfc                hspi1
-                0x0000000020014c84                hdma_spi1_rx
-                0x0000000020014cfc                . = ALIGN (0x4)
-                0x0000000020014cfc                _ebss = .
-                0x0000000020014cfc                __bss_end__ = _ebss
+ COMMON         0x00000000200000a8        0x4 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
+                0x00000000200000a8                uwTick
+ COMMON         0x00000000200000ac       0x40 LEAF/leaf/Src/leaf.o
+                0x00000000200000ac                leaf
+ COMMON         0x00000000200000ec    0x1438c Src/audiostream.o
+                0x00000000200000ec                stringPositions
+                0x00000000200000f4                mySine
+                0x00000000200000fc                small_memory
+                0x0000000020013ac4                theAmps
+                0x0000000020013aec                saws
+                0x0000000020013b14                smoother
+                0x0000000020013b3c                transmit_status
+                0x0000000020013b40                myNoise
+                0x0000000020013b44                previousStringInputs
+                0x0000000020013b6c                largePool
+                0x0000000020013b70                strings
+                0x0000000020013b98                stringMappedPositions
+                0x0000000020013bc0                receive_status
+                0x0000000020013bc4                mediumPool
+                0x0000000020013bc8                stringInputs
+                0x0000000020013bf0                LED_envelope
+                0x0000000020013c00                atodbTable
+                0x0000000020014400                envelopes
+                0x0000000020014428                maxVolumes
+                0x0000000020014450                stringFrequencies
+ COMMON         0x0000000020014478        0x1 Src/codec.o
+                0x0000000020014478                testVal
+ *fill*         0x0000000020014479        0x3 
+ COMMON         0x000000002001447c      0x46c Src/fatfs.o
+                0x000000002001447c                retSD
+                0x0000000020014480                SDPath
+                0x0000000020014484                SDFile
+                0x00000000200146b4                SDFatFS
+ COMMON         0x00000000200148e8       0x34 Src/fmc.o
+                0x00000000200148e8                hsdram1
+ COMMON         0x000000002001491c       0x4c Src/i2c.o
+                0x000000002001491c                hi2c2
+ COMMON         0x0000000020014968       0x14 Src/rng.o
+                0x0000000020014968                hrng
+ COMMON         0x000000002001497c      0x220 Src/sai.o
+                0x000000002001497c                hsai_BlockB1
+                0x0000000020014a14                hdma_sai1_a
+                0x0000000020014a8c                hdma_sai1_b
+                0x0000000020014b04                hsai_BlockA1
+ COMMON         0x0000000020014b9c       0x80 Src/sdmmc.o
+                0x0000000020014b9c                hsd1
+ COMMON         0x0000000020014c1c      0x200 Src/spi.o
+                0x0000000020014c1c                hspi2
+                0x0000000020014ca4                hdma_spi2_rx
+                0x0000000020014d1c                hspi1
+                0x0000000020014da4                hdma_spi1_rx
+                0x0000000020014e1c                . = ALIGN (0x4)
+                0x0000000020014e1c                _ebss = .
+                0x0000000020014e1c                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x0000000020014cfc     0x6004 load address 0x0000000008088904
-                0x0000000020014d00                . = ALIGN (0x8)
- *fill*         0x0000000020014cfc        0x4 
-                0x0000000020014d00                PROVIDE (end = .)
+                0x0000000020014e1c     0x6004 load address 0x00000000080892e0
+                0x0000000020014e20                . = ALIGN (0x8)
+ *fill*         0x0000000020014e1c        0x4 
+                0x0000000020014e20                PROVIDE (end = .)
                 [!provide]                        PROVIDE (_end = .)
-                0x0000000020017d00                . = (. + _Min_Heap_Size)
- *fill*         0x0000000020014d00     0x3000 
-                0x000000002001ad00                . = (. + _Min_Stack_Size)
- *fill*         0x0000000020017d00     0x3000 
-                0x000000002001ad00                . = ALIGN (0x8)
+                0x0000000020017e20                . = (. + _Min_Heap_Size)
+ *fill*         0x0000000020014e20     0x3000 
+                0x000000002001ae20                . = (. + _Min_Stack_Size)
+ *fill*         0x0000000020017e20     0x3000 
+                0x000000002001ae20                . = ALIGN (0x8)
 
 .RAM_D1         0x0000000024000000    0x7eb58
  *(.RAM_D1)
@@ -14806,66 +14750,76 @@ LOAD /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.id
  .ARM.attributes
                 0x000000000000034f       0x33 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
  .ARM.attributes
-                0x0000000000000382       0x33 LEAF/leaf/Src/leaf-envelopes.o
+                0x0000000000000382       0x33 LEAF/leaf/Src/leaf-analysis.o
  .ARM.attributes
-                0x00000000000003b5       0x33 LEAF/leaf/Src/leaf-math.o
+                0x00000000000003b5       0x33 LEAF/leaf/Src/leaf-delay.o
  .ARM.attributes
-                0x00000000000003e8       0x33 LEAF/leaf/Src/leaf-mempool.o
+                0x00000000000003e8       0x33 LEAF/leaf/Src/leaf-dynamics.o
  .ARM.attributes
-                0x000000000000041b       0x33 LEAF/leaf/Src/leaf-oscillators.o
+                0x000000000000041b       0x33 LEAF/leaf/Src/leaf-envelopes.o
  .ARM.attributes
-                0x000000000000044e       0x33 LEAF/leaf/Src/leaf-tables.o
+                0x000000000000044e       0x33 LEAF/leaf/Src/leaf-filters.o
  .ARM.attributes
-                0x0000000000000481       0x33 LEAF/leaf/Src/leaf.o
+                0x0000000000000481       0x33 LEAF/leaf/Src/leaf-math.o
  .ARM.attributes
-                0x00000000000004b4       0x33 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+                0x00000000000004b4       0x33 LEAF/leaf/Src/leaf-mempool.o
  .ARM.attributes
-                0x00000000000004e7       0x33 Src/audiostream.o
+                0x00000000000004e7       0x33 LEAF/leaf/Src/leaf-oscillators.o
  .ARM.attributes
-                0x000000000000051a       0x33 Src/bsp_driver_sd.o
+                0x000000000000051a       0x33 LEAF/leaf/Src/leaf-physical.o
  .ARM.attributes
-                0x000000000000054d       0x33 Src/codec.o
+                0x000000000000054d       0x33 LEAF/leaf/Src/leaf-tables.o
  .ARM.attributes
-                0x0000000000000580       0x33 Src/dma.o
+                0x0000000000000580       0x33 LEAF/leaf/Src/leaf.o
  .ARM.attributes
-                0x00000000000005b3       0x33 Src/fatfs.o
+                0x00000000000005b3       0x33 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
  .ARM.attributes
-                0x00000000000005e6       0x33 Src/fatfs_platform.o
+                0x00000000000005e6       0x33 Src/audiostream.o
  .ARM.attributes
-                0x0000000000000619       0x33 Src/fmc.o
+                0x0000000000000619       0x33 Src/bsp_driver_sd.o
  .ARM.attributes
-                0x000000000000064c       0x33 Src/gpio.o
+                0x000000000000064c       0x33 Src/codec.o
  .ARM.attributes
-                0x000000000000067f       0x33 Src/i2c.o
+                0x000000000000067f       0x33 Src/dma.o
  .ARM.attributes
-                0x00000000000006b2       0x33 Src/main.o
+                0x00000000000006b2       0x33 Src/fatfs.o
  .ARM.attributes
-                0x00000000000006e5       0x33 Src/rng.o
+                0x00000000000006e5       0x33 Src/fatfs_platform.o
  .ARM.attributes
-                0x0000000000000718       0x33 Src/sai.o
+                0x0000000000000718       0x33 Src/fmc.o
  .ARM.attributes
-                0x000000000000074b       0x33 Src/sd_diskio.o
+                0x000000000000074b       0x33 Src/gpio.o
  .ARM.attributes
-                0x000000000000077e       0x33 Src/sdmmc.o
+                0x000000000000077e       0x33 Src/i2c.o
  .ARM.attributes
-                0x00000000000007b1       0x33 Src/spi.o
+                0x00000000000007b1       0x33 Src/main.o
  .ARM.attributes
-                0x00000000000007e4       0x33 Src/stm32h7xx_hal_msp.o
+                0x00000000000007e4       0x33 Src/rng.o
  .ARM.attributes
-                0x0000000000000817       0x33 Src/stm32h7xx_it.o
+                0x0000000000000817       0x33 Src/sai.o
  .ARM.attributes
-                0x000000000000084a       0x33 Src/system_stm32h7xx.o
+                0x000000000000084a       0x33 Src/sd_diskio.o
  .ARM.attributes
-                0x000000000000087d       0x21 Startup/startup_stm32h743zitx.o
+                0x000000000000087d       0x33 Src/sdmmc.o
  .ARM.attributes
-                0x000000000000089e       0x32 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-init.o)
+                0x00000000000008b0       0x33 Src/spi.o
  .ARM.attributes
-                0x00000000000008d0       0x32 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-memset.o)
+                0x00000000000008e3       0x33 Src/stm32h7xx_hal_msp.o
  .ARM.attributes
-                0x0000000000000902       0x20 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtn.o
+                0x0000000000000916       0x33 Src/stm32h7xx_it.o
+ .ARM.attributes
+                0x0000000000000949       0x33 Src/system_stm32h7xx.o
+ .ARM.attributes
+                0x000000000000097c       0x21 Startup/startup_stm32h743zitx.o
+ .ARM.attributes
+                0x000000000000099d       0x32 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-init.o)
+ .ARM.attributes
+                0x00000000000009cf       0x32 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-memset.o)
+ .ARM.attributes
+                0x0000000000000a01       0x20 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv5/hard/crtn.o
 OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
 
-.debug_info     0x0000000000000000    0x4b45e
+.debug_info     0x0000000000000000    0x6465c
  .debug_info    0x0000000000000000     0x1f0c Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_info    0x0000000000001f0c     0x1bce Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
  .debug_info    0x0000000000003ada     0x1820 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
@@ -14882,34 +14836,39 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_info    0x000000000001b642     0x243a Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .debug_info    0x000000000001da7c     0x15bd Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .debug_info    0x000000000001f039     0x2d5a Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
- .debug_info    0x0000000000021d93     0x3ea8 LEAF/leaf/Src/leaf-envelopes.o
- .debug_info    0x0000000000025c3b     0x2595 LEAF/leaf/Src/leaf-math.o
- .debug_info    0x00000000000281d0     0x1cc2 LEAF/leaf/Src/leaf-mempool.o
- .debug_info    0x0000000000029e92     0x4759 LEAF/leaf/Src/leaf-oscillators.o
- .debug_info    0x000000000002e5eb      0xe45 LEAF/leaf/Src/leaf-tables.o
- .debug_info    0x000000000002f430      0xe62 LEAF/leaf/Src/leaf.o
- .debug_info    0x0000000000030292      0xf55 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_info    0x00000000000311e7     0x29f3 Src/audiostream.o
- .debug_info    0x0000000000033bda     0x12f1 Src/bsp_driver_sd.o
- .debug_info    0x0000000000034ecb     0x17c5 Src/codec.o
- .debug_info    0x0000000000036690     0x1305 Src/dma.o
- .debug_info    0x0000000000037995      0xf16 Src/fatfs.o
- .debug_info    0x00000000000388ab      0xbbc Src/fatfs_platform.o
- .debug_info    0x0000000000039467     0x177e Src/fmc.o
- .debug_info    0x000000000003abe5     0x123d Src/gpio.o
- .debug_info    0x000000000003be22     0x16ac Src/i2c.o
- .debug_info    0x000000000003d4ce     0x3f73 Src/main.o
- .debug_info    0x0000000000041441     0x1042 Src/rng.o
- .debug_info    0x0000000000042483     0x18b5 Src/sai.o
- .debug_info    0x0000000000043d38     0x10a9 Src/sd_diskio.o
- .debug_info    0x0000000000044de1     0x144d Src/sdmmc.o
- .debug_info    0x000000000004622e     0x1d86 Src/spi.o
- .debug_info    0x0000000000047fb4      0xe85 Src/stm32h7xx_hal_msp.o
- .debug_info    0x0000000000048e39     0x12c9 Src/stm32h7xx_it.o
- .debug_info    0x000000000004a102     0x133a Src/system_stm32h7xx.o
- .debug_info    0x000000000004b43c       0x22 Startup/startup_stm32h743zitx.o
+ .debug_info    0x0000000000021d93     0x7253 LEAF/leaf/Src/leaf-analysis.o
+ .debug_info    0x0000000000028fe6     0x33d4 LEAF/leaf/Src/leaf-delay.o
+ .debug_info    0x000000000002c3ba     0x17a6 LEAF/leaf/Src/leaf-dynamics.o
+ .debug_info    0x000000000002db60     0x3ea8 LEAF/leaf/Src/leaf-envelopes.o
+ .debug_info    0x0000000000031a08     0x6a4e LEAF/leaf/Src/leaf-filters.o
+ .debug_info    0x0000000000038456     0x2595 LEAF/leaf/Src/leaf-math.o
+ .debug_info    0x000000000003a9eb     0x1cc2 LEAF/leaf/Src/leaf-mempool.o
+ .debug_info    0x000000000003c6ad     0x4759 LEAF/leaf/Src/leaf-oscillators.o
+ .debug_info    0x0000000000040e06     0x62d3 LEAF/leaf/Src/leaf-physical.o
+ .debug_info    0x00000000000470d9      0xe45 LEAF/leaf/Src/leaf-tables.o
+ .debug_info    0x0000000000047f1e      0xe62 LEAF/leaf/Src/leaf.o
+ .debug_info    0x0000000000048d80      0xf55 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_info    0x0000000000049cd5     0x3103 Src/audiostream.o
+ .debug_info    0x000000000004cdd8     0x12f1 Src/bsp_driver_sd.o
+ .debug_info    0x000000000004e0c9     0x17c5 Src/codec.o
+ .debug_info    0x000000000004f88e     0x1305 Src/dma.o
+ .debug_info    0x0000000000050b93      0xf16 Src/fatfs.o
+ .debug_info    0x0000000000051aa9      0xbbc Src/fatfs_platform.o
+ .debug_info    0x0000000000052665     0x177e Src/fmc.o
+ .debug_info    0x0000000000053de3     0x123d Src/gpio.o
+ .debug_info    0x0000000000055020     0x16ac Src/i2c.o
+ .debug_info    0x00000000000566cc     0x3f73 Src/main.o
+ .debug_info    0x000000000005a63f     0x1042 Src/rng.o
+ .debug_info    0x000000000005b681     0x18b5 Src/sai.o
+ .debug_info    0x000000000005cf36     0x10a9 Src/sd_diskio.o
+ .debug_info    0x000000000005dfdf     0x144d Src/sdmmc.o
+ .debug_info    0x000000000005f42c     0x1d86 Src/spi.o
+ .debug_info    0x00000000000611b2      0xe85 Src/stm32h7xx_hal_msp.o
+ .debug_info    0x0000000000062037     0x12c9 Src/stm32h7xx_it.o
+ .debug_info    0x0000000000063300     0x133a Src/system_stm32h7xx.o
+ .debug_info    0x000000000006463a       0x22 Startup/startup_stm32h743zitx.o
 
-.debug_abbrev   0x0000000000000000     0x7d96
+.debug_abbrev   0x0000000000000000     0x94fa
  .debug_abbrev  0x0000000000000000      0x358 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_abbrev  0x0000000000000358      0x3d0 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
  .debug_abbrev  0x0000000000000728      0x35b Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
@@ -14926,34 +14885,39 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_abbrev  0x0000000000002ba6      0x3da Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .debug_abbrev  0x0000000000002f80      0x288 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .debug_abbrev  0x0000000000003208      0x38f Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
- .debug_abbrev  0x0000000000003597      0x48d LEAF/leaf/Src/leaf-envelopes.o
- .debug_abbrev  0x0000000000003a24      0x4c0 LEAF/leaf/Src/leaf-math.o
- .debug_abbrev  0x0000000000003ee4      0x451 LEAF/leaf/Src/leaf-mempool.o
- .debug_abbrev  0x0000000000004335      0x500 LEAF/leaf/Src/leaf-oscillators.o
- .debug_abbrev  0x0000000000004835      0x1c1 LEAF/leaf/Src/leaf-tables.o
- .debug_abbrev  0x00000000000049f6      0x272 LEAF/leaf/Src/leaf.o
- .debug_abbrev  0x0000000000004c68      0x2d6 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_abbrev  0x0000000000004f3e      0x428 Src/audiostream.o
- .debug_abbrev  0x0000000000005366      0x2df Src/bsp_driver_sd.o
- .debug_abbrev  0x0000000000005645      0x23f Src/codec.o
- .debug_abbrev  0x0000000000005884      0x22a Src/dma.o
- .debug_abbrev  0x0000000000005aae      0x225 Src/fatfs.o
- .debug_abbrev  0x0000000000005cd3      0x1f9 Src/fatfs_platform.o
- .debug_abbrev  0x0000000000005ecc      0x2fa Src/fmc.o
- .debug_abbrev  0x00000000000061c6      0x234 Src/gpio.o
- .debug_abbrev  0x00000000000063fa      0x288 Src/i2c.o
- .debug_abbrev  0x0000000000006682      0x3e7 Src/main.o
- .debug_abbrev  0x0000000000006a69      0x257 Src/rng.o
- .debug_abbrev  0x0000000000006cc0      0x277 Src/sai.o
- .debug_abbrev  0x0000000000006f37      0x2f6 Src/sd_diskio.o
- .debug_abbrev  0x000000000000722d      0x276 Src/sdmmc.o
- .debug_abbrev  0x00000000000074a3      0x29e Src/spi.o
- .debug_abbrev  0x0000000000007741      0x1e3 Src/stm32h7xx_hal_msp.o
- .debug_abbrev  0x0000000000007924      0x241 Src/stm32h7xx_it.o
- .debug_abbrev  0x0000000000007b65      0x21f Src/system_stm32h7xx.o
- .debug_abbrev  0x0000000000007d84       0x12 Startup/startup_stm32h743zitx.o
+ .debug_abbrev  0x0000000000003597      0x596 LEAF/leaf/Src/leaf-analysis.o
+ .debug_abbrev  0x0000000000003b2d      0x468 LEAF/leaf/Src/leaf-delay.o
+ .debug_abbrev  0x0000000000003f95      0x34a LEAF/leaf/Src/leaf-dynamics.o
+ .debug_abbrev  0x00000000000042df      0x48d LEAF/leaf/Src/leaf-envelopes.o
+ .debug_abbrev  0x000000000000476c      0x4de LEAF/leaf/Src/leaf-filters.o
+ .debug_abbrev  0x0000000000004c4a      0x4c0 LEAF/leaf/Src/leaf-math.o
+ .debug_abbrev  0x000000000000510a      0x451 LEAF/leaf/Src/leaf-mempool.o
+ .debug_abbrev  0x000000000000555b      0x500 LEAF/leaf/Src/leaf-oscillators.o
+ .debug_abbrev  0x0000000000005a5b      0x4fc LEAF/leaf/Src/leaf-physical.o
+ .debug_abbrev  0x0000000000005f57      0x1c1 LEAF/leaf/Src/leaf-tables.o
+ .debug_abbrev  0x0000000000006118      0x272 LEAF/leaf/Src/leaf.o
+ .debug_abbrev  0x000000000000638a      0x2d6 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_abbrev  0x0000000000006660      0x46a Src/audiostream.o
+ .debug_abbrev  0x0000000000006aca      0x2df Src/bsp_driver_sd.o
+ .debug_abbrev  0x0000000000006da9      0x23f Src/codec.o
+ .debug_abbrev  0x0000000000006fe8      0x22a Src/dma.o
+ .debug_abbrev  0x0000000000007212      0x225 Src/fatfs.o
+ .debug_abbrev  0x0000000000007437      0x1f9 Src/fatfs_platform.o
+ .debug_abbrev  0x0000000000007630      0x2fa Src/fmc.o
+ .debug_abbrev  0x000000000000792a      0x234 Src/gpio.o
+ .debug_abbrev  0x0000000000007b5e      0x288 Src/i2c.o
+ .debug_abbrev  0x0000000000007de6      0x3e7 Src/main.o
+ .debug_abbrev  0x00000000000081cd      0x257 Src/rng.o
+ .debug_abbrev  0x0000000000008424      0x277 Src/sai.o
+ .debug_abbrev  0x000000000000869b      0x2f6 Src/sd_diskio.o
+ .debug_abbrev  0x0000000000008991      0x276 Src/sdmmc.o
+ .debug_abbrev  0x0000000000008c07      0x29e Src/spi.o
+ .debug_abbrev  0x0000000000008ea5      0x1e3 Src/stm32h7xx_hal_msp.o
+ .debug_abbrev  0x0000000000009088      0x241 Src/stm32h7xx_it.o
+ .debug_abbrev  0x00000000000092c9      0x21f Src/system_stm32h7xx.o
+ .debug_abbrev  0x00000000000094e8       0x12 Startup/startup_stm32h743zitx.o
 
-.debug_loc      0x0000000000000000    0x21550
+.debug_loc      0x0000000000000000    0x32e40
  .debug_loc     0x0000000000000000      0x48f Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_loc     0x000000000000048f      0x58e Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
  .debug_loc     0x0000000000000a1d      0xfc4 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
@@ -14970,26 +14934,31 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_loc     0x0000000000010d05     0x1d62 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .debug_loc     0x0000000000012a67      0x626 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .debug_loc     0x000000000001308d     0x394c Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
- .debug_loc     0x00000000000169d9     0x2c9a LEAF/leaf/Src/leaf-envelopes.o
- .debug_loc     0x0000000000019673     0x212a LEAF/leaf/Src/leaf-math.o
- .debug_loc     0x000000000001b79d      0xe73 LEAF/leaf/Src/leaf-mempool.o
- .debug_loc     0x000000000001c610     0x3a5c LEAF/leaf/Src/leaf-oscillators.o
- .debug_loc     0x000000000002006c      0x122 LEAF/leaf/Src/leaf.o
- .debug_loc     0x000000000002018e      0x467 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_loc     0x00000000000205f5      0x327 Src/audiostream.o
- .debug_loc     0x000000000002091c      0x435 Src/bsp_driver_sd.o
- .debug_loc     0x0000000000020d51       0x2c Src/codec.o
- .debug_loc     0x0000000000020d7d       0x25 Src/fatfs_platform.o
- .debug_loc     0x0000000000020da2       0x42 Src/fmc.o
- .debug_loc     0x0000000000020de4       0x42 Src/i2c.o
- .debug_loc     0x0000000000020e26       0xaf Src/main.o
- .debug_loc     0x0000000000020ed5       0x8c Src/sai.o
- .debug_loc     0x0000000000020f61      0x3d5 Src/sd_diskio.o
- .debug_loc     0x0000000000021336       0x42 Src/sdmmc.o
- .debug_loc     0x0000000000021378       0x84 Src/spi.o
- .debug_loc     0x00000000000213fc      0x154 Src/system_stm32h7xx.o
+ .debug_loc     0x00000000000169d9     0x618b LEAF/leaf/Src/leaf-analysis.o
+ .debug_loc     0x000000000001cb64     0x2061 LEAF/leaf/Src/leaf-delay.o
+ .debug_loc     0x000000000001ebc5      0x8c2 LEAF/leaf/Src/leaf-dynamics.o
+ .debug_loc     0x000000000001f487     0x2c9a LEAF/leaf/Src/leaf-envelopes.o
+ .debug_loc     0x0000000000022121     0x52c1 LEAF/leaf/Src/leaf-filters.o
+ .debug_loc     0x00000000000273e2     0x212a LEAF/leaf/Src/leaf-math.o
+ .debug_loc     0x000000000002950c      0xe73 LEAF/leaf/Src/leaf-mempool.o
+ .debug_loc     0x000000000002a37f     0x3a5c LEAF/leaf/Src/leaf-oscillators.o
+ .debug_loc     0x000000000002dddb     0x3a72 LEAF/leaf/Src/leaf-physical.o
+ .debug_loc     0x000000000003184d      0x122 LEAF/leaf/Src/leaf.o
+ .debug_loc     0x000000000003196f      0x467 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_loc     0x0000000000031dd6      0x436 Src/audiostream.o
+ .debug_loc     0x000000000003220c      0x435 Src/bsp_driver_sd.o
+ .debug_loc     0x0000000000032641       0x2c Src/codec.o
+ .debug_loc     0x000000000003266d       0x25 Src/fatfs_platform.o
+ .debug_loc     0x0000000000032692       0x42 Src/fmc.o
+ .debug_loc     0x00000000000326d4       0x42 Src/i2c.o
+ .debug_loc     0x0000000000032716       0xaf Src/main.o
+ .debug_loc     0x00000000000327c5       0x8c Src/sai.o
+ .debug_loc     0x0000000000032851      0x3d5 Src/sd_diskio.o
+ .debug_loc     0x0000000000032c26       0x42 Src/sdmmc.o
+ .debug_loc     0x0000000000032c68       0x84 Src/spi.o
+ .debug_loc     0x0000000000032cec      0x154 Src/system_stm32h7xx.o
 
-.debug_aranges  0x0000000000000000     0x1bd8
+.debug_aranges  0x0000000000000000     0x2920
  .debug_aranges
                 0x0000000000000000      0x1b0 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_aranges
@@ -15023,59 +14992,69 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_aranges
                 0x0000000000000d28      0x158 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
  .debug_aranges
-                0x0000000000000e80      0x2e0 LEAF/leaf/Src/leaf-envelopes.o
+                0x0000000000000e80      0x348 LEAF/leaf/Src/leaf-analysis.o
  .debug_aranges
-                0x0000000000001160      0x1f8 LEAF/leaf/Src/leaf-math.o
+                0x00000000000011c8      0x2b8 LEAF/leaf/Src/leaf-delay.o
  .debug_aranges
-                0x0000000000001358       0xa0 LEAF/leaf/Src/leaf-mempool.o
+                0x0000000000001480       0xb0 LEAF/leaf/Src/leaf-dynamics.o
  .debug_aranges
-                0x00000000000013f8      0x318 LEAF/leaf/Src/leaf-oscillators.o
+                0x0000000000001530      0x2e0 LEAF/leaf/Src/leaf-envelopes.o
  .debug_aranges
-                0x0000000000001710       0x18 LEAF/leaf/Src/leaf-tables.o
+                0x0000000000001810      0x420 LEAF/leaf/Src/leaf-filters.o
  .debug_aranges
-                0x0000000000001728       0x48 LEAF/leaf/Src/leaf.o
+                0x0000000000001c30      0x1f8 LEAF/leaf/Src/leaf-math.o
  .debug_aranges
-                0x0000000000001770       0x40 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+                0x0000000000001e28       0xa0 LEAF/leaf/Src/leaf-mempool.o
  .debug_aranges
-                0x00000000000017b0       0x60 Src/audiostream.o
+                0x0000000000001ec8      0x318 LEAF/leaf/Src/leaf-oscillators.o
  .debug_aranges
-                0x0000000000001810       0x88 Src/bsp_driver_sd.o
+                0x00000000000021e0      0x278 LEAF/leaf/Src/leaf-physical.o
  .debug_aranges
-                0x0000000000001898       0x20 Src/codec.o
+                0x0000000000002458       0x18 LEAF/leaf/Src/leaf-tables.o
  .debug_aranges
-                0x00000000000018b8       0x20 Src/dma.o
+                0x0000000000002470       0x48 LEAF/leaf/Src/leaf.o
  .debug_aranges
-                0x00000000000018d8       0x28 Src/fatfs.o
+                0x00000000000024b8       0x40 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
  .debug_aranges
-                0x0000000000001900       0x20 Src/fatfs_platform.o
+                0x00000000000024f8       0x60 Src/audiostream.o
  .debug_aranges
-                0x0000000000001920       0x30 Src/fmc.o
+                0x0000000000002558       0x88 Src/bsp_driver_sd.o
  .debug_aranges
-                0x0000000000001950       0x20 Src/gpio.o
+                0x00000000000025e0       0x20 Src/codec.o
  .debug_aranges
-                0x0000000000001970       0x30 Src/i2c.o
+                0x0000000000002600       0x20 Src/dma.o
  .debug_aranges
-                0x00000000000019a0       0x48 Src/main.o
+                0x0000000000002620       0x28 Src/fatfs.o
  .debug_aranges
-                0x00000000000019e8       0x30 Src/rng.o
+                0x0000000000002648       0x20 Src/fatfs_platform.o
  .debug_aranges
-                0x0000000000001a18       0x30 Src/sai.o
+                0x0000000000002668       0x30 Src/fmc.o
  .debug_aranges
-                0x0000000000001a48       0x40 Src/sd_diskio.o
+                0x0000000000002698       0x20 Src/gpio.o
  .debug_aranges
-                0x0000000000001a88       0x30 Src/sdmmc.o
+                0x00000000000026b8       0x30 Src/i2c.o
  .debug_aranges
-                0x0000000000001ab8       0x38 Src/spi.o
+                0x00000000000026e8       0x48 Src/main.o
  .debug_aranges
-                0x0000000000001af0       0x20 Src/stm32h7xx_hal_msp.o
+                0x0000000000002730       0x30 Src/rng.o
  .debug_aranges
-                0x0000000000001b10       0x78 Src/stm32h7xx_it.o
+                0x0000000000002760       0x30 Src/sai.o
  .debug_aranges
-                0x0000000000001b88       0x28 Src/system_stm32h7xx.o
+                0x0000000000002790       0x40 Src/sd_diskio.o
  .debug_aranges
-                0x0000000000001bb0       0x28 Startup/startup_stm32h743zitx.o
+                0x00000000000027d0       0x30 Src/sdmmc.o
+ .debug_aranges
+                0x0000000000002800       0x38 Src/spi.o
+ .debug_aranges
+                0x0000000000002838       0x20 Src/stm32h7xx_hal_msp.o
+ .debug_aranges
+                0x0000000000002858       0x78 Src/stm32h7xx_it.o
+ .debug_aranges
+                0x00000000000028d0       0x28 Src/system_stm32h7xx.o
+ .debug_aranges
+                0x00000000000028f8       0x28 Startup/startup_stm32h743zitx.o
 
-.debug_ranges   0x0000000000000000     0x5830
+.debug_ranges   0x0000000000000000     0x8a48
  .debug_ranges  0x0000000000000000      0x1a0 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_ranges  0x00000000000001a0      0x180 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
  .debug_ranges  0x0000000000000320      0x190 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
@@ -15092,33 +15071,38 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_ranges  0x00000000000028e0      0x1e0 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .debug_ranges  0x0000000000002ac0       0xb8 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .debug_ranges  0x0000000000002b78      0xf00 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
- .debug_ranges  0x0000000000003a78      0x610 LEAF/leaf/Src/leaf-envelopes.o
- .debug_ranges  0x0000000000004088      0x4b8 LEAF/leaf/Src/leaf-math.o
- .debug_ranges  0x0000000000004540      0x438 LEAF/leaf/Src/leaf-mempool.o
- .debug_ranges  0x0000000000004978      0x870 LEAF/leaf/Src/leaf-oscillators.o
- .debug_ranges  0x00000000000051e8       0x38 LEAF/leaf/Src/leaf.o
- .debug_ranges  0x0000000000005220       0x68 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_ranges  0x0000000000005288      0x110 Src/audiostream.o
- .debug_ranges  0x0000000000005398       0x78 Src/bsp_driver_sd.o
- .debug_ranges  0x0000000000005410       0x10 Src/codec.o
- .debug_ranges  0x0000000000005420       0x30 Src/dma.o
- .debug_ranges  0x0000000000005450       0x18 Src/fatfs.o
- .debug_ranges  0x0000000000005468       0x10 Src/fatfs_platform.o
- .debug_ranges  0x0000000000005478       0x90 Src/fmc.o
- .debug_ranges  0x0000000000005508       0x30 Src/gpio.o
- .debug_ranges  0x0000000000005538       0x50 Src/i2c.o
- .debug_ranges  0x0000000000005588       0x50 Src/main.o
- .debug_ranges  0x00000000000055d8       0x38 Src/rng.o
- .debug_ranges  0x0000000000005610       0x20 Src/sai.o
- .debug_ranges  0x0000000000005630       0x30 Src/sd_diskio.o
- .debug_ranges  0x0000000000005660       0x60 Src/sdmmc.o
- .debug_ranges  0x00000000000056c0       0xa8 Src/spi.o
- .debug_ranges  0x0000000000005768       0x28 Src/stm32h7xx_hal_msp.o
- .debug_ranges  0x0000000000005790       0x68 Src/stm32h7xx_it.o
- .debug_ranges  0x00000000000057f8       0x18 Src/system_stm32h7xx.o
- .debug_ranges  0x0000000000005810       0x20 Startup/startup_stm32h743zitx.o
+ .debug_ranges  0x0000000000003a78     0x1508 LEAF/leaf/Src/leaf-analysis.o
+ .debug_ranges  0x0000000000004f80      0x4f8 LEAF/leaf/Src/leaf-delay.o
+ .debug_ranges  0x0000000000005478      0x110 LEAF/leaf/Src/leaf-dynamics.o
+ .debug_ranges  0x0000000000005588      0x610 LEAF/leaf/Src/leaf-envelopes.o
+ .debug_ranges  0x0000000000005b98      0xf18 LEAF/leaf/Src/leaf-filters.o
+ .debug_ranges  0x0000000000006ab0      0x4b8 LEAF/leaf/Src/leaf-math.o
+ .debug_ranges  0x0000000000006f68      0x438 LEAF/leaf/Src/leaf-mempool.o
+ .debug_ranges  0x00000000000073a0      0x870 LEAF/leaf/Src/leaf-oscillators.o
+ .debug_ranges  0x0000000000007c10      0x728 LEAF/leaf/Src/leaf-physical.o
+ .debug_ranges  0x0000000000008338       0x38 LEAF/leaf/Src/leaf.o
+ .debug_ranges  0x0000000000008370       0x68 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_ranges  0x00000000000083d8      0x1d8 Src/audiostream.o
+ .debug_ranges  0x00000000000085b0       0x78 Src/bsp_driver_sd.o
+ .debug_ranges  0x0000000000008628       0x10 Src/codec.o
+ .debug_ranges  0x0000000000008638       0x30 Src/dma.o
+ .debug_ranges  0x0000000000008668       0x18 Src/fatfs.o
+ .debug_ranges  0x0000000000008680       0x10 Src/fatfs_platform.o
+ .debug_ranges  0x0000000000008690       0x90 Src/fmc.o
+ .debug_ranges  0x0000000000008720       0x30 Src/gpio.o
+ .debug_ranges  0x0000000000008750       0x50 Src/i2c.o
+ .debug_ranges  0x00000000000087a0       0x50 Src/main.o
+ .debug_ranges  0x00000000000087f0       0x38 Src/rng.o
+ .debug_ranges  0x0000000000008828       0x20 Src/sai.o
+ .debug_ranges  0x0000000000008848       0x30 Src/sd_diskio.o
+ .debug_ranges  0x0000000000008878       0x60 Src/sdmmc.o
+ .debug_ranges  0x00000000000088d8       0xa8 Src/spi.o
+ .debug_ranges  0x0000000000008980       0x28 Src/stm32h7xx_hal_msp.o
+ .debug_ranges  0x00000000000089a8       0x68 Src/stm32h7xx_it.o
+ .debug_ranges  0x0000000000008a10       0x18 Src/system_stm32h7xx.o
+ .debug_ranges  0x0000000000008a28       0x20 Startup/startup_stm32h743zitx.o
 
-.debug_macro    0x0000000000000000    0x3c9dd
+.debug_macro    0x0000000000000000    0x3e927
  .debug_macro   0x0000000000000000      0x326 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_macro   0x0000000000000326      0xa72 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_macro   0x0000000000000d98      0x22d Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
@@ -15200,36 +15184,78 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_macro   0x00000000000367b9      0x304 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .debug_macro   0x0000000000036abd      0x326 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .debug_macro   0x0000000000036de3      0x2fd Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
- .debug_macro   0x00000000000370e0      0x398 LEAF/leaf/Src/leaf-envelopes.o
- .debug_macro   0x0000000000037478      0x2b9 LEAF/leaf/Src/leaf-math.o
- .debug_macro   0x0000000000037731      0x37a LEAF/leaf/Src/leaf-mempool.o
- .debug_macro   0x0000000000037aab      0x390 LEAF/leaf/Src/leaf-oscillators.o
- .debug_macro   0x0000000000037e3b      0x2a6 LEAF/leaf/Src/leaf-tables.o
- .debug_macro   0x00000000000380e1      0x37c LEAF/leaf/Src/leaf.o
- .debug_macro   0x000000000003845d      0x39d Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_macro   0x00000000000387fa      0x5b7 Src/audiostream.o
- .debug_macro   0x0000000000038db1       0x1c Src/audiostream.o
- .debug_macro   0x0000000000038dcd       0x28 Src/audiostream.o
- .debug_macro   0x0000000000038df5       0x52 Src/audiostream.o
- .debug_macro   0x0000000000038e47      0x314 Src/bsp_driver_sd.o
- .debug_macro   0x000000000003915b      0x597 Src/codec.o
- .debug_macro   0x00000000000396f2      0x315 Src/dma.o
- .debug_macro   0x0000000000039a07      0x3b0 Src/fatfs.o
- .debug_macro   0x0000000000039db7      0x305 Src/fatfs_platform.o
- .debug_macro   0x000000000003a0bc      0x315 Src/fmc.o
- .debug_macro   0x000000000003a3d1      0x315 Src/gpio.o
- .debug_macro   0x000000000003a6e6      0x315 Src/i2c.o
- .debug_macro   0x000000000003a9fb      0x6a5 Src/main.o
- .debug_macro   0x000000000003b0a0      0x315 Src/rng.o
- .debug_macro   0x000000000003b3b5      0x329 Src/sai.o
- .debug_macro   0x000000000003b6de      0x3b3 Src/sd_diskio.o
- .debug_macro   0x000000000003ba91      0x315 Src/sdmmc.o
- .debug_macro   0x000000000003bda6      0x315 Src/spi.o
- .debug_macro   0x000000000003c0bb      0x30b Src/stm32h7xx_hal_msp.o
- .debug_macro   0x000000000003c3c6      0x315 Src/stm32h7xx_it.o
- .debug_macro   0x000000000003c6db      0x302 Src/system_stm32h7xx.o
+ .debug_macro   0x00000000000370e0      0x2ef LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000373cf       0x40 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x000000000003740f       0x94 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000374a3       0x16 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000374b9       0x57 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037510       0x97 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000375a7      0x330 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000378d7       0xfd LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000379d4       0x10 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000379e4       0x10 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000379f4       0x1c LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037a10       0x52 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037a62       0x40 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037aa2       0x10 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037ab2       0x40 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037af2       0xd7 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037bc9       0x1c LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037be5       0x3d LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037c22       0x16 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037c38      0x145 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037d7d       0x16 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037d93       0x35 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037dc8       0x16 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037dde       0x29 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037e07       0x16 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037e1d       0x20 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037e3d       0x22 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037e5f       0x2b LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037e8a      0x118 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000037fa2      0x136 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x00000000000380d8       0x94 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x000000000003816c       0xba LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000038226       0x10 LEAF/leaf/Src/leaf-analysis.o
+ .debug_macro   0x0000000000038236      0x386 LEAF/leaf/Src/leaf-delay.o
+ .debug_macro   0x00000000000385bc       0x10 LEAF/leaf/Src/leaf-delay.o
+ .debug_macro   0x00000000000385cc       0x8e LEAF/leaf/Src/leaf-delay.o
+ .debug_macro   0x000000000003865a       0x11 LEAF/leaf/Src/leaf-delay.o
+ .debug_macro   0x000000000003866b       0x42 LEAF/leaf/Src/leaf-delay.o
+ .debug_macro   0x00000000000386ad       0x10 LEAF/leaf/Src/leaf-delay.o
+ .debug_macro   0x00000000000386bd      0x2e2 LEAF/leaf/Src/leaf-dynamics.o
+ .debug_macro   0x000000000003899f      0x398 LEAF/leaf/Src/leaf-envelopes.o
+ .debug_macro   0x0000000000038d37      0x394 LEAF/leaf/Src/leaf-filters.o
+ .debug_macro   0x00000000000390cb      0x2b9 LEAF/leaf/Src/leaf-math.o
+ .debug_macro   0x0000000000039384      0x37a LEAF/leaf/Src/leaf-mempool.o
+ .debug_macro   0x00000000000396fe      0x390 LEAF/leaf/Src/leaf-oscillators.o
+ .debug_macro   0x0000000000039a8e      0x2f1 LEAF/leaf/Src/leaf-physical.o
+ .debug_macro   0x0000000000039d7f      0x2a6 LEAF/leaf/Src/leaf-tables.o
+ .debug_macro   0x000000000003a025      0x37c LEAF/leaf/Src/leaf.o
+ .debug_macro   0x000000000003a3a1      0x39d Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_macro   0x000000000003a73e      0x5bd Src/audiostream.o
+ .debug_macro   0x000000000003acfb       0x1c Src/audiostream.o
+ .debug_macro   0x000000000003ad17       0x28 Src/audiostream.o
+ .debug_macro   0x000000000003ad3f       0x52 Src/audiostream.o
+ .debug_macro   0x000000000003ad91      0x314 Src/bsp_driver_sd.o
+ .debug_macro   0x000000000003b0a5      0x597 Src/codec.o
+ .debug_macro   0x000000000003b63c      0x315 Src/dma.o
+ .debug_macro   0x000000000003b951      0x3b0 Src/fatfs.o
+ .debug_macro   0x000000000003bd01      0x305 Src/fatfs_platform.o
+ .debug_macro   0x000000000003c006      0x315 Src/fmc.o
+ .debug_macro   0x000000000003c31b      0x315 Src/gpio.o
+ .debug_macro   0x000000000003c630      0x315 Src/i2c.o
+ .debug_macro   0x000000000003c945      0x6a5 Src/main.o
+ .debug_macro   0x000000000003cfea      0x315 Src/rng.o
+ .debug_macro   0x000000000003d2ff      0x329 Src/sai.o
+ .debug_macro   0x000000000003d628      0x3b3 Src/sd_diskio.o
+ .debug_macro   0x000000000003d9db      0x315 Src/sdmmc.o
+ .debug_macro   0x000000000003dcf0      0x315 Src/spi.o
+ .debug_macro   0x000000000003e005      0x30b Src/stm32h7xx_hal_msp.o
+ .debug_macro   0x000000000003e310      0x315 Src/stm32h7xx_it.o
+ .debug_macro   0x000000000003e625      0x302 Src/system_stm32h7xx.o
 
-.debug_line     0x0000000000000000    0x23f9e
+.debug_line     0x0000000000000000    0x2b69a
  .debug_line    0x0000000000000000      0xd7a Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_line    0x0000000000000d7a      0xbe8 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
  .debug_line    0x0000000000001962     0x10c2 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
@@ -15246,117 +15272,132 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_line    0x000000000000dfca     0x162e Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .debug_line    0x000000000000f5f8      0xbb1 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .debug_line    0x00000000000101a9     0x161e Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
- .debug_line    0x00000000000117c7     0x173b LEAF/leaf/Src/leaf-envelopes.o
- .debug_line    0x0000000000012f02      0xe8b LEAF/leaf/Src/leaf-math.o
- .debug_line    0x0000000000013d8d      0xe00 LEAF/leaf/Src/leaf-mempool.o
- .debug_line    0x0000000000014b8d     0x1a0a LEAF/leaf/Src/leaf-oscillators.o
- .debug_line    0x0000000000016597      0x767 LEAF/leaf/Src/leaf-tables.o
- .debug_line    0x0000000000016cfe      0x911 LEAF/leaf/Src/leaf.o
- .debug_line    0x000000000001760f      0xa81 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_line    0x0000000000018090      0xed9 Src/audiostream.o
- .debug_line    0x0000000000018f69      0xa45 Src/bsp_driver_sd.o
- .debug_line    0x00000000000199ae      0xd5f Src/codec.o
- .debug_line    0x000000000001a70d      0x93a Src/dma.o
- .debug_line    0x000000000001b047      0x9f9 Src/fatfs.o
- .debug_line    0x000000000001ba40      0x935 Src/fatfs_platform.o
- .debug_line    0x000000000001c375      0xa00 Src/fmc.o
- .debug_line    0x000000000001cd75      0x997 Src/gpio.o
- .debug_line    0x000000000001d70c      0x98f Src/i2c.o
- .debug_line    0x000000000001e09b      0xfa1 Src/main.o
- .debug_line    0x000000000001f03c      0x957 Src/rng.o
- .debug_line    0x000000000001f993      0xa32 Src/sai.o
- .debug_line    0x00000000000203c5      0xa7b Src/sd_diskio.o
- .debug_line    0x0000000000020e40      0x9a4 Src/sdmmc.o
- .debug_line    0x00000000000217e4      0xa6b Src/spi.o
- .debug_line    0x000000000002224f      0x931 Src/stm32h7xx_hal_msp.o
- .debug_line    0x0000000000022b80      0x9f2 Src/stm32h7xx_it.o
- .debug_line    0x0000000000023572      0x9ac Src/system_stm32h7xx.o
- .debug_line    0x0000000000023f1e       0x80 Startup/startup_stm32h743zitx.o
+ .debug_line    0x00000000000117c7     0x1dc7 LEAF/leaf/Src/leaf-analysis.o
+ .debug_line    0x000000000001358e     0x140e LEAF/leaf/Src/leaf-delay.o
+ .debug_line    0x000000000001499c      0xa05 LEAF/leaf/Src/leaf-dynamics.o
+ .debug_line    0x00000000000153a1     0x173b LEAF/leaf/Src/leaf-envelopes.o
+ .debug_line    0x0000000000016adc     0x257f LEAF/leaf/Src/leaf-filters.o
+ .debug_line    0x000000000001905b      0xe8b LEAF/leaf/Src/leaf-math.o
+ .debug_line    0x0000000000019ee6      0xe00 LEAF/leaf/Src/leaf-mempool.o
+ .debug_line    0x000000000001ace6     0x1a0a LEAF/leaf/Src/leaf-oscillators.o
+ .debug_line    0x000000000001c6f0     0x14d7 LEAF/leaf/Src/leaf-physical.o
+ .debug_line    0x000000000001dbc7      0x767 LEAF/leaf/Src/leaf-tables.o
+ .debug_line    0x000000000001e32e      0x911 LEAF/leaf/Src/leaf.o
+ .debug_line    0x000000000001ec3f      0xa81 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_line    0x000000000001f6c0      0xfa5 Src/audiostream.o
+ .debug_line    0x0000000000020665      0xa45 Src/bsp_driver_sd.o
+ .debug_line    0x00000000000210aa      0xd5f Src/codec.o
+ .debug_line    0x0000000000021e09      0x93a Src/dma.o
+ .debug_line    0x0000000000022743      0x9f9 Src/fatfs.o
+ .debug_line    0x000000000002313c      0x935 Src/fatfs_platform.o
+ .debug_line    0x0000000000023a71      0xa00 Src/fmc.o
+ .debug_line    0x0000000000024471      0x997 Src/gpio.o
+ .debug_line    0x0000000000024e08      0x98f Src/i2c.o
+ .debug_line    0x0000000000025797      0xfa1 Src/main.o
+ .debug_line    0x0000000000026738      0x957 Src/rng.o
+ .debug_line    0x000000000002708f      0xa32 Src/sai.o
+ .debug_line    0x0000000000027ac1      0xa7b Src/sd_diskio.o
+ .debug_line    0x000000000002853c      0x9a4 Src/sdmmc.o
+ .debug_line    0x0000000000028ee0      0xa6b Src/spi.o
+ .debug_line    0x000000000002994b      0x931 Src/stm32h7xx_hal_msp.o
+ .debug_line    0x000000000002a27c      0x9f2 Src/stm32h7xx_it.o
+ .debug_line    0x000000000002ac6e      0x9ac Src/system_stm32h7xx.o
+ .debug_line    0x000000000002b61a       0x80 Startup/startup_stm32h743zitx.o
 
-.debug_str      0x0000000000000000   0x163f7f
- .debug_str     0x0000000000000000   0x15803f Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
+.debug_str      0x0000000000000000   0x16712a
+ .debug_str     0x0000000000000000   0x158037 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
                                      0x1586db (size before relaxing)
- .debug_str     0x000000000015803f      0x469 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
+ .debug_str     0x0000000000158037      0x469 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
                                      0x158109 (size before relaxing)
- .debug_str     0x00000000001584a8      0xaee Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
+ .debug_str     0x00000000001584a0      0xaee Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
                                      0x157ef6 (size before relaxing)
- .debug_str     0x0000000000158f96      0x27f Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.o
+ .debug_str     0x0000000000158f8e      0x27f Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.o
                                      0x1578a1 (size before relaxing)
- .debug_str     0x0000000000159215      0xfd2 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.o
+ .debug_str     0x000000000015920d      0xfd2 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.o
                                      0x158784 (size before relaxing)
- .debug_str     0x000000000015a1e7       0xb8 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.o
+ .debug_str     0x000000000015a1df       0xb8 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.o
                                      0x157bdc (size before relaxing)
- .debug_str     0x000000000015a29f      0x67e Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.o
+ .debug_str     0x000000000015a297      0x67e Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.o
                                      0x157c75 (size before relaxing)
- .debug_str     0x000000000015a91d      0x53d Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.o
+ .debug_str     0x000000000015a915      0x53d Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.o
                                      0x157b64 (size before relaxing)
- .debug_str     0x000000000015ae5a      0x94f Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.o
+ .debug_str     0x000000000015ae52      0x945 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.o
                                      0x158027 (size before relaxing)
- .debug_str     0x000000000015b7a9      0x253 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng.o
+ .debug_str     0x000000000015b797      0x253 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng.o
                                      0x157551 (size before relaxing)
- .debug_str     0x000000000015b9fc      0x6da Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sai.o
+ .debug_str     0x000000000015b9ea      0x6da Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sai.o
                                      0x157dd2 (size before relaxing)
- .debug_str     0x000000000015c0d6      0xc41 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd.o
+ .debug_str     0x000000000015c0c4      0xc41 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd.o
                                      0x158194 (size before relaxing)
- .debug_str     0x000000000015cd17      0x873 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sdram.o
+ .debug_str     0x000000000015cd05      0x873 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sdram.o
                                      0x157c3f (size before relaxing)
- .debug_str     0x000000000015d58a      0x753 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
+ .debug_str     0x000000000015d578      0x753 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
                                      0x157e38 (size before relaxing)
- .debug_str     0x000000000015dcdd      0x743 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
+ .debug_str     0x000000000015dccb      0x743 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
                                      0x157d4a (size before relaxing)
- .debug_str     0x000000000015e420      0x22b Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
+ .debug_str     0x000000000015e40e      0x22b Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
                                      0x157937 (size before relaxing)
- .debug_str     0x000000000015e64b     0x2fe9 LEAF/leaf/Src/leaf-envelopes.o
+ .debug_str     0x000000000015e639     0x3631 LEAF/leaf/Src/leaf-analysis.o
+                                       0xb08b (size before relaxing)
+ .debug_str     0x0000000000161c6a      0x974 LEAF/leaf/Src/leaf-delay.o
+                                       0xa5ae (size before relaxing)
+ .debug_str     0x00000000001625de      0x298 LEAF/leaf/Src/leaf-dynamics.o
+                                       0x9f0f (size before relaxing)
+ .debug_str     0x0000000000162876      0x9e3 LEAF/leaf/Src/leaf-envelopes.o
                                        0xa883 (size before relaxing)
- .debug_str     0x0000000000161634      0x47e LEAF/leaf/Src/leaf-math.o
+ .debug_str     0x0000000000163259      0xb38 LEAF/leaf/Src/leaf-filters.o
+                                       0xab04 (size before relaxing)
+ .debug_str     0x0000000000163d91      0x3af LEAF/leaf/Src/leaf-math.o
                                        0x9e85 (size before relaxing)
- .debug_str     0x0000000000161ab2      0x1b2 LEAF/leaf/Src/leaf-mempool.o
+ .debug_str     0x0000000000164140      0x1a5 LEAF/leaf/Src/leaf-mempool.o
                                        0x9f5d (size before relaxing)
- .debug_str     0x0000000000161c64      0x84f LEAF/leaf/Src/leaf-oscillators.o
+ .debug_str     0x00000000001642e5      0x7d9 LEAF/leaf/Src/leaf-oscillators.o
                                        0xa70d (size before relaxing)
- .debug_str     0x00000000001624b3       0x1f LEAF/leaf/Src/leaf-tables.o
+ .debug_str     0x0000000000164abe      0xb1b LEAF/leaf/Src/leaf-physical.o
+                                       0xad45 (size before relaxing)
+ .debug_str     0x00000000001655d9       0x1f LEAF/leaf/Src/leaf-tables.o
                                        0x9946 (size before relaxing)
- .debug_str     0x00000000001624d2       0xda LEAF/leaf/Src/leaf.o
+ .debug_str     0x00000000001655f8       0xd0 LEAF/leaf/Src/leaf.o
                                        0x9e8a (size before relaxing)
- .debug_str     0x00000000001625ac      0xa64 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_str     0x00000000001656c8      0xa64 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
                                      0x157dfc (size before relaxing)
- .debug_str     0x0000000000163010      0x48a Src/audiostream.o
-                                     0x15ad2c (size before relaxing)
- .debug_str     0x000000000016349a      0x167 Src/bsp_driver_sd.o
+ .debug_str     0x000000000016612c      0x519 Src/audiostream.o
+                                     0x15b057 (size before relaxing)
+ .debug_str     0x0000000000166645      0x167 Src/bsp_driver_sd.o
                                      0x15795b (size before relaxing)
- .debug_str     0x0000000000163601       0x52 Src/codec.o
+ .debug_str     0x00000000001667ac       0x52 Src/codec.o
                                      0x15a2fc (size before relaxing)
- .debug_str     0x0000000000163653       0x22 Src/dma.o
+ .debug_str     0x00000000001667fe       0x22 Src/dma.o
                                      0x157e7e (size before relaxing)
- .debug_str     0x0000000000163675      0x13a Src/fatfs.o
+ .debug_str     0x0000000000166820      0x13a Src/fatfs.o
                                      0x157e97 (size before relaxing)
- .debug_str     0x00000000001637af       0x18 Src/fatfs_platform.o
+ .debug_str     0x000000000016695a       0x18 Src/fatfs_platform.o
                                      0x157399 (size before relaxing)
- .debug_str     0x00000000001637c7       0x94 Src/fmc.o
+ .debug_str     0x0000000000166972       0x94 Src/fmc.o
                                      0x157cbc (size before relaxing)
- .debug_str     0x000000000016385b       0x1b Src/gpio.o
+ .debug_str     0x0000000000166a06       0x1b Src/gpio.o
                                      0x1576f9 (size before relaxing)
- .debug_str     0x0000000000163876       0x24 Src/i2c.o
+ .debug_str     0x0000000000166a21       0x24 Src/i2c.o
                                      0x157d07 (size before relaxing)
- .debug_str     0x000000000016389a      0x3e1 Src/main.o
+ .debug_str     0x0000000000166a45      0x3e1 Src/main.o
                                      0x15c753 (size before relaxing)
- .debug_str     0x0000000000163c7b       0x17 Src/rng.o
+ .debug_str     0x0000000000166e26       0x17 Src/rng.o
                                      0x157788 (size before relaxing)
- .debug_str     0x0000000000163c92       0x31 Src/sai.o
+ .debug_str     0x0000000000166e3d       0x31 Src/sai.o
                                      0x157d94 (size before relaxing)
- .debug_str     0x0000000000163cc3       0x97 Src/sd_diskio.o
+ .debug_str     0x0000000000166e6e       0x97 Src/sd_diskio.o
                                      0x157ec5 (size before relaxing)
- .debug_str     0x0000000000163d5a       0x18 Src/sdmmc.o
+ .debug_str     0x0000000000166f05       0x18 Src/sdmmc.o
                                      0x15799a (size before relaxing)
- .debug_str     0x0000000000163d72       0x31 Src/spi.o
+ .debug_str     0x0000000000166f1d       0x31 Src/spi.o
                                      0x1585a6 (size before relaxing)
- .debug_str     0x0000000000163da3       0x1b Src/stm32h7xx_hal_msp.o
+ .debug_str     0x0000000000166f4e       0x1b Src/stm32h7xx_hal_msp.o
                                      0x15763e (size before relaxing)
- .debug_str     0x0000000000163dbe      0x138 Src/stm32h7xx_it.o
+ .debug_str     0x0000000000166f69      0x138 Src/stm32h7xx_it.o
                                      0x157b58 (size before relaxing)
- .debug_str     0x0000000000163ef6       0x58 Src/system_stm32h7xx.o
+ .debug_str     0x00000000001670a1       0x58 Src/system_stm32h7xx.o
                                      0x1576ab (size before relaxing)
- .debug_str     0x0000000000163f4e       0x31 Startup/startup_stm32h743zitx.o
+ .debug_str     0x00000000001670f9       0x31 Startup/startup_stm32h743zitx.o
                                          0x5e (size before relaxing)
 
 .comment        0x0000000000000000       0x7b
@@ -15377,10 +15418,15 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .comment       0x000000000000007b       0x7c Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .comment       0x000000000000007b       0x7c Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .comment       0x000000000000007b       0x7c Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
+ .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-analysis.o
+ .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-delay.o
+ .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-dynamics.o
  .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-envelopes.o
+ .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-filters.o
  .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-math.o
  .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-mempool.o
  .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-oscillators.o
+ .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-physical.o
  .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf-tables.o
  .comment       0x000000000000007b       0x7c LEAF/leaf/Src/leaf.o
  .comment       0x000000000000007b       0x7c Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
@@ -15403,7 +15449,7 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .comment       0x000000000000007b       0x7c Src/stm32h7xx_it.o
  .comment       0x000000000000007b       0x7c Src/system_stm32h7xx.o
 
-.debug_frame    0x0000000000000000     0x5b94
+.debug_frame    0x0000000000000000     0x8cc0
  .debug_frame   0x0000000000000000      0x3e4 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.o
  .debug_frame   0x00000000000003e4      0x194 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.o
  .debug_frame   0x0000000000000578      0x254 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.o
@@ -15420,29 +15466,34 @@ OUTPUT(cube_for_new_genera_brain4.elf elf32-littlearm)
  .debug_frame   0x000000000000277c      0x4e4 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.o
  .debug_frame   0x0000000000002c60      0x24c Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.o
  .debug_frame   0x0000000000002eac      0x5b8 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.o
- .debug_frame   0x0000000000003464      0x970 LEAF/leaf/Src/leaf-envelopes.o
- .debug_frame   0x0000000000003dd4      0x6e4 LEAF/leaf/Src/leaf-math.o
- .debug_frame   0x00000000000044b8      0x238 LEAF/leaf/Src/leaf-mempool.o
- .debug_frame   0x00000000000046f0      0x974 LEAF/leaf/Src/leaf-oscillators.o
- .debug_frame   0x0000000000005064       0x8c LEAF/leaf/Src/leaf.o
- .debug_frame   0x00000000000050f0       0xa8 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_frame   0x0000000000005198      0x158 Src/audiostream.o
- .debug_frame   0x00000000000052f0      0x174 Src/bsp_driver_sd.o
- .debug_frame   0x0000000000005464       0x38 Src/codec.o
- .debug_frame   0x000000000000549c       0x34 Src/dma.o
- .debug_frame   0x00000000000054d0       0x38 Src/fatfs.o
- .debug_frame   0x0000000000005508       0x28 Src/fatfs_platform.o
- .debug_frame   0x0000000000005530       0x7c Src/fmc.o
- .debug_frame   0x00000000000055ac       0x3c Src/gpio.o
- .debug_frame   0x00000000000055e8       0x70 Src/i2c.o
- .debug_frame   0x0000000000005658       0xd0 Src/main.o
- .debug_frame   0x0000000000005728       0x54 Src/rng.o
- .debug_frame   0x000000000000577c       0x84 Src/sai.o
- .debug_frame   0x0000000000005800       0xb0 Src/sd_diskio.o
- .debug_frame   0x00000000000058b0       0x70 Src/sdmmc.o
- .debug_frame   0x0000000000005920       0xb4 Src/spi.o
- .debug_frame   0x00000000000059d4       0x28 Src/stm32h7xx_hal_msp.o
- .debug_frame   0x00000000000059fc      0x100 Src/stm32h7xx_it.o
- .debug_frame   0x0000000000005afc       0x4c Src/system_stm32h7xx.o
- .debug_frame   0x0000000000005b48       0x2c /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-init.o)
- .debug_frame   0x0000000000005b74       0x20 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x0000000000003464      0xc4c LEAF/leaf/Src/leaf-analysis.o
+ .debug_frame   0x00000000000040b0      0x7a4 LEAF/leaf/Src/leaf-delay.o
+ .debug_frame   0x0000000000004854      0x23c LEAF/leaf/Src/leaf-dynamics.o
+ .debug_frame   0x0000000000004a90      0x970 LEAF/leaf/Src/leaf-envelopes.o
+ .debug_frame   0x0000000000005400      0xf24 LEAF/leaf/Src/leaf-filters.o
+ .debug_frame   0x0000000000006324      0x6e4 LEAF/leaf/Src/leaf-math.o
+ .debug_frame   0x0000000000006a08      0x238 LEAF/leaf/Src/leaf-mempool.o
+ .debug_frame   0x0000000000006c40      0x974 LEAF/leaf/Src/leaf-oscillators.o
+ .debug_frame   0x00000000000075b4      0xb38 LEAF/leaf/Src/leaf-physical.o
+ .debug_frame   0x00000000000080ec       0x8c LEAF/leaf/Src/leaf.o
+ .debug_frame   0x0000000000008178       0xa8 Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_frame   0x0000000000008220      0x1fc Src/audiostream.o
+ .debug_frame   0x000000000000841c      0x174 Src/bsp_driver_sd.o
+ .debug_frame   0x0000000000008590       0x38 Src/codec.o
+ .debug_frame   0x00000000000085c8       0x34 Src/dma.o
+ .debug_frame   0x00000000000085fc       0x38 Src/fatfs.o
+ .debug_frame   0x0000000000008634       0x28 Src/fatfs_platform.o
+ .debug_frame   0x000000000000865c       0x7c Src/fmc.o
+ .debug_frame   0x00000000000086d8       0x3c Src/gpio.o
+ .debug_frame   0x0000000000008714       0x70 Src/i2c.o
+ .debug_frame   0x0000000000008784       0xd0 Src/main.o
+ .debug_frame   0x0000000000008854       0x54 Src/rng.o
+ .debug_frame   0x00000000000088a8       0x84 Src/sai.o
+ .debug_frame   0x000000000000892c       0xb0 Src/sd_diskio.o
+ .debug_frame   0x00000000000089dc       0x70 Src/sdmmc.o
+ .debug_frame   0x0000000000008a4c       0xb4 Src/spi.o
+ .debug_frame   0x0000000000008b00       0x28 Src/stm32h7xx_hal_msp.o
+ .debug_frame   0x0000000000008b28      0x100 Src/stm32h7xx_it.o
+ .debug_frame   0x0000000000008c28       0x4c Src/system_stm32h7xx.o
+ .debug_frame   0x0000000000008c74       0x2c /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-init.o)
+ .debug_frame   0x0000000000008ca0       0x20 /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.macos64_1.0.0.201904181610/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv5/hard/libc_nano.a(lib_a-memset.o)
