@@ -13,7 +13,7 @@
 #include "codec.h"
 #include "i2c.h"
 #include "gpio.h"
-
+#include "spi.h"
 
 //the audio buffers are put in the D2 RAM area because that is a memory location that the DMA has access to.
 int32_t audioOutBuffer[AUDIO_BUFFER_SIZE] __ATTR_RAM_D2;
@@ -41,6 +41,8 @@ uint32_t codecReady = 0;
 
 uint32_t frameCounter = 0;
 
+int stringPositions[2];
+
 tNoise myNoise;
 tCycle mySine[2];
 tEnvelopeFollower LED_envelope[4];
@@ -60,7 +62,9 @@ int numBuffersCleared = 0;
 float atodbTable[ATODB_TABLE_SIZE];
 
 
-
+tADSR envelopes[10];
+tSaw saws[10];
+float theAmps[10];
 /**********************************************/
 
 
@@ -75,6 +79,15 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 
 	tCycle_init(&mySine[0]);
 	tCycle_setFreq(&mySine[0], 220.0f);
+	tCycle_init(&mySine[1]);
+	tCycle_setFreq(&mySine[1], 220.0f);
+
+	for (int i = 0; i < 10; i++)
+	{
+		tADSR_init(&envelopes[i], 5.0f, 4090.0f, 0.0f, 100.0f);
+		tSaw_initToPool(&saws[i], &mediumPool);
+		tSaw_setFreq(&saws[i], 110.0f * ((float)i+1.0f));
+	}
 	//loadingPreset = 1;
 	//previousPreset = PresetNil;
 
@@ -99,25 +112,17 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 	AudioCodec_init(hi2c);
 	HAL_Delay(1);
 
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
 }
 
 void audioFrame(uint16_t buffer_offset)
 {
 
 	int i;
-
+	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 	uint32_t clipCatcher = 0;
-
-	//if (!loadingPreset)
-	//{
-		//frameFunctions[currentPreset]();
-	//}
 
 	//if the codec isn't ready, keep the buffer as all zeros
 	//otherwise, start computing audio!
-
-	bufferCleared = TRUE;
 
 	if (codecReady)
 	{
@@ -132,27 +137,113 @@ void audioFrame(uint16_t buffer_offset)
 			audioOutBuffer[buffer_offset + i] = (int32_t)(theSamples[1] * TWO_TO_23);
 			audioOutBuffer[buffer_offset + i + 1] = (int32_t)(theSamples[0] * TWO_TO_23);
 		}
-		//if (!loadingPreset)
-		//{
-			//bufferCleared = 0;
-		//}
+
 	}
+	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
 }
 
 
-
+uint maxVolumes[10];
+uint stringInputs[10];
 
 uint32_t audioTick(float* samples)
 {
 	uint32_t clips = 0;
+	for (int j = 0; j < 2; j++)
+	{
+		stringPositions[j] =  ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
+	}
+	//tCycle_setFreq(&mySine[0], mtof(((stringPositions[0] * INV_TWO_TO_16) * 24.0f) + 48.0f));
 
-	//tickFunctions[currentPreset](samples);
-	samples[0] = tCycle_tick(&mySine[0]);
+	//tCycle_setFreq(&mySine[1], mtof(((stringPositions[1] * INV_TWO_TO_16) * 24.0f) + 48.0f));
+
+	samples[0] = 0.0f;
+
+	uint string0 = (SPI_PLUCK_RX[0] << 8) + SPI_PLUCK_RX[1];
+
+	//uint string0 = SPI_PLUCK_RX[0];
+	if (string0 > 0)
+	{
+		//theAmps[0] = 1.0f;
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
+	}
+	else
+	{
+		//theAmps[0] = 0.0f;
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		samples[0] += tSaw_tick(&saws[i]) * theAmps[i];//tADSR_tick(&envelopes[i]);
+	}
+	samples[0] *= .10f;
 	samples[1] = samples[0];
 	return clips;
 }
 
 
+
+
+void midiIn (uint string, uint amplitude)
+{
+	if (amplitude > maxVolumes[string])
+	{
+		maxVolumes[string] = amplitude;
+	}
+	if (amplitude > 0)
+	{
+		theAmps[string] = 1.0f;
+	}
+	else
+	{
+		theAmps[string] = 0.0f;
+	}
+	if (theAmps[0] > 0.0f)
+	{
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+	}
+}
+
+volatile int testInt = 0;
+
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+	if (hspi == &hspi1)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			stringInputs[i] = (SPI_PLUCK_RX[i*2] << 8) + SPI_PLUCK_RX[(i*2)+1];
+			//if (maxVolumes[i] < stringInputs[i])
+			//{
+			//	maxVolumes[i] = stringInputs[i];
+			//}
+
+			theAmps[i] = (float)(stringInputs[i] > 0); //(float)stringInputs[i] / (float)maxVolumes[i];
+		}
+
+
+		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11);
+		//uint tempAmp = (SPI_PLUCK_RX[1] << 8) + SPI_PLUCK_RX[2];
+		//midiIn(SPI_PLUCK_RX[0], tempAmp);
+	}
+	HAL_SPI_Receive_DMA(&hspi1, SPI_PLUCK_RX, 20);
+}
+
+void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef *hspi)
+{
+	//if (hspi == &hspi1)
+	//{
+
+
+		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11);
+		//int tempAmp = (SPI_PLUCK_RX[1] << 8) + SPI_PLUCK_RX[2];
+		//midiIn(SPI_PLUCK_RX[0], tempAmp);
+	//}
+}
 
 
 void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)

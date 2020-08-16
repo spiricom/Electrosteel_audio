@@ -20,9 +20,6 @@ Src/audiostream.o: ../Src/audiostream.c ../Inc/audiostream.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_mdma.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_exti.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h \
- ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc.h \
- ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_adc.h \
- ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc_ex.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash_ex.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hsem.h \
@@ -70,7 +67,8 @@ Src/audiostream.o: ../Src/audiostream.c ../Inc/audiostream.h \
  /Users/josnyder/dev/Electrosteel_audio/LEAF/leaf/./Inc/leaf-sampling.h \
  /Users/josnyder/dev/Electrosteel_audio/LEAF/leaf/./Inc/leaf-physical.h \
  /Users/josnyder/dev/Electrosteel_audio/LEAF/leaf/./Inc/leaf-electrical.h \
- ../Inc/main.h ../Inc/main.h ../Inc/codec.h ../Inc/i2c.h ../Inc/gpio.h
+ ../Inc/main.h ../Inc/main.h ../Inc/codec.h ../Inc/i2c.h ../Inc/gpio.h \
+ ../Inc/spi.h
 
 ../Inc/audiostream.h:
 
@@ -115,12 +113,6 @@ Src/audiostream.o: ../Src/audiostream.c ../Inc/audiostream.h \
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_exti.h:
 
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h:
-
-../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc.h:
-
-../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_adc.h:
-
-../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc_ex.h:
 
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash.h:
 
@@ -225,3 +217,5 @@ Src/audiostream.o: ../Src/audiostream.c ../Inc/audiostream.h \
 ../Inc/i2c.h:
 
 ../Inc/gpio.h:
+
+../Inc/spi.h:

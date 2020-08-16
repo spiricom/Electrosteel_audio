@@ -20,7 +20,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "adc.h"
 #include "dma.h"
 #include "fatfs.h"
 #include "i2c.h"
@@ -53,6 +52,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint8_t SPI_RX[16] __ATTR_RAM_D2;
+
+uint8_t SPI_PLUCK_RX[20] __ATTR_RAM_D2;
 
 /* USER CODE END PV */
 
@@ -110,7 +112,6 @@ int main(void)
   MX_RNG_Init();
   MX_SPI2_Init();
   MX_I2C2_Init();
-  MX_ADC1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
@@ -120,6 +121,9 @@ int main(void)
   uint32_t tempFPURegisterVal = __get_FPSCR();
   tempFPURegisterVal |= (1<<24); // set the FTZ (flush-to-zero) bit in the FPU control register  // this makes checking for denormals not necessary as they are automatically set to zero by the hardware
   __set_FPSCR(tempFPURegisterVal);
+
+  HAL_SPI_Receive_DMA(&hspi2, SPI_RX, 16);
+  HAL_SPI_Receive_DMA(&hspi1, SPI_PLUCK_RX, 20);
 
 
   SDRAM_Initialization_sequence();
@@ -163,11 +167,8 @@ void SystemClock_Config(void)
   __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSI
-                              |RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSIState = RCC_HSI_DIV1;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
@@ -196,15 +197,14 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2;
   RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RNG|RCC_PERIPHCLK_SPI1
                               |RCC_PERIPHCLK_SPI2|RCC_PERIPHCLK_SAI1
                               |RCC_PERIPHCLK_SDMMC|RCC_PERIPHCLK_I2C2
-                              |RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_FMC
-                              |RCC_PERIPHCLK_CKPER;
+                              |RCC_PERIPHCLK_FMC;
   PeriphClkInitStruct.PLL2.PLL2M = 25;
   PeriphClkInitStruct.PLL2.PLL2N = 344;
   PeriphClkInitStruct.PLL2.PLL2P = 7;
@@ -215,12 +215,10 @@ void SystemClock_Config(void)
   PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
   PeriphClkInitStruct.FmcClockSelection = RCC_FMCCLKSOURCE_D1HCLK;
   PeriphClkInitStruct.SdmmcClockSelection = RCC_SDMMCCLKSOURCE_PLL2;
-  PeriphClkInitStruct.CkperClockSelection = RCC_CLKPSOURCE_HSI;
   PeriphClkInitStruct.Sai1ClockSelection = RCC_SAI1CLKSOURCE_PLL2;
   PeriphClkInitStruct.Spi123ClockSelection = RCC_SPI123CLKSOURCE_PLL;
   PeriphClkInitStruct.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
   PeriphClkInitStruct.I2c123ClockSelection = RCC_I2C123CLKSOURCE_D2PCLK1;
-  PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_CLKP;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
