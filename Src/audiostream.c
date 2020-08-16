@@ -64,11 +64,15 @@ float atodbTable[ATODB_TABLE_SIZE];
 #define NUM_STRINGS 10
 
 tADSR envelopes[10];
-tSaw saws[10];
+tADSR fenvelopes[10];
+tMBSaw saws[10];
+tMBSaw Ssaws[10];
 tSimpleLivingString strings[10];
 float theAmps[10];
 tNoise myNoise;
 tExpSmooth smoother[10];
+tExpSmooth pitchSmoother[2];
+tVZFilter filts[10];
 /**********************************************/
 
 
@@ -88,12 +92,19 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 
 	for (int i = 0; i < 10; i++)
 	{
-		tADSR_init(&envelopes[i], 5.0f, 4090.0f, 0.0f, 100.0f);
-		tSaw_initToPool(&saws[i], &mediumPool);
-		tSaw_setFreq(&saws[i], 110.0f * ((float)i+1.0f));
+		tADSR_init(&envelopes[i], 5.0f, 2000.0f, 0.6f, 80.0f);
+		tADSR_setLeakFactor(&envelopes[i], 0.99999f),
+		tMBSaw_initToPool(&saws[i], &mediumPool);
+		tMBSaw_initToPool(&Ssaws[i], &mediumPool);
+		tMBSaw_setFreq(&saws[i], 110.0f * ((float)i+1.0f));
 		tSimpleLivingString_initToPool(&strings[i], 100.0f, 19000.0f, 0.99999f, 1.0f, 0.01f, 0.01f, 0, &mediumPool);
 		tExpSmooth_init(&smoother[i],0.0f, 0.001f);
+		tVZFilter_init(&filts[i], Lowpass, 8000.0f, 1.1f);
+		tADSR_init(&fenvelopes[i], 5.0f, 1000.0f, 0.0f, 80.0f);
 	}
+
+	tExpSmooth_init(&pitchSmoother[0], 0.0f, 0.001f);
+	tExpSmooth_init(&pitchSmoother[1], 0.0f, 0.001f);
 	//loadingPreset = 1;
 	//previousPreset = PresetNil;
 	tNoise_init(&myNoise, WhiteNoise);
@@ -178,10 +189,16 @@ float map(float value, float istart, float istop, float ostart, float ostop)
 uint32_t audioTick(float* samples)
 {
 	uint32_t clips = 0;
+	float posData[2];
 	for (int j = 0; j < 2; j++)
 	{
-		stringPositions[j] =  ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
 
+		posData[j] = ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
+
+		//stringPositions[j] =  ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
+		tExpSmooth_setDest(&pitchSmoother[j], posData[j]);
+
+		stringPositions[j] = tExpSmooth_tick(&pitchSmoother[j]);
 		if (stringPositions[j] == 65535)
 		{
 			stringMappedPositions[j] = 1.0f;
@@ -199,9 +216,11 @@ uint32_t audioTick(float* samples)
 
 		//then apply those ratios to the fundamental frequencies
 		stringFrequencies[i] = ((1.0 / myMappedPos) * openStringFrequencies[i]);
-		//tSaw_setFreq(&saws[i], stringFrequencies[i]);
-		tSimpleLivingString_setFreq(&strings[i], stringFrequencies[i]);
-
+		float theEnv = tADSR_tick(&fenvelopes[i]);
+		tMBSaw_setFreq(&saws[i], (stringFrequencies[i]));
+		tMBSaw_setFreq(&Ssaws[i], stringFrequencies[i] * (1.0f + (2.0f *  theEnv)));
+		//tSimpleLivingString_setFreq(&strings[i], stringFrequencies[i]);
+		tVZFilter_setFreq(&filts[i], stringFrequencies[i] * (1.0f + (2.0f * theEnv)));
 	}
 
 	samples[0] = 0.0f;
@@ -219,13 +238,16 @@ uint32_t audioTick(float* samples)
 		//theAmps[0] = 0.0f;
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
 	}
+	float tempSamp = 0.0f;
 	for (int i = 0; i < 10; i++)
 	{
-		//samples[0] += tSaw_tick(&saws[i]) * theAmps[i];//tADSR_tick(&envelopes[i]);
-
-		samples[0] += tSimpleLivingString_tick(&strings[i], tExpSmooth_tick(&smoother[i]) * tNoise_tick(&myNoise)) * theAmps[i];//tADSR_tick(&envelopes[i]);
+		//tempSamp = tSaw_tick(&saws[i]) * tADSR_tick(&envelopes[i]);
+		tMBSaw_tick(&saws[i]);
+		tMBSaw_syncIn(&Ssaws[i], tMBSaw_syncOut(&saws[i]));
+		samples[0] +=  tVZFilter_tickEfficient(&filts[i], tMBSaw_tick(&Ssaws[i]) * tADSR_tick(&envelopes[i]));
+		//samples[0] += (tSimpleLivingString_tick(&strings[i], (tExpSmooth_tick(&smoother[i]) * tNoise_tick(&myNoise)) + tempSamp) * theAmps[i]) + tempSamp;//tADSR_tick(&envelopes[i]);
 	}
-	samples[0] *= .10f;
+	samples[0] *= .1f;
 	samples[1] = samples[0];
 	return clips;
 }
@@ -278,6 +300,8 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 				//attack
 				tExpSmooth_setVal(&smoother[i], 1.0f);
 				tExpSmooth_setDest(&smoother[i], 0.0f);
+				tADSR_on(&envelopes[i], 1.0f);
+				tADSR_on(&fenvelopes[i], 1.0f);
 				theAmps[i] = 1.0f;
 			}
 			else if ((previousStringInputs[i] > 0) && (stringInputs[i] == 0))
@@ -286,6 +310,8 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 				tExpSmooth_setVal(&smoother[i], 1.0f);
 				tExpSmooth_setDest(&smoother[i], 0.0f);
 				theAmps[i] = 0.0f;
+				tADSR_off(&envelopes[i]);
+				tADSR_off(&fenvelopes[i]);
 				//theAmps[i] = (float)(stringInputs[i] > 0);
 			}
 
