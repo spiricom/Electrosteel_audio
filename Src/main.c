@@ -52,7 +52,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t SPI_RX[16] __ATTR_RAM_D2;
+uint8_t SPI_RX[32] __ATTR_RAM_D2;
 
 uint8_t SPI_PLUCK_RX[20] __ATTR_RAM_D2;
 
@@ -122,7 +122,7 @@ int main(void)
   tempFPURegisterVal |= (1<<24); // set the FTZ (flush-to-zero) bit in the FPU control register  // this makes checking for denormals not necessary as they are automatically set to zero by the hardware
   __set_FPSCR(tempFPURegisterVal);
 
-  HAL_SPI_Receive_DMA(&hspi2, SPI_RX, 16);
+  HAL_SPI_Receive_DMA(&hspi2, SPI_RX, 32);
   HAL_SPI_Receive_DMA(&hspi1, SPI_PLUCK_RX, 20);
 
 

@@ -65,7 +65,7 @@ float randomNumber(void);
 
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
-extern uint8_t SPI_RX[16];
+extern uint8_t SPI_RX[32];
 extern uint8_t SPI_PLUCK_RX[20];
 /* USER CODE END Private defines */
 

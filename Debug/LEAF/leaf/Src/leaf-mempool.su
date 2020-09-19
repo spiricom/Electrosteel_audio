@@ -1,10 +1,10 @@
 leaf-mempool.c:61:6:mpool_create	8	static
-leaf-mempool.c:80:6:leaf_pool_init	12	static
+leaf-mempool.c:80:6:leaf_pool_init	8	static
 leaf-mempool.c:90:7:mpool_alloc	24	static
 leaf-mempool.c:178:7:mpool_calloc	24	static
 leaf-mempool.c:258:7:leaf_alloc	24	static
 leaf-mempool.c:266:7:leaf_calloc	24	static
-leaf-mempool.c:274:6:mpool_free	28	static
+leaf-mempool.c:274:6:mpool_free	24	static
 leaf-mempool.c:342:6:leaf_free	24	static
 leaf-mempool.c:347:8:mpool_get_size	0	static
 leaf-mempool.c:352:8:mpool_get_used	0	static
@@ -12,6 +12,5 @@ leaf-mempool.c:357:8:leaf_pool_get_size	0	static
 leaf-mempool.c:362:8:leaf_pool_get_used	0	static
 leaf-mempool.c:367:7:leaf_pool_get_pool	0	static
 leaf-mempool.c:411:6:tMempool_init	40	static
-leaf-mempool.c:416:6:tMempool_free	28	static
-leaf-mempool.c:421:9:tMempool_initToPool	40	static
-leaf-mempool.c:429:9:tMempool_freeFromPool	28	static
+leaf-mempool.c:416:6:tMempool_free	24	static
+leaf-mempool.c:423:9:tMempool_initToPool	40	static
