@@ -57,11 +57,12 @@ float pedals[8][10] =
 		{1.122462f, 1.0f, 1.0f, 1.0f, 1.0f, 1.122462f, 1.0f, 1.0f, 1.0f, 1.0f},
 		{1.0f, 1.0f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f},
 		{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.122462f, 1.122462f, 1.0f, 1.0f, 1.0f},
-		{0.793701f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
-		{1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f},
-		{1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f},
+		{0.66742f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.059463f},
 		{1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.890899f, 1.0f},
-		{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.059463f}};
+		{1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f}
+};
 
 
 
@@ -87,9 +88,18 @@ tExpSmooth smoother[10];
 tExpSmooth pitchSmoother[2];
 tVZFilter filts[10];
 tVZFilter noiseFilt;
+tVZFilter noiseFilt2;
+tExpSmooth pedalSmoothers[12];
+tExpSmooth stringFreqSmoothers[10];
 
 LEAF leaf;
+
 /**********************************************/
+
+float map(float value, float istart, float istop, float ostart, float ostop)
+{
+    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
 
 
 void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTypeDef* hsaiIn)
@@ -114,14 +124,19 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 		tMBSaw_initToPool(&Ssaws[i], &mediumPool);
 		tMBSaw_setFreq(&saws[i], 110.0f * ((float)i+1.0f));
 		tSimpleLivingString_initToPool(&strings[i], 100.0f, 6000.0f, 0.999f, 0.9f, 0.01f, 0.01f, 0, &mediumPool);
-		tExpSmooth_init(&smoother[i],0.0f, 0.0008f, &leaf);
+		tExpSmooth_init(&smoother[i],0.0f, 0.002f, &leaf);
 		tVZFilter_init(&filts[i], Lowpass, 8000.0f, 1.1f, &leaf);
-		tVZFilter_init(&noiseFilt, Lowpass, 2000.0f, 0.9f, &leaf);
+		tVZFilter_init(&noiseFilt, BandpassPeak, 2000.0f, 1.5f, &leaf);
+		tVZFilter_init(&noiseFilt2, Lowpass, 2000.0f, 0.9f, &leaf);
 		tADSR_init(&fenvelopes[i], 5.0f, 1000.0f, 0.0f, 80.0f, &leaf);
+		tExpSmooth_init(&stringFreqSmoothers[i],1.0f, 0.05f, &leaf);
+	}
+	for (int i = 0; i < 12; i++)
+	{
+		tExpSmooth_init(&pedalSmoothers[i],0.0f, 0.0008f, &leaf);
 	}
 
-	tExpSmooth_init(&pitchSmoother[0], 0.0f, 0.001f, &leaf);
-	tExpSmooth_init(&pitchSmoother[1], 0.0f, 0.001f, &leaf);
+
 	//loadingPreset = 1;
 	//previousPreset = PresetNil;
 	tNoise_init(&myNoise, WhiteNoise, &leaf);
@@ -148,6 +163,31 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 	HAL_Delay(1);
 
 }
+float prevSamp = 0.0f;
+float pedalValuesInt[12];
+float pedalMin[12] = {1.0f, 1.0f, 1018.0f, 534.0f, 3109.0f, 616.0f, 312.0f, 410.0f, 1.0f, 353.0f, 3321.0f, 1.0f};
+float pedalMax[12] = {2.0f, 1.0f, 1174.0f, 705.0f, 3377.0f, 840.0f, 733.0f, 892.0f, 2.0f, 746.0f, 3685.0f, 1.0f};
+float pedalScaled[12];
+int pedalOffset = 6;
+uint maxVolumes[10];
+float invMaxVolumes[10];
+uint stringInputs[10];
+float openStringFrequencies[NUM_STRINGS] = {123.470825f, 146.832384f, 164.813779f, 184.997211f, 207.652349f, 246.941651f, 329.627557f, 415.304698f, 311.126984f, 369.994423f};
+float octave = 1.0f;
+
+float stringMappedPositions[NUM_STRINGS];
+float stringFrequencies[NUM_STRINGS];
+
+
+// frets are measured at 3 7 12 and 19   need to redo these measurements with an accurately set capo
+float fretMeasurements[4][2] ={
+		{52628.0f, 53920.0f},
+		{40008.0f, 41254.0f},
+		{27462.0f, 28328.0f},
+		{10040.0f, 10052.0f}
+	};
+
+float fretScaling[4] = {0.9f, 0.66666666666f, 0.5f, 0.25f};
 
 void audioFrame(uint16_t buffer_offset)
 {
@@ -158,7 +198,47 @@ void audioFrame(uint16_t buffer_offset)
 
 	//if the codec isn't ready, keep the buffer as all zeros
 	//otherwise, start computing audio!
+	for (int j = 0; j < 2; j++)
+	{
+		stringPositions[j] =  ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
+		if (stringPositions[j] == 65535)
+		{
+			stringMappedPositions[j] = 1.0f;
+		}
+		else
+		{
+			stringMappedPositions[j] = map((float)stringPositions[j], fretMeasurements[1][j], fretMeasurements[2][j], fretScaling[1], fretScaling[2]);
+		}
+	}
 
+	for (int i = 0; i < 12; i++)
+	{
+		pedalValuesInt[i] = ((uint16_t)SPI_RX[(i * 2) + pedalOffset] << 8) + ((uint16_t)SPI_RX[(i * 2) + 1 + pedalOffset] & 0xff);
+		tExpSmooth_setDest(&pedalSmoothers[i], LEAF_clip(0.0f, map(pedalValuesInt[i], pedalMin[i], pedalMax[i], -0.7f, 1.7f), 1.0f));
+		pedalScaled[i] = tExpSmooth_tick(&pedalSmoothers[i]);
+	}
+
+
+
+	for (int i = 0; i < NUM_STRINGS; i++)
+	{
+		//interpolate ratios for each of the 10 strings
+		float myMappedPos = stringMappedPositions[0];
+		//float myMappedPos = LEAF_interpolation_linear(stringMappedPositions[1], stringMappedPositions[0], ((float)i) * 0.111111111111111f);
+
+		//then apply those ratios to the fundamental frequencies
+		float tempFreq = ((1.0 / myMappedPos) * openStringFrequencies[i] *
+					(LEAF_interpolation_linear(1.0f, pedals[0][i], pedalScaled[2])) *
+					(LEAF_interpolation_linear(1.0f, pedals[1][i], pedalScaled[3])) *
+					(LEAF_interpolation_linear(1.0f, pedals[2][i], pedalScaled[4])) *
+					(LEAF_interpolation_linear(1.0f, pedals[3][i], pedalScaled[5])) *
+					(LEAF_interpolation_linear(1.0f, pedals[4][i], pedalScaled[6])) *
+					(LEAF_interpolation_linear(1.0f, pedals[5][i], pedalScaled[7])) *
+					(LEAF_interpolation_linear(1.0f, pedals[6][i], pedalScaled[9])) *
+					(LEAF_interpolation_linear(1.0f, pedals[7][i], pedalScaled[10])));
+		tExpSmooth_setDest(&stringFreqSmoothers[i], tempFreq);
+
+	}
 	if (codecReady)
 	{
 
@@ -178,110 +258,33 @@ void audioFrame(uint16_t buffer_offset)
 }
 
 
-uint maxVolumes[10];
-float invMaxVolumes[10];
-uint stringInputs[10];
-float openStringFrequencies[NUM_STRINGS] = {123.470825f, 146.832384f, 164.813779f, 184.997211f, 207.652349f, 246.941651f, 329.627557f, 415.304698f, 311.126984f, 369.994423f};
-float octave = 1.0f;
-
-float stringMappedPositions[NUM_STRINGS];
-float stringFrequencies[NUM_STRINGS];
 
 
-// frets are measured at 3 7 12 and 19   need to redo these measurements with an accurately set capo
-float fretMeasurements[4][2] ={
-		{52628.0f, 53920.0f},
-		{40008.0f, 41254.0f},
-		{27462.0f, 28328.0f},
-		{10040.0f, 10052.0f}
-	};
 
 
-float fretScaling[4] = {0.9f, 0.66666666666f, 0.5f, 0.25f};
-
-float map(float value, float istart, float istop, float ostart, float ostop)
-{
-    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
-}
-
-float prevSamp = 0.0f;
-float pedalValuesInt[12];
-float pedalMax[12];
-float pedalMin[12] = {65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535};
-float pedalScaled[12];
-int pedalOffset = 6;
 
 uint32_t audioTick(float* samples)
 {
 	uint32_t clips = 0;
-	for (int j = 0; j < 2; j++)
-	{
-
-		//posData[j] = ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
-		//posData[j] = 65535;
-		stringPositions[j] =  ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
-		//tExpSmooth_setDest(&pitchSmoother[j], posData[j]);
-
-		//stringPositions[j] = tExpSmooth_tick(&pitchSmoother[j]);
-		if (stringPositions[j] == 65535)
-		{
-			stringMappedPositions[j] = 1.0f;
-		}
-		else
-		{
-			stringMappedPositions[j] = map((float)stringPositions[j], fretMeasurements[1][j], fretMeasurements[2][j], fretScaling[1], fretScaling[2]);
-		}
-	}
 
 	for (int i = 0; i < 12; i++)
 	{
-		pedalValuesInt[i] = ((uint16_t)SPI_RX[(i * 2) + pedalOffset] << 8) + ((uint16_t)SPI_RX[(i * 2) + 1 + pedalOffset] & 0xff);
-		if (pedalValuesInt[i] > pedalMax[i])
-		{
-			pedalMax[i] = pedalValuesInt[i];
-		}
-		else if (pedalValuesInt[i] < pedalMin[i])
-		{
-			pedalMin[i] = pedalValuesInt[i];
-		}
-		pedalScaled[i] = LEAF_clip(0.0f, map(pedalValuesInt[i], pedalMin[i], pedalMax[i], -0.5f, 1.5f), 1.0f);
+		pedalScaled[i] = tExpSmooth_tick(&pedalSmoothers[i]);
 	}
-
-
-
 	for (int i = 0; i < NUM_STRINGS; i++)
 	{
-		//interpolate ratios for each of the 10 strings
-		float myMappedPos = stringMappedPositions[0];
-		//float myMappedPos = LEAF_interpolation_linear(stringMappedPositions[1], stringMappedPositions[0], ((float)i) * 0.111111111111111f);
-
-		//then apply those ratios to the fundamental frequencies
-		stringFrequencies[i] = ((1.0 / myMappedPos) * openStringFrequencies[i] * (LEAF_interpolation_linear(1.0f, pedals[0][i], pedalScaled[2])) * (LEAF_interpolation_linear(1.0f, pedals[1][i], pedalScaled[3])));
 		float theEnv = tADSR_tick(&fenvelopes[i]);
+		stringFrequencies[i] = tExpSmooth_tick(&stringFreqSmoothers[i]);
 		//tMBSaw_setFreq(&saws[i], (stringFrequencies[i]));
 		//tMBSaw_setFreq(&Ssaws[i], stringFrequencies[i] * (1.0f + (2.0f *  theEnv)));
 		tSimpleLivingString_setFreq(&strings[i], stringFrequencies[i]);
-		tSimpleLivingString_setDampFreq(&strings[i], LEAF_clip(50.0f, (stringFrequencies[i] * 4.0f) + 6000.0f, 23000.0f));
+		tSimpleLivingString_setDampFreq(&strings[i], LEAF_clip(50.0f, (stringFrequencies[i] * 3.0f) + 6000.0f, 23000.0f));
 		//tVZFilter_setFreq(&filts[i], stringFrequencies[i] * (1.0f + (6.0f * theEnv)));
 	}
-
 	samples[0] = 0.0f;
 
-	uint string1 = (SPI_PLUCK_RX[2] << 8) + SPI_PLUCK_RX[3];
-
-	//uint string0 = SPI_PLUCK_RX[0];
-	if (string1 > 0)
-	{
-		//theAmps[0] = 1.0f;
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
-	}
-	else
-	{
-		//theAmps[0] = 0.0f;
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
-	}
-	float tempSamp = 0.0f;
 	float filtNoise = tVZFilter_tickEfficient(&noiseFilt, tNoise_tick(&myNoise));
+	filtNoise += tVZFilter_tickEfficient(&noiseFilt2, filtNoise);
 	for (int i = 0; i < 10; i++)
 	{
 		//tempSamp = tSaw_tick(&saws[i]) * tADSR_tick(&envelopes[i]);
@@ -350,47 +353,29 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 				tExpSmooth_setDest(&smoother[i], 0.0f);
 				tADSR_on(&envelopes[i], amplitz);
 				tADSR_on(&fenvelopes[i], amplitz);
-				theAmps[i] = 1.0f;
+				tVZFilter_setFreq(&noiseFilt, faster_mtof(amplitz * 25.0f + 60.0f));
+				tVZFilter_setFreq(&noiseFilt2, faster_mtof(amplitz * 10.0f + 80.0f));
+
 			}
 			else if ((previousStringInputs[i] > 0) && (stringInputs[i] == 0))
 			{
-
-				//tExpSmooth_setVal(&smoother[i], 1.0f);
-				//tExpSmooth_setDest(&smoother[i], 0.0f);
-				theAmps[i] = 0.0f;
 				tADSR_off(&envelopes[i]);
 				tADSR_off(&fenvelopes[i]);
-				//theAmps[i] = (float)(stringInputs[i] > 0);
 			}
 
 			previousStringInputs[i] = stringInputs[i];
-			//theAmps[i] = (float)(stringInputs[i] > 0); //(float)stringInputs[i] / (float)maxVolumes[i];
 		}
-
-
-		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11);
-		//uint tempAmp = (SPI_PLUCK_RX[1] << 8) + SPI_PLUCK_RX[2];
-		//midiIn(SPI_PLUCK_RX[0], tempAmp);
 	}
 	HAL_SPI_Receive_DMA(&hspi1, SPI_PLUCK_RX, 20);
 }
 
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef *hspi)
 {
-	//if (hspi == &hspi1)
-	//{
-
-
-		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_11);
-		//int tempAmp = (SPI_PLUCK_RX[1] << 8) + SPI_PLUCK_RX[2];
-		//midiIn(SPI_PLUCK_RX[0], tempAmp);
-	//}
 }
 
 
 void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)
 {
-	//setLED_Edit(1);
 }
 
 void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
