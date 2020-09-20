@@ -52,6 +52,19 @@ uint32_t clipped[4] = {0,0,0,0};
 uint32_t clipHappened[4] = {0,0,0,0};
 
 
+float pedals[8][10] =
+{
+		{1.122462f, 1.0f, 1.0f, 1.0f, 1.0f, 1.122462f, 1.0f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.122462f, 1.122462f, 1.0f, 1.0f, 1.0f},
+		{0.793701f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.890899f, 1.0f},
+		{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.059463f}};
+
+
+
 BOOL bufferCleared = TRUE;
 
 int numBuffersToClearOnLoad = 2;
@@ -192,15 +205,19 @@ float map(float value, float istart, float istop, float ostart, float ostop)
 }
 
 float prevSamp = 0.0f;
+float pedalValuesInt[12];
+float pedalMax[12];
+float pedalMin[12] = {65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535};
+float pedalScaled[12];
+int pedalOffset = 6;
 
 uint32_t audioTick(float* samples)
 {
 	uint32_t clips = 0;
-	float posData[2];
 	for (int j = 0; j < 2; j++)
 	{
 
-		posData[j] = ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
+		//posData[j] = ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
 		//posData[j] = 65535;
 		stringPositions[j] =  ((uint16_t)SPI_RX[j * 2] << 8) + ((uint16_t)SPI_RX[(j * 2) + 1] & 0xff);
 		//tExpSmooth_setDest(&pitchSmoother[j], posData[j]);
@@ -216,6 +233,22 @@ uint32_t audioTick(float* samples)
 		}
 	}
 
+	for (int i = 0; i < 12; i++)
+	{
+		pedalValuesInt[i] = ((uint16_t)SPI_RX[(i * 2) + pedalOffset] << 8) + ((uint16_t)SPI_RX[(i * 2) + 1 + pedalOffset] & 0xff);
+		if (pedalValuesInt[i] > pedalMax[i])
+		{
+			pedalMax[i] = pedalValuesInt[i];
+		}
+		else if (pedalValuesInt[i] < pedalMin[i])
+		{
+			pedalMin[i] = pedalValuesInt[i];
+		}
+		pedalScaled[i] = LEAF_clip(0.0f, map(pedalValuesInt[i], pedalMin[i], pedalMax[i], -0.5f, 1.5f), 1.0f);
+	}
+
+
+
 	for (int i = 0; i < NUM_STRINGS; i++)
 	{
 		//interpolate ratios for each of the 10 strings
@@ -223,7 +256,7 @@ uint32_t audioTick(float* samples)
 		//float myMappedPos = LEAF_interpolation_linear(stringMappedPositions[1], stringMappedPositions[0], ((float)i) * 0.111111111111111f);
 
 		//then apply those ratios to the fundamental frequencies
-		stringFrequencies[i] = ((1.0 / myMappedPos) * openStringFrequencies[i]);
+		stringFrequencies[i] = ((1.0 / myMappedPos) * openStringFrequencies[i] * (LEAF_interpolation_linear(1.0f, pedals[0][i], pedalScaled[2])) * (LEAF_interpolation_linear(1.0f, pedals[1][i], pedalScaled[3])));
 		float theEnv = tADSR_tick(&fenvelopes[i]);
 		//tMBSaw_setFreq(&saws[i], (stringFrequencies[i]));
 		//tMBSaw_setFreq(&Ssaws[i], stringFrequencies[i] * (1.0f + (2.0f *  theEnv)));
