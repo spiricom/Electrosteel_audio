@@ -51,6 +51,17 @@ uint32_t clipCounter[4] = {0,0,0,0};
 uint32_t clipped[4] = {0,0,0,0};
 uint32_t clipHappened[4] = {0,0,0,0};
 
+float pedalsInCents[8][10] =
+{
+		{184.0f, 0.0f, 0.0f, -16.0f, 0.0f, 184.0f, 0.0f, 0.0f, 0.0f, -16.0f},
+		{0.0f, -20.0f, 0.0f, 0.0f, 116.0f, 0.0f, 0.0f, 116.0f, 0.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 204.0f, 184.0f, 0.0f, 0.0f, 0.0f},
+		{-702.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 112.0f},
+		{0.0f, -134.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -204.0f, 0.0f},
+		{0.0f, 0.0f, 78.0f, 0.0f, 0.0f, 0.0f, 78.0f, 0.0f, 0.0f, 0.0f},
+		{0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f}
+};
 
 float pedals[8][10] =
 {
@@ -94,6 +105,37 @@ tExpSmooth stringFreqSmoothers[10];
 
 LEAF leaf;
 
+
+float pedalValuesInt[12];
+float pedalMin[12] = {1.0f, 1.0f, 1018.0f, 534.0f, 3109.0f, 616.0f, 312.0f, 410.0f, 1.0f, 353.0f, 3321.0f, 1.0f};
+float pedalMax[12] = {2.0f, 1.0f, 1174.0f, 705.0f, 3377.0f, 840.0f, 733.0f, 892.0f, 2.0f, 746.0f, 3685.0f, 1.0f};
+float pedalScaled[12];
+int pedalOffset = 6;
+uint maxVolumes[10];
+float invMaxVolumes[10];
+uint stringInputs[10];
+float openStringMidinotes[NUM_STRINGS] = {47.02f, 50.18f, 52.0f, 54.04f, 55.86f, 59.02f, 64.0f, 67.86f, 62.88f, 66.04f};
+float openStringFrequencies[NUM_STRINGS] = {123.470825f, 146.832384f, 164.813779f, 184.997211f, 207.652349f, 246.941651f, 329.627557f, 415.304698f, 311.126984f, 369.994423f};
+float octave = 1.0f;
+
+float stringMappedPositions[NUM_STRINGS];
+float stringFrequencies[NUM_STRINGS];
+
+
+float prevSamp[NUM_STRINGS];
+float sympathetic = 0.000001f;
+
+// frets are measured at 3 7 12 and 19   need to redo these measurements with an accurately set capo
+float fretMeasurements[4][2] ={
+		{52843.0f, 54638.0f},
+		{39596.0f, 41028.0f},
+		{27336.0f, 28186.0f},
+		{9460.0f, 9849.0f}
+	};
+
+float fretScaling[4] = {0.9f, 0.66666666666f, 0.5f, 0.25f};
+
+
 /**********************************************/
 
 float map(float value, float istart, float istop, float ostart, float ostop)
@@ -130,16 +172,27 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 		tVZFilter_init(&noiseFilt2, Lowpass, 2000.0f, 0.9f, &leaf);
 		tADSR_init(&fenvelopes[i], 5.0f, 1000.0f, 0.0f, 80.0f, &leaf);
 		tExpSmooth_init(&stringFreqSmoothers[i],1.0f, 0.05f, &leaf);
+
+		openStringFrequencies[i] = mtof(openStringMidinotes[i]);
 	}
 	for (int i = 0; i < 12; i++)
 	{
 		tExpSmooth_init(&pedalSmoothers[i],0.0f, 0.0008f, &leaf);
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < NUM_STRINGS; j++)
+		{
+			pedals[i][j] = pow(2.0, (pedalsInCents[i][j] / 1200.0));
+		}
 	}
 
 
 	//loadingPreset = 1;
 	//previousPreset = PresetNil;
 	tNoise_init(&myNoise, WhiteNoise, &leaf);
+
+
 
 	HAL_Delay(10);
 
@@ -163,31 +216,8 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 	HAL_Delay(1);
 
 }
-float prevSamp = 0.0f;
-float pedalValuesInt[12];
-float pedalMin[12] = {1.0f, 1.0f, 1018.0f, 534.0f, 3109.0f, 616.0f, 312.0f, 410.0f, 1.0f, 353.0f, 3321.0f, 1.0f};
-float pedalMax[12] = {2.0f, 1.0f, 1174.0f, 705.0f, 3377.0f, 840.0f, 733.0f, 892.0f, 2.0f, 746.0f, 3685.0f, 1.0f};
-float pedalScaled[12];
-int pedalOffset = 6;
-uint maxVolumes[10];
-float invMaxVolumes[10];
-uint stringInputs[10];
-float openStringFrequencies[NUM_STRINGS] = {123.470825f, 146.832384f, 164.813779f, 184.997211f, 207.652349f, 246.941651f, 329.627557f, 415.304698f, 311.126984f, 369.994423f};
-float octave = 1.0f;
-
-float stringMappedPositions[NUM_STRINGS];
-float stringFrequencies[NUM_STRINGS];
 
 
-// frets are measured at 3 7 12 and 19   need to redo these measurements with an accurately set capo
-float fretMeasurements[4][2] ={
-		{52628.0f, 53920.0f},
-		{40008.0f, 41254.0f},
-		{27462.0f, 28328.0f},
-		{10040.0f, 10052.0f}
-	};
-
-float fretScaling[4] = {0.9f, 0.66666666666f, 0.5f, 0.25f};
 
 void audioFrame(uint16_t buffer_offset)
 {
@@ -262,7 +292,6 @@ void audioFrame(uint16_t buffer_offset)
 
 
 
-
 uint32_t audioTick(float* samples)
 {
 	uint32_t clips = 0;
@@ -292,9 +321,17 @@ uint32_t audioTick(float* samples)
 		//tMBSaw_syncIn(&Ssaws[i], tMBSaw_syncOut(&saws[i]));
 		//samples[0] +=  tMBSaw_tick(&saws[i]) * tADSR_tick(&envelopes[i]);
 		//samples[0] +=  tVZFilter_tickEfficient(&filts[i], tMBSaw_tick(&saws[i]) * tADSR_tick(&envelopes[i]));
-		samples[0] += (tSimpleLivingString_tick(&strings[i], (tExpSmooth_tick(&smoother[i]) * filtNoise) + (prevSamp * 0.0000f))) * tADSR_tick(&envelopes[i]);//tADSR_tick(&envelopes[i]);
+		float tempSamp = (tSimpleLivingString_tick(&strings[i], (tExpSmooth_tick(&smoother[i]) * filtNoise) + (prevSamp[i] * sympathetic))) * tADSR_tick(&envelopes[i]);
+		samples[0] += tempSamp;
+		prevSamp[i] = 0.0f;
+		for (int j = 0; j < 10; j++)
+		{
+			if (j != i) //put sympathetic resonance in all strings but yourself
+			{
+				prevSamp[j]+=tempSamp;
+			}
+		}
 	}
-	prevSamp = samples[0];
 	samples[0] *= .1f;
 	samples[0] = tanhf(samples[0]);
 	samples[1] = samples[0];
