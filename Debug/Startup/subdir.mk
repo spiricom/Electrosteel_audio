@@ -9,8 +9,11 @@ S_SRCS += \
 OBJS += \
 ./Startup/startup_stm32h743zitx.o 
 
+S_DEPS += \
+./Startup/startup_stm32h743zitx.d 
+
 
 # Each subdirectory must supply rules for building sources it contributes
-Startup/%.o: ../Startup/%.s
-	arm-none-eabi-gcc -mcpu=cortex-m7 -g3 -c -I"/Users/josnyder/dev/Electrosteel_audio/LEAF/leaf" -x assembler-with-cpp --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@" "$<"
+Startup/startup_stm32h743zitx.o: ../Startup/startup_stm32h743zitx.s
+	arm-none-eabi-gcc -mcpu=cortex-m7 -g3 -c -I"/Users/josnyder/dev/Electrosteel_audio/LEAF/leaf" -x assembler-with-cpp -MMD -MP -MF"Startup/startup_stm32h743zitx.d" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@" "$<"
 

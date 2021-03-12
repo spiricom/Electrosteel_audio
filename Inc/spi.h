@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -32,6 +32,7 @@
 
 extern SPI_HandleTypeDef hspi1;
 extern SPI_HandleTypeDef hspi2;
+extern SPI_HandleTypeDef hspi5;
 
 /* USER CODE BEGIN Private defines */
 
@@ -39,6 +40,7 @@ extern SPI_HandleTypeDef hspi2;
 
 void MX_SPI1_Init(void);
 void MX_SPI2_Init(void);
+void MX_SPI5_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 

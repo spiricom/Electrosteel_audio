@@ -55,7 +55,6 @@
 "Src/audiostream.o"
 "Src/bsp_driver_sd.o"
 "Src/codec.o"
-"Src/debug.o"
 "Src/dma.o"
 "Src/fatfs.o"
 "Src/fatfs_platform.o"
