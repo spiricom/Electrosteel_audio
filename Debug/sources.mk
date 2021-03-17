@@ -20,10 +20,11 @@ OBJCOPY_BIN :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Drivers/STM32H7xx_HAL_Driver/Src \
-LEAF/leaf/Externals \
-LEAF/leaf/Src \
 Middlewares/Third_Party/FatFs/src \
 Middlewares/Third_Party/FatFs/src/option \
 Src \
 Startup \
+leaf/Examples \
+leaf/leaf/Externals \
+leaf/leaf/Src \
 

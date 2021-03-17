@@ -1,90 +1,96 @@
-LEAF/leaf/Src/leaf-mempool.o: ../LEAF/leaf/Src/leaf-mempool.c \
- ../LEAF/leaf/Src/../Inc/leaf-mempool.h ../LEAF/leaf/Src/../leaf.h \
- ../LEAF/leaf/Src/.././Inc/leaf-global.h \
- ../LEAF/leaf/Src/.././Inc/leaf-mempool.h \
- ../LEAF/leaf/Src/.././Inc/leaf-math.h \
- ../LEAF/leaf/Src/.././Inc/leaf-global.h \
- ../LEAF/leaf/Src/.././Inc/leaf-mempool.h \
- ../LEAF/leaf/Src/.././Inc/leaf-tables.h \
- ../LEAF/leaf/Src/.././Inc/leaf-math.h \
- ../LEAF/leaf/Src/.././Inc/leaf-distortion.h \
- ../LEAF/leaf/Src/.././Inc/leaf-dynamics.h \
- ../LEAF/leaf/Src/.././Inc/leaf-analysis.h \
- ../LEAF/leaf/Src/.././Inc/leaf-filters.h \
- ../LEAF/leaf/Src/.././Inc/leaf-delay.h \
- ../LEAF/leaf/Src/.././Inc/leaf-tables.h \
- ../LEAF/leaf/Src/.././Inc/leaf-envelopes.h \
- ../LEAF/leaf/Src/.././Inc/leaf-oscillators.h \
- ../LEAF/leaf/Src/.././Inc/leaf-filters.h \
- ../LEAF/leaf/Src/.././Inc/leaf-delay.h \
- ../LEAF/leaf/Src/.././Inc/leaf-reverb.h \
- ../LEAF/leaf/Src/.././Inc/leaf-oscillators.h \
- ../LEAF/leaf/Src/.././Inc/leaf-effects.h \
- ../LEAF/leaf/Src/.././Inc/leaf-dynamics.h \
- ../LEAF/leaf/Src/.././Inc/leaf-envelopes.h \
- ../LEAF/leaf/Src/.././Inc/leaf-analysis.h \
- ../LEAF/leaf/Src/.././Inc/leaf-instruments.h \
- ../LEAF/leaf/Src/.././Inc/leaf-midi.h \
- ../LEAF/leaf/Src/.././Inc/leaf-sampling.h \
- ../LEAF/leaf/Src/.././Inc/leaf-physical.h \
- ../LEAF/leaf/Src/.././Inc/leaf-electrical.h
+leaf/leaf/Src/leaf-mempool.o: ../leaf/leaf/Src/leaf-mempool.c \
+ ../leaf/leaf/Src/../Inc/leaf-mempool.h ../leaf/leaf/Src/../leaf.h \
+ ../leaf/leaf/Src/.././Inc/leaf-global.h \
+ ../leaf/leaf/Src/.././Inc/leaf-mempool.h \
+ ../leaf/leaf/Src/.././Inc/../leaf-config.h \
+ ../leaf/leaf/Src/.././Inc/leaf-math.h \
+ ../leaf/leaf/Src/.././Inc/leaf-global.h \
+ ../leaf/leaf/Src/.././Inc/leaf-mempool.h \
+ ../leaf/leaf/Src/.././Inc/leaf-tables.h \
+ ../leaf/leaf/Src/.././Inc/leaf-math.h \
+ ../leaf/leaf/Src/.././Inc/leaf-distortion.h \
+ ../leaf/leaf/Src/.././Inc/leaf-dynamics.h \
+ ../leaf/leaf/Src/.././Inc/leaf-analysis.h \
+ ../leaf/leaf/Src/.././Inc/leaf-distortion.h \
+ ../leaf/leaf/Src/.././Inc/leaf-filters.h \
+ ../leaf/leaf/Src/.././Inc/leaf-delay.h \
+ ../leaf/leaf/Src/.././Inc/leaf-tables.h \
+ ../leaf/leaf/Src/.././Inc/leaf-envelopes.h \
+ ../leaf/leaf/Src/.././Inc/leaf-oscillators.h \
+ ../leaf/leaf/Src/.././Inc/leaf-filters.h \
+ ../leaf/leaf/Src/.././Inc/leaf-delay.h \
+ ../leaf/leaf/Src/.././Inc/leaf-reverb.h \
+ ../leaf/leaf/Src/.././Inc/leaf-oscillators.h \
+ ../leaf/leaf/Src/.././Inc/leaf-effects.h \
+ ../leaf/leaf/Src/.././Inc/leaf-dynamics.h \
+ ../leaf/leaf/Src/.././Inc/leaf-envelopes.h \
+ ../leaf/leaf/Src/.././Inc/leaf-analysis.h \
+ ../leaf/leaf/Src/.././Inc/leaf-instruments.h \
+ ../leaf/leaf/Src/.././Inc/leaf-midi.h \
+ ../leaf/leaf/Src/.././Inc/leaf-sampling.h \
+ ../leaf/leaf/Src/.././Inc/leaf-physical.h \
+ ../leaf/leaf/Src/.././Inc/leaf-electrical.h
 
-../LEAF/leaf/Src/../Inc/leaf-mempool.h:
+../leaf/leaf/Src/../Inc/leaf-mempool.h:
 
-../LEAF/leaf/Src/../leaf.h:
+../leaf/leaf/Src/../leaf.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-global.h:
+../leaf/leaf/Src/.././Inc/leaf-global.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-mempool.h:
+../leaf/leaf/Src/.././Inc/leaf-mempool.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-math.h:
+../leaf/leaf/Src/.././Inc/../leaf-config.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-global.h:
+../leaf/leaf/Src/.././Inc/leaf-math.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-mempool.h:
+../leaf/leaf/Src/.././Inc/leaf-global.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-tables.h:
+../leaf/leaf/Src/.././Inc/leaf-mempool.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-math.h:
+../leaf/leaf/Src/.././Inc/leaf-tables.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-distortion.h:
+../leaf/leaf/Src/.././Inc/leaf-math.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-dynamics.h:
+../leaf/leaf/Src/.././Inc/leaf-distortion.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-analysis.h:
+../leaf/leaf/Src/.././Inc/leaf-dynamics.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-filters.h:
+../leaf/leaf/Src/.././Inc/leaf-analysis.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-delay.h:
+../leaf/leaf/Src/.././Inc/leaf-distortion.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-tables.h:
+../leaf/leaf/Src/.././Inc/leaf-filters.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-envelopes.h:
+../leaf/leaf/Src/.././Inc/leaf-delay.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-oscillators.h:
+../leaf/leaf/Src/.././Inc/leaf-tables.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-filters.h:
+../leaf/leaf/Src/.././Inc/leaf-envelopes.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-delay.h:
+../leaf/leaf/Src/.././Inc/leaf-oscillators.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-reverb.h:
+../leaf/leaf/Src/.././Inc/leaf-filters.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-oscillators.h:
+../leaf/leaf/Src/.././Inc/leaf-delay.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-effects.h:
+../leaf/leaf/Src/.././Inc/leaf-reverb.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-dynamics.h:
+../leaf/leaf/Src/.././Inc/leaf-oscillators.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-envelopes.h:
+../leaf/leaf/Src/.././Inc/leaf-effects.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-analysis.h:
+../leaf/leaf/Src/.././Inc/leaf-dynamics.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-instruments.h:
+../leaf/leaf/Src/.././Inc/leaf-envelopes.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-midi.h:
+../leaf/leaf/Src/.././Inc/leaf-analysis.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-sampling.h:
+../leaf/leaf/Src/.././Inc/leaf-instruments.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-physical.h:
+../leaf/leaf/Src/.././Inc/leaf-midi.h:
 
-../LEAF/leaf/Src/.././Inc/leaf-electrical.h:
+../leaf/leaf/Src/.././Inc/leaf-sampling.h:
+
+../leaf/leaf/Src/.././Inc/leaf-physical.h:
+
+../leaf/leaf/Src/.././Inc/leaf-electrical.h:

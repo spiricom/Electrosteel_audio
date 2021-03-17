@@ -1,3 +1,5 @@
 [submodule "LEAF"]
 	path = LEAF
 	url = https://github.com/spiricom/LEAF.git
+	path = leaf
+	url = https://github.com/spiricom/leaf

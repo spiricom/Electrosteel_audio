@@ -51,12 +51,13 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t SPI_RX[8] __ATTR_RAM_D2;
+uint8_t SPI_RX[16] __ATTR_RAM_D2;
 
-uint8_t SPI_PLUCK_RX[22] __ATTR_RAM_D2;
+uint8_t SPI_PLUCK_RX[44] __ATTR_RAM_D2;
 uint8_t SPI_LEVERS[32] __ATTR_RAM_D2;
 volatile uint32_t myTester = 0;
-
+uint8_t levers[2][32];
+uint8_t currentLeverBuffer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,6 +74,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if(GPIO_Pin == GPIO_PIN_8)
   {
     /* Toggle LED1 */
+	  for (int i = 0; i < 32; i++)
+	  {
+		  levers[!currentLeverBuffer][i] = SPI_LEVERS[i];
+	  }
+	  currentLeverBuffer = !currentLeverBuffer;
 	  HAL_SPI_Receive_DMA(&hspi5, SPI_LEVERS, 32);
   }
 }
@@ -131,8 +137,8 @@ int main(void)
   tempFPURegisterVal |= (1<<24); // set the FTZ (flush-to-zero) bit in the FPU control register  // this makes checking for denormals not necessary as they are automatically set to zero by the hardware
   __set_FPSCR(tempFPURegisterVal);
 
-  HAL_SPI_Receive_DMA(&hspi2, SPI_RX, 8);
-  HAL_SPI_Receive_DMA(&hspi1, SPI_PLUCK_RX, 22);
+  HAL_SPI_Receive_DMA(&hspi2, SPI_RX, 16);
+  HAL_SPI_Receive_DMA(&hspi1, SPI_PLUCK_RX, 44);
   HAL_SPI_Receive_DMA(&hspi5, SPI_LEVERS, 32);
 
   SDRAM_Initialization_sequence();

@@ -1,1 +1,1 @@
-LEAF/leaf/Externals/d_fft_mayer.o: ../LEAF/leaf/Externals/d_fft_mayer.c
+leaf/leaf/Externals/d_fft_mayer.o: ../leaf/leaf/Externals/d_fft_mayer.c

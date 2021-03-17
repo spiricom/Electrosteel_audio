@@ -62,5 +62,5 @@ leaf-math.c:797:7:maximum	0	static
 leaf-math.c:802:7:minimum	0	static
 leaf-math.c:811:5:popcount	24	static
 leaf-math.c:825:7:median3f	0	static
-leaf-math.c:835:6:place_step_dd	0	static
-leaf-math.c:859:6:place_slope_dd	0	static
+leaf-math.c:833:6:place_step_dd	0	static
+leaf-math.c:857:6:place_slope_dd	0	static
