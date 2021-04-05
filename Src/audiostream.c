@@ -133,6 +133,10 @@ tEfficientSVF filts2[NUM_STRINGS];
 LEAF leaf;
 int amHere = 0;
 
+union breakFloat{
+	float f;
+	uint8_t b[4];
+};
 
 float pedalValuesInt[12];
 float pedalScaled[12];
@@ -289,6 +293,7 @@ void audioFrame(uint16_t buffer_offset)
 
 	//if the codec isn't ready, keep the buffer as all zeros
 	//otherwise, start computing audio!
+	/*
 	if (newBar)
 	{
 		if ((bar[6] == 254) && (bar[7] == 253))
@@ -308,21 +313,38 @@ void audioFrame(uint16_t buffer_offset)
 		}
 		newBar = 0;
 	}
-	if ((levers[currentLeverBuffer][30] == 254) && (levers[currentLeverBuffer][31] == 253))
+	*/
+	if ((levers[currentLeverBuffer][62] == 254) && (levers[currentLeverBuffer][63] == 253))
 	{
+
+		union breakFloat tempBreak;
+
+		for (int i = firstString; i < lastStringPlusOne; i++)
+		{
+			tempBreak.b[0] = levers[currentLeverBuffer][(i * 4)];
+			tempBreak.b[1] =levers[currentLeverBuffer][(i * 4) + 1];
+			tempBreak.b[2] =levers[currentLeverBuffer][(i * 4) + 2];
+			tempBreak.b[3] =levers[currentLeverBuffer][(i * 4) + 3];
+			tExpSmooth_setDest(&stringFreqSmoothers[i], mtof(tempBreak.f));
+		}
+
+
+/*
 		for (int i = 0; i < 9; i++)
 		{
 			pedalValuesInt[i] = ((uint16_t)levers[currentLeverBuffer][(i * 2)] << 8) + ((uint16_t)levers[currentLeverBuffer][(i * 2) + 1] & 0xff);
 			tExpSmooth_setDest(&pedalSmoothers[i], LEAF_clip(0.0f, ((pedalValuesInt[i] * 0.0002490234375f) - 0.01f), 1.0f)); //   divided by 4096 multiplied by 1.02 and subtracting 0.01 to push it a little beyond the edges.
 			//pedalScaled[i] = tExpSmooth_tick(&pedalSmoothers[i]);
 		}
+*/
+
 		for (int i = 0; i < 4; i++)
 		{
-			tExpSmooth_setDest(&knobSmoothers[i], (levers[currentLeverBuffer][i+21] * 0.0078125)); //   divided by 128
+			tExpSmooth_setDest(&knobSmoothers[i], (levers[currentLeverBuffer][i+49] * 0.0078125)); //   divided by 128
 			//knobScaled[i] = tExpSmooth_tick(&knobSmoothers[i]);
 		}
 
-		int modeBit = levers[currentLeverBuffer][20];
+		int modeBit = levers[currentLeverBuffer][48];
 
 		neck = (modeBit >> 4) & 1;
 		dualSlider = (modeBit >> 3) & 1;
@@ -330,13 +352,13 @@ void audioFrame(uint16_t buffer_offset)
 
 		octave = powf(2.0f,((int32_t) (modeBit & 3) - 1 ));
 
-		uint16_t volumePedalInt = ((uint16_t)levers[currentLeverBuffer][25] << 8) + ((uint16_t)levers[currentLeverBuffer][26] & 0xff);
+		uint16_t volumePedalInt = ((uint16_t)levers[currentLeverBuffer][53] << 8) + ((uint16_t)levers[currentLeverBuffer][54] & 0xff);
 		volumePedal = volumePedalInt * 0.00026123046875f;
 		tExpSmooth_setDest(&volumeSmoother,volumePedal);
 	}
 
 	//float posDiff = stringMappedPositions[0]-stringMappedPositions[1];
-
+/*
 	for (int i = firstString; i < lastStringPlusOne; i++)
 	{
 		//interpolate ratios for each of the 10 strings
@@ -367,7 +389,7 @@ void audioFrame(uint16_t buffer_offset)
 
 
 	}
-
+*/
 
 
 	if (codecReady)
@@ -396,12 +418,12 @@ volatile float tempNum = 0.0f;
 uint32_t audioTick(float* samples)
 {
 	uint32_t clips = 0;
-
+/*
 	for (int i = 0; i < 12; i++)
 	{
 		pedalScaled[i] = tExpSmooth_tick(&pedalSmoothers[i]);
 	}
-
+*/
 	float volumeSmoothed = tExpSmooth_tick(&volumeSmoother);
 
 	for (int i = 0; i < 4; i++)
@@ -679,7 +701,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 	if (hspi == &hspi1)
 	{
 
-		for (int i = 0; i < 32; i++)
+		for (int i = 0; i < 64; i++)
 		{
 			levers[1][i] = SPI_LEVERS[i];
 		}
@@ -749,7 +771,7 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef *hspi)
 	}
 	if (hspi == &hspi1)
 	{
-		for (int i = 0; i < 32; i++)
+		for (int i = 0; i < 64; i++)
 		{
 			levers[0][i] = SPI_LEVERS[i];
 		}

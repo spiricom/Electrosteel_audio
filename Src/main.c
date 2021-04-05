@@ -54,9 +54,9 @@
 uint8_t SPI_RX[16] __ATTR_RAM_D2;
 
 uint8_t SPI_PLUCK_RX[52] __ATTR_RAM_D2;
-uint8_t SPI_LEVERS[64] __ATTR_RAM_D2;
+uint8_t SPI_LEVERS[128] __ATTR_RAM_D2;
 volatile uint32_t myTester = 0;
-uint8_t levers[2][32];
+uint8_t levers[2][64];
 uint8_t currentLeverBuffer = 0;
 /* USER CODE END PV */
 
@@ -141,7 +141,7 @@ int main(void)
 
   HAL_SPI_Receive_DMA(&hspi2, SPI_RX, 16);
   HAL_SPI_Receive_DMA(&hspi5, SPI_PLUCK_RX, 52);
-  HAL_SPI_Receive_DMA(&hspi1, SPI_LEVERS, 32);
+  HAL_SPI_Receive_DMA(&hspi1, SPI_LEVERS, 64);
 
   SDRAM_Initialization_sequence();
 
