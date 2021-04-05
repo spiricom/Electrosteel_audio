@@ -60,19 +60,21 @@ float decayExpBuffer[DECAY_EXP_BUFFER_SIZE];
 
 int previousStringInputs[12];
 
-float pedalsInCents[8][12] =
+float pedalsInCents[10][12] =
 {
-		{184.0f, 0.0f, 0.0f, -16.0f, 0.0f, 184.0f, 0.0f, 0.0f, 0.0f, -16.0f},
-		{0.0f, -14.0f, 0.0f, 0.0f, 116.0f, 0.0f, 0.0f, 116.0f, 0.0f, 0.0f},
+		{-16.0f, 0.0f, 0.0f, 0.0f, 184.0f, 0.0f,  -16.0f, 0.0f, 0.0f,  184.0f, 0.0f, 0.0f},
+		{0.0f, 0.0f, 116.0f, 0.0f, 0.0f, 116.0f, 0.0f, 0.0f,  -14.0f, 0.0f, 116.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f, -16.0f, 0.0f, 184.0f, 184.0f, 0.0f, 0.0f, -16.0f},
 		{-1200.0f, 0.0f, 0.0f, 0.0f, -1200.0f, -1200.0f, -1200.0f, -1200.0f, -1200.0f, -1200.0f},
 		{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 186.0f},
-		{0.0f, -134.0f, 0.0f, -14.0f, 0.0f, 0.0f, 0.0f, 0.0f, -204.0f, -14.0f},
-		{0.0f, 0.0f, 78.0f, 0.0f, 0.0f, 0.0f, 78.0f, 0.0f, 0.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f, -112.0f},
+		{0.0f, 0.0f,  0.0f, 78.0f, 0.0f, 0.0f,  0.0f, 78.0f, 0.0f, 0.0f, 0.0f, 78.0f},
+		{0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f, 0.0f, -112.0f},
+		{0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f},
 		{0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f, -112.0f, 0.0f, 0.0f, 0.0f}
 };
 
-float pedals[8][12] =
+float pedals[10][12] =
 {
 		{1.122462f, 1.0f, 1.0f, 1.0f, 1.0f, 1.122462f, 1.0f, 1.0f, 1.0f, 1.0f},
 		{1.0f, 1.0f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f},
@@ -81,6 +83,8 @@ float pedals[8][12] =
 		{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.059463f},
 		{1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.890899f, 1.0f},
 		{1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f, 1.059463f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f},
 		{1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f, 0.943874f, 1.0f, 1.0f, 1.0f}
 };
 
@@ -131,8 +135,6 @@ int amHere = 0;
 
 
 float pedalValuesInt[12];
-float pedalMin[12] = {1.0f, 1.0f, 1500.0f, 653.0f, 124.0f, 883.0f, 480.0f, 900.0f, 1.0f, 541.0f, 98.0f, 1.0f};
-float pedalMax[12] = {2.0f, 1.0f, 1749.0f, 1059.0f, 663.0f, 1273.0f, 1215.0f, 1500.0f, 2.0f, 1264.0f, 273.0f, 1.0f};
 float pedalScaled[12];
 int pedalOffset = 6;
 uint maxVolumes[NUM_STRINGS];
@@ -163,6 +165,9 @@ float fretMeasurements[4][2] ={
 
 float fretScaling[4] = {1.0f, 0.5f, 0.5f, 0.25f};
 
+int voice = 0;
+int dualSlider = 0;
+int neck = 0;
 
 
 /**********************************************/
@@ -232,7 +237,7 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 	{
 		tExpSmooth_init(&pedalSmoothers[i],0.0f, 0.02f, &leaf);
 	}
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < NUM_STRINGS; j++)
 		{
@@ -316,10 +321,17 @@ void audioFrame(uint16_t buffer_offset)
 			tExpSmooth_setDest(&knobSmoothers[i], (levers[currentLeverBuffer][i+21] * 0.0078125)); //   divided by 128
 			//knobScaled[i] = tExpSmooth_tick(&knobSmoothers[i]);
 		}
-		octave = powf(2.0f,((int32_t) levers[currentLeverBuffer][20] - 1 ));
+
+		int modeBit = levers[currentLeverBuffer][20];
+
+		neck = (modeBit >> 4) & 1;
+		dualSlider = (modeBit >> 3) & 1;
+		voice = (modeBit >> 2) & 1;
+
+		octave = powf(2.0f,((int32_t) (modeBit & 3) - 1 ));
 
 		uint16_t volumePedalInt = ((uint16_t)levers[currentLeverBuffer][25] << 8) + ((uint16_t)levers[currentLeverBuffer][26] & 0xff);
-		volumePedal = volumePedalInt * 0.00006103515625f;
+		volumePedal = volumePedalInt * 0.00026123046875f;
 		tExpSmooth_setDest(&volumeSmoother,volumePedal);
 	}
 
@@ -330,17 +342,24 @@ void audioFrame(uint16_t buffer_offset)
 		//interpolate ratios for each of the 10 strings
 		//float myMappedPos = stringMappedPositions[0];
 		//float myMappedPos  = stringMappedPositions[1] + ((float) i * posDiff);
+		float myMappedPos = 0.0f;
 
-		float myMappedPos = LEAF_interpolation_linear(stringMappedPositions[0], stringMappedPositions[1], ((float)i) * 0.090909090909091f);
-
+		if (dualSlider)
+		{
+			myMappedPos = LEAF_interpolation_linear(stringMappedPositions[0], stringMappedPositions[1], ((float)i) * 0.090909090909091f);
+		}
+		else
+		{
+			myMappedPos =  stringMappedPositions[0];
+		}
 		//then apply those ratios to the fundamental frequencies
 		float tempFreq = ((1.0 / myMappedPos) * openStringFrequencies[i] *
 					(LEAF_interpolation_linear(1.0f, pedals[0][i], pedalScaled[0])) *
 					(LEAF_interpolation_linear(1.0f, pedals[1][i], pedalScaled[1])) *
 					(LEAF_interpolation_linear(1.0f, pedals[2][i], pedalScaled[2])) *
 					(LEAF_interpolation_linear(1.0f, pedals[3][i], pedalScaled[3])) *
-					(LEAF_interpolation_linear(1.0f, pedals[4][i], pedalScaled[5])) *
-					(LEAF_interpolation_linear(1.0f, pedals[5][i], pedalScaled[6])) *
+					(LEAF_interpolation_linear(1.0f, pedals[5][i], pedalScaled[5])) *
+					(LEAF_interpolation_linear(1.0f, pedals[6][i], pedalScaled[6])) *
 					(LEAF_interpolation_linear(1.0f, pedals[6][i], pedalScaled[7])) *
 					(LEAF_interpolation_linear(1.0f, pedals[7][i], pedalScaled[8])));
 
@@ -372,7 +391,7 @@ void audioFrame(uint16_t buffer_offset)
 
 
 
-
+volatile float tempNum = 0.0f;
 
 uint32_t audioTick(float* samples)
 {
@@ -595,7 +614,10 @@ uint32_t audioTick(float* samples)
 		}
 	}
 */
-	//samples[0] *= .1f * volumeSmoothed;
+
+	tempNum= (fasterdbtoa((volumeSmoothed*60.0f) - 60.0f) * 0.5f) + (volumeSmoothed * 0.5f);
+
+	samples[0] *= tempNum;
 	samples[0] = tanhf(samples[0] * 0.25f);
 	samples[1] = samples[0];
 	return clips;
