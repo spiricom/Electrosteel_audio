@@ -54,9 +54,9 @@
 uint8_t SPI_RX[16] __ATTR_RAM_D2;
 
 uint8_t SPI_PLUCK_RX[52] __ATTR_RAM_D2;
-uint8_t SPI_LEVERS[128] __ATTR_RAM_D2;
+uint8_t SPI_LEVERS[148] __ATTR_RAM_D2;
 volatile uint32_t myTester = 0;
-uint8_t levers[2][64];
+uint8_t levers[2][74];
 uint8_t currentLeverBuffer = 0;
 /* USER CODE END PV */
 
@@ -139,9 +139,10 @@ int main(void)
   tempFPURegisterVal |= (1<<24); // set the FTZ (flush-to-zero) bit in the FPU control register  // this makes checking for denormals not necessary as they are automatically set to zero by the hardware
   __set_FPSCR(tempFPURegisterVal);
 
+  HAL_Delay(200);
   HAL_SPI_Receive_DMA(&hspi2, SPI_RX, 16);
   HAL_SPI_Receive_DMA(&hspi5, SPI_PLUCK_RX, 52);
-  HAL_SPI_Receive_DMA(&hspi1, SPI_LEVERS, 64);
+  HAL_SPI_Receive_DMA(&hspi1, SPI_LEVERS, 74);
 
   SDRAM_Initialization_sequence();
 
