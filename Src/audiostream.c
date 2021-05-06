@@ -14,6 +14,7 @@
 #include "i2c.h"
 #include "gpio.h"
 #include "spi.h"
+#include "wavetables.h"
 
 //the audio buffers are put in the D2 RAM area because that is a memory location that the DMA has access to.
 int32_t audioOutBuffer[AUDIO_BUFFER_SIZE] __ATTR_RAM_D2;
@@ -196,10 +197,15 @@ tFeedbackLeveler levelers[NUM_STRINGS_PER_BOARD][2];
 
 tCycle additive[NUM_STRINGS_PER_BOARD][18];
 tADSRT additiveEnv[NUM_STRINGS_PER_BOARD][18];
+
+tWaveTable therT;
+tWaveSynthS wt[NUM_STRINGS_PER_BOARD];
+
 LEAF leaf;
 int amHere = 0;
 
-
+float* therTabs[26];
+int therTabSizes[26];
 
 float LFOdetunes[NUM_STRINGS_PER_BOARD][3];
 
@@ -285,6 +291,7 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 
 	invNumOvertones = 1.0f / NUM_OVERTONES;
 
+
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 3; j++)
@@ -365,8 +372,17 @@ void audioInit(I2C_HandleTypeDef* hi2c, SAI_HandleTypeDef* hsaiOut, SAI_HandleTy
 	{
 		randomFactors[i] = randomNumber() + 0.5f;
 	}
+
+	//tWaveTable_initToPool(&therT, theremin, 53248, 18000.0f, &largePool);
+	for (int i = 0; i < 26; i++)
+	{
+		therTabs[i] = (float*)&theremin[i*2048];
+		therTabSizes[i] = 2048;
+	}
 	for (int i = 0; i < NUM_STRINGS_PER_BOARD; i++)
 	{
+		tWaveSynthS_initToPool(&wt[i], 2, therTabs, therTabSizes, 4, 18000.0f, &largePool);
+		tWaveSynthS_setAntiAliasing(&wt[i], 1.0f);
 
 		for (int j = 0; j < NUM_OVERTONES; j++)
 		{
@@ -780,7 +796,7 @@ uint32_t audioTick(float* samples)
 						}
 						tLivingString2_setDecay(&strings[i], params[1] * 80.0f);
 					}
-					else if (voice == 1)
+					else if ((voice == 1) || (voice == 3))
 					{
 						tADSRT_on(&envelopes[i][0], 1.0f);
 						tADSRT_on(&envelopes[i][1], 1.0f);
@@ -898,7 +914,7 @@ uint32_t audioTick(float* samples)
 						tADSRT_off(&envelopes[i][2]);
 						tADSRT_off(&fenvelopes[i]);
 					}
-					else if (voice == 1)
+					else if ((voice == 1)||(voice == 3))
 					{
 						tADSRT_off(&envelopes[i][0]);
 						tADSRT_off(&envelopes[i][1]);
@@ -936,7 +952,7 @@ uint32_t audioTick(float* samples)
 		float Env2 = 0.0f;
 		float env = 0.0f;
 
-		if ((voice == 0) || (voice == 1))
+		if ((voice == 0) || (voice == 1) || (voice == 3))
 		{
 			Env1 = tADSRT_tick(&envelopes[i][0]);
 			Env2 = tADSRT_tick(&envelopes[i][1]);
@@ -1019,6 +1035,27 @@ uint32_t audioTick(float* samples)
 				}
 
 			}
+		}
+
+		else if (voice == 3)
+		{
+
+			//tEfficientSVF_setQ(&filts2[i], (params[13] * 10.0f) + 0.5f);
+			//tEfficientSVF_setFreq(&filts2[i], LEAF_clip(0, (knobScaled[0]*4095.0f) + (Env2 * knobScaled[1]* 4095.0f) + (stringMIDIPitches[i] * knobScaled[2] * 32.0f), 4095));
+
+			tWaveSynthS_setFreq(&wt[i], 0, stringFrequencies[i]);
+			tWaveSynthS_setFreq(&wt[i], 1, stringFrequencies[i]);
+
+			tWaveSynthS_setIndex(&wt[i], knobScaled[0]);
+			tempSamp = tWaveSynthS_tick(&wt[i]);
+			//tempSamp += (filtNoise * env);
+			//tempSamp = tEfficientSVF_tick(&filts2[i], tempSamp);
+			//tFeedbackLeveler_setTargetLevel(&levelers[i][0], params[4]);
+			//tFeedbackLeveler_setStrength(&levelers[i][0], params[5] * 0.1f);
+			//tFeedbackLeveler_setFactor(&levelers[i][0], params[6] * 0.1f);
+			//tFeedbackLeveler_setMode(&levelers[i][0], params[8] > 0.5f);
+			//tempSamp = tFeedbackLeveler_tick(&levelers[i][0], tempSamp);
+			tempSamp *= Env1 * knobScaled[2];
 		}
 
 		samples[0] += tempSamp;

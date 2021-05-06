@@ -70,7 +70,7 @@ Src/audiostream.o: ../Src/audiostream.c ../Inc/audiostream.h \
  /Users/josnyder/dev/Electrosteel_audio/leaf/leaf/./Inc/leaf-physical.h \
  /Users/josnyder/dev/Electrosteel_audio/leaf/leaf/./Inc/leaf-electrical.h \
  ../Inc/main.h ../Inc/main.h ../Inc/codec.h ../Inc/i2c.h ../Inc/gpio.h \
- ../Inc/spi.h
+ ../Inc/spi.h ../Inc/wavetables.h
 
 ../Inc/audiostream.h:
 
@@ -225,3 +225,5 @@ Src/audiostream.o: ../Src/audiostream.c ../Inc/audiostream.h \
 ../Inc/gpio.h:
 
 ../Inc/spi.h:
+
+../Inc/wavetables.h:
