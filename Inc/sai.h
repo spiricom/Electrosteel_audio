@@ -32,12 +32,17 @@
 
 extern SAI_HandleTypeDef hsai_BlockA1;
 extern SAI_HandleTypeDef hsai_BlockB1;
+extern SAI_HandleTypeDef hsai_BlockA2;
+extern SAI_HandleTypeDef hsai_BlockB2;
+extern SAI_HandleTypeDef hsai_BlockA4;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
 void MX_SAI1_Init(void);
+void MX_SAI2_Init(void);
+void MX_SAI4_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 

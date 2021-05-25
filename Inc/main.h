@@ -69,7 +69,7 @@ extern uint8_t SPI_RX[16];
 extern uint8_t SPI_PLUCK_RX[52];
 extern uint8_t SPI_LEVERS[148];
 extern uint8_t levers[2][74];
-extern uint8_t currentLeverBuffer;
+extern int currentLeverBuffer;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

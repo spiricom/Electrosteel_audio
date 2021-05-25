@@ -28,6 +28,9 @@
 
 SAI_HandleTypeDef hsai_BlockA1;
 SAI_HandleTypeDef hsai_BlockB1;
+SAI_HandleTypeDef hsai_BlockA2;
+SAI_HandleTypeDef hsai_BlockB2;
+SAI_HandleTypeDef hsai_BlockA4;
 DMA_HandleTypeDef hdma_sai1_a;
 DMA_HandleTypeDef hdma_sai1_b;
 
@@ -66,7 +69,106 @@ void MX_SAI1_Init(void)
   }
 
 }
+/* SAI2 init function */
+void MX_SAI2_Init(void)
+{
+
+  hsai_BlockA2.Instance = SAI2_Block_A;
+  hsai_BlockA2.Init.Protocol = SAI_FREE_PROTOCOL;
+  hsai_BlockA2.Init.AudioMode = SAI_MODESLAVE_RX;
+  hsai_BlockA2.Init.DataSize = SAI_DATASIZE_8;
+  hsai_BlockA2.Init.FirstBit = SAI_FIRSTBIT_MSB;
+  hsai_BlockA2.Init.ClockStrobing = SAI_CLOCKSTROBING_FALLINGEDGE;
+  hsai_BlockA2.Init.Synchro = SAI_SYNCHRONOUS;
+  hsai_BlockA2.Init.OutputDrive = SAI_OUTPUTDRIVE_DISABLE;
+  hsai_BlockA2.Init.FIFOThreshold = SAI_FIFOTHRESHOLD_EMPTY;
+  hsai_BlockA2.Init.MonoStereoMode = SAI_STEREOMODE;
+  hsai_BlockA2.Init.CompandingMode = SAI_NOCOMPANDING;
+  hsai_BlockA2.Init.TriState = SAI_OUTPUT_NOTRELEASED;
+  hsai_BlockA2.Init.PdmInit.Activation = DISABLE;
+  hsai_BlockA2.Init.PdmInit.MicPairsNbr = 1;
+  hsai_BlockA2.Init.PdmInit.ClockEnable = SAI_PDM_CLOCK1_ENABLE;
+  hsai_BlockA2.FrameInit.FrameLength = 8;
+  hsai_BlockA2.FrameInit.ActiveFrameLength = 1;
+  hsai_BlockA2.FrameInit.FSDefinition = SAI_FS_STARTFRAME;
+  hsai_BlockA2.FrameInit.FSPolarity = SAI_FS_ACTIVE_LOW;
+  hsai_BlockA2.FrameInit.FSOffset = SAI_FS_FIRSTBIT;
+  hsai_BlockA2.SlotInit.FirstBitOffset = 0;
+  hsai_BlockA2.SlotInit.SlotSize = SAI_SLOTSIZE_DATASIZE;
+  hsai_BlockA2.SlotInit.SlotNumber = 1;
+  hsai_BlockA2.SlotInit.SlotActive = 0x00000000;
+  if (HAL_SAI_Init(&hsai_BlockA2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  hsai_BlockB2.Instance = SAI2_Block_B;
+  hsai_BlockB2.Init.Protocol = SAI_FREE_PROTOCOL;
+  hsai_BlockB2.Init.AudioMode = SAI_MODESLAVE_RX;
+  hsai_BlockB2.Init.DataSize = SAI_DATASIZE_8;
+  hsai_BlockB2.Init.FirstBit = SAI_FIRSTBIT_MSB;
+  hsai_BlockB2.Init.ClockStrobing = SAI_CLOCKSTROBING_FALLINGEDGE;
+  hsai_BlockB2.Init.Synchro = SAI_SYNCHRONOUS;
+  hsai_BlockB2.Init.OutputDrive = SAI_OUTPUTDRIVE_DISABLE;
+  hsai_BlockB2.Init.FIFOThreshold = SAI_FIFOTHRESHOLD_EMPTY;
+  hsai_BlockB2.Init.MonoStereoMode = SAI_STEREOMODE;
+  hsai_BlockB2.Init.CompandingMode = SAI_NOCOMPANDING;
+  hsai_BlockB2.Init.TriState = SAI_OUTPUT_NOTRELEASED;
+  hsai_BlockB2.Init.PdmInit.Activation = DISABLE;
+  hsai_BlockB2.Init.PdmInit.MicPairsNbr = 1;
+  hsai_BlockB2.Init.PdmInit.ClockEnable = SAI_PDM_CLOCK1_ENABLE;
+  hsai_BlockB2.FrameInit.FrameLength = 8;
+  hsai_BlockB2.FrameInit.ActiveFrameLength = 1;
+  hsai_BlockB2.FrameInit.FSDefinition = SAI_FS_STARTFRAME;
+  hsai_BlockB2.FrameInit.FSPolarity = SAI_FS_ACTIVE_LOW;
+  hsai_BlockB2.FrameInit.FSOffset = SAI_FS_FIRSTBIT;
+  hsai_BlockB2.SlotInit.FirstBitOffset = 0;
+  hsai_BlockB2.SlotInit.SlotSize = SAI_SLOTSIZE_DATASIZE;
+  hsai_BlockB2.SlotInit.SlotNumber = 1;
+  hsai_BlockB2.SlotInit.SlotActive = 0x00000000;
+  if (HAL_SAI_Init(&hsai_BlockB2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+/* SAI4 init function */
+void MX_SAI4_Init(void)
+{
+
+  hsai_BlockA4.Instance = SAI4_Block_A;
+  hsai_BlockA4.Init.Protocol = SAI_FREE_PROTOCOL;
+  hsai_BlockA4.Init.AudioMode = SAI_MODESLAVE_RX;
+  hsai_BlockA4.Init.DataSize = SAI_DATASIZE_8;
+  hsai_BlockA4.Init.FirstBit = SAI_FIRSTBIT_MSB;
+  hsai_BlockA4.Init.ClockStrobing = SAI_CLOCKSTROBING_FALLINGEDGE;
+  hsai_BlockA4.Init.Synchro = SAI_SYNCHRONOUS;
+  hsai_BlockA4.Init.OutputDrive = SAI_OUTPUTDRIVE_DISABLE;
+  hsai_BlockA4.Init.FIFOThreshold = SAI_FIFOTHRESHOLD_EMPTY;
+  hsai_BlockA4.Init.MonoStereoMode = SAI_STEREOMODE;
+  hsai_BlockA4.Init.CompandingMode = SAI_NOCOMPANDING;
+  hsai_BlockA4.Init.TriState = SAI_OUTPUT_NOTRELEASED;
+  hsai_BlockA4.Init.PdmInit.Activation = DISABLE;
+  hsai_BlockA4.Init.PdmInit.MicPairsNbr = 1;
+  hsai_BlockA4.Init.PdmInit.ClockEnable = SAI_PDM_CLOCK1_ENABLE;
+  hsai_BlockA4.FrameInit.FrameLength = 8;
+  hsai_BlockA4.FrameInit.ActiveFrameLength = 1;
+  hsai_BlockA4.FrameInit.FSDefinition = SAI_FS_STARTFRAME;
+  hsai_BlockA4.FrameInit.FSPolarity = SAI_FS_ACTIVE_LOW;
+  hsai_BlockA4.FrameInit.FSOffset = SAI_FS_FIRSTBIT;
+  hsai_BlockA4.SlotInit.FirstBitOffset = 0;
+  hsai_BlockA4.SlotInit.SlotSize = SAI_SLOTSIZE_DATASIZE;
+  hsai_BlockA4.SlotInit.SlotNumber = 1;
+  hsai_BlockA4.SlotInit.SlotActive = 0x00000000;
+  if (HAL_SAI_Init(&hsai_BlockA4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
 static uint32_t SAI1_client =0;
+static uint32_t SAI2_client =0;
+static uint32_t SAI4_client =0;
 
 void HAL_SAI_MspInit(SAI_HandleTypeDef* hsai)
 {
@@ -164,6 +266,68 @@ void HAL_SAI_MspInit(SAI_HandleTypeDef* hsai)
     __HAL_LINKDMA(hsai,hdmarx,hdma_sai1_b);
     __HAL_LINKDMA(hsai,hdmatx,hdma_sai1_b);
     }
+/* SAI2 */
+    if(hsai->Instance==SAI2_Block_A)
+    {
+    /* SAI2 clock enable */
+    if (SAI2_client == 0)
+    {
+       __HAL_RCC_SAI2_CLK_ENABLE();
+    }
+    SAI2_client ++;
+
+    /**SAI2_A_Block_A GPIO Configuration
+    PD11     ------> SAI2_SD_A
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_11;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF10_SAI2;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+    }
+    if(hsai->Instance==SAI2_Block_B)
+    {
+      /* SAI2 clock enable */
+      if (SAI2_client == 0)
+      {
+       __HAL_RCC_SAI2_CLK_ENABLE();
+      }
+    SAI2_client ++;
+
+    /**SAI2_B_Block_B GPIO Configuration
+    PA0     ------> SAI2_SD_B
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_0;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF10_SAI2;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    }
+/* SAI4 */
+    if(hsai->Instance==SAI4_Block_A)
+    {
+    /* SAI4 clock enable */
+    if (SAI4_client == 0)
+    {
+       __HAL_RCC_SAI4_CLK_ENABLE();
+    }
+    SAI4_client ++;
+
+    /**SAI4_A_Block_A GPIO Configuration
+    PC1     ------> SAI4_SD_A
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF8_SAI4;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    }
 }
 
 void HAL_SAI_MspDeInit(SAI_HandleTypeDef* hsai)
@@ -206,6 +370,53 @@ void HAL_SAI_MspDeInit(SAI_HandleTypeDef* hsai)
 
     HAL_DMA_DeInit(hsai->hdmarx);
     HAL_DMA_DeInit(hsai->hdmatx);
+    }
+/* SAI2 */
+    if(hsai->Instance==SAI2_Block_A)
+    {
+    SAI2_client --;
+    if (SAI2_client == 0)
+      {
+      /* Peripheral clock disable */
+       __HAL_RCC_SAI2_CLK_DISABLE();
+      }
+
+    /**SAI2_A_Block_A GPIO Configuration
+    PD11     ------> SAI2_SD_A
+    */
+    HAL_GPIO_DeInit(GPIOD, GPIO_PIN_11);
+
+    }
+    if(hsai->Instance==SAI2_Block_B)
+    {
+    SAI2_client --;
+      if (SAI2_client == 0)
+      {
+      /* Peripheral clock disable */
+      __HAL_RCC_SAI2_CLK_DISABLE();
+      }
+
+    /**SAI2_B_Block_B GPIO Configuration
+    PA0     ------> SAI2_SD_B
+    */
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_0);
+
+    }
+/* SAI4 */
+    if(hsai->Instance==SAI4_Block_A)
+    {
+    SAI4_client --;
+    if (SAI4_client == 0)
+      {
+      /* Peripheral clock disable */
+       __HAL_RCC_SAI4_CLK_DISABLE();
+      }
+
+    /**SAI4_A_Block_A GPIO Configuration
+    PC1     ------> SAI4_SD_A
+    */
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1);
+
     }
 }
 

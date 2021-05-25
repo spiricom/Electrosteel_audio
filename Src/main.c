@@ -57,7 +57,7 @@ uint8_t SPI_PLUCK_RX[52] __ATTR_RAM_D2;
 uint8_t SPI_LEVERS[148] __ATTR_RAM_D2;
 volatile uint32_t myTester = 0;
 uint8_t levers[2][74];
-uint8_t currentLeverBuffer = 0;
+int currentLeverBuffer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -130,6 +130,9 @@ int main(void)
   MX_I2C2_Init();
   MX_SPI1_Init();
   MX_SPI5_Init();
+  MX_SAI2_Init();
+  MX_SAI4_Init();
+  MX_SPI6_Init();
   /* USER CODE BEGIN 2 */
 
   //pull reset pin on audio codec low to make sure it's stable
@@ -222,8 +225,10 @@ void SystemClock_Config(void)
   }
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RNG|RCC_PERIPHCLK_SPI5
                               |RCC_PERIPHCLK_SPI1|RCC_PERIPHCLK_SPI2
-                              |RCC_PERIPHCLK_SAI1|RCC_PERIPHCLK_SDMMC
-                              |RCC_PERIPHCLK_I2C2|RCC_PERIPHCLK_FMC;
+                              |RCC_PERIPHCLK_SAI2|RCC_PERIPHCLK_SAI1
+                              |RCC_PERIPHCLK_SDMMC|RCC_PERIPHCLK_I2C2
+                              |RCC_PERIPHCLK_SAI4A|RCC_PERIPHCLK_SPI6
+                              |RCC_PERIPHCLK_FMC;
   PeriphClkInitStruct.PLL2.PLL2M = 25;
   PeriphClkInitStruct.PLL2.PLL2N = 344;
   PeriphClkInitStruct.PLL2.PLL2P = 7;
@@ -235,10 +240,13 @@ void SystemClock_Config(void)
   PeriphClkInitStruct.FmcClockSelection = RCC_FMCCLKSOURCE_D1HCLK;
   PeriphClkInitStruct.SdmmcClockSelection = RCC_SDMMCCLKSOURCE_PLL2;
   PeriphClkInitStruct.Sai1ClockSelection = RCC_SAI1CLKSOURCE_PLL2;
+  PeriphClkInitStruct.Sai23ClockSelection = RCC_SAI23CLKSOURCE_PLL;
   PeriphClkInitStruct.Spi123ClockSelection = RCC_SPI123CLKSOURCE_PLL;
   PeriphClkInitStruct.Spi45ClockSelection = RCC_SPI45CLKSOURCE_D2PCLK1;
   PeriphClkInitStruct.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
   PeriphClkInitStruct.I2c123ClockSelection = RCC_I2C123CLKSOURCE_D2PCLK1;
+  PeriphClkInitStruct.Sai4AClockSelection = RCC_SAI4ACLKSOURCE_PLL;
+  PeriphClkInitStruct.Spi6ClockSelection = RCC_SPI6CLKSOURCE_D3PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
